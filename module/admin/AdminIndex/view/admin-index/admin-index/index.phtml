@@ -1,0 +1,48 @@
+<div id="page_list_main">
+
+<div id="navigation">
+<p data-ul="product" class="selected">商品管理</p>
+<p data-ul="type">商品分类管理</p>
+<p>订单管理</p>
+<p>用户管理</p>
+<br clear="all" />
+</div>
+
+<div id="AdTopMenuB">
+	<ul id="AdTopMenu" class="product">
+		<li><p><a href="<?php echo $this->url('admin-product'); ?>">商品查看</a></p></li>
+		<li><p><a href="<?php echo $this->url('admin-product/add'); ?>">商品添加</a></p></li>
+		<br clear="all" />
+	</ul>
+	<ul id="AdTopMenu" class="type" style="display:none;">
+		<li><p><a href="<?php echo $this->url('admin-product-type'); ?>">商品分类查看</a></p></li>
+		<li><p><a href="<?php echo $this->url('admin-product-type/add'); ?>">商品分类添加</a></p></li>
+		<br clear="all" />
+	</ul>
+</div>
+
+</div>
+<script type="text/javascript" language="JavaScript">
+$(document).ready(function (){
+	var lang=$("#ad_lang").val();
+	/*---top_menu_starts---*/
+	$(".rick #page_list_main #navigation p").eq(0).css('border-left','1px solid #999');
+	$(".rick #page_list_main #navigation p[class!=\"selected\"]").css('background-image','url(/img/p1.jpg)');
+	$(".rick #page_list_main #navigation p[class!=\"selected\"]").css({'cursor':'pointer','color':'#666'});
+	hv_bg($(".rick #page_list_main #navigation p[class!=\"selected\"]"),'/img/p1h.jpg','/img/p1.jpg');
+	/*---menu_second_floor_starts---*/
+	hv_bg($("#AdTopMenu >li > p"),'/img/admin/p1h.gif','/img/admin/p1.gif');
+	hv_color($("#AdTopMenu >li >p"),'#00E100','#00AE00');
+    $('#AdTopMenuB a').css('text-decoration','none').css('color','#00AE00');
+	$('#navigation p').on('click',function(){
+		$('#AdTopMenuB ul').each(function(){
+			$(this).css('display','none');
+		});
+		$('.'+$(this).attr('data-ul')).css('display','inline');
+		$('#navigation p').each(function(){
+			$(this).removeAttr('class');
+		});
+		$(this).attr('class','selected');
+	});
+});
+</script>

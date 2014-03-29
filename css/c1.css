@@ -1,0 +1,50 @@
+@charset "utf-8";
+*{margin:0px;padding:0px;font-size:13px;
+font-family: Verdana, Arial, Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Osaka, "MS P Gothic", "ＭＳ Ｐゴシック",sans-serif;}
+body{ background-color:#FF0;}
+.rick{}
+.rick #center{ width:1000px; margin:0 auto; padding-top:10px;}
+/*---------------------------------------------------------------------------parts---*/
+.rick .zp10{ padding-left:10px;}
+.rick .zp5{ padding-top:5px;}
+/*---------------------------------------------------------------------------page_login---*/
+.rick #header #log{ float:left;}
+.rick #header #log a img{ border:none;behavior: url("/img/iepngfix.htc");}
+.rick #header #opration_box_header{ float:right;}
+.rick #header #opration_box_header .line0{ text-align:right; padding-top:4px; padding-bottom:3px;}
+.rick #header #opration_box_header .line0 span{ cursor:pointer;}
+
+.rick #page_login_main{ padding-top:50px; padding-bottom:50px;}
+.rick #page_login_main #login{ width:450px; height:170px; padding-top:10px; margin:0 auto; background-image:url(../img/admin/login.jpg);}
+.rick #page_login_main #login table{ border-collapse: collapse; width:450px; margin:0 auto;}
+.rick #page_login_main #login table .td0{ width:110px; padding-left:40px;}
+.rick #page_login_main #login table .td0 p{}
+.rick #page_login_main #login table .td0 p img{behavior: url("/img/iepngfix.htc"); width:102px; height:27px;}
+.rick #page_login_main #login table .td1{ width:300px;}
+.rick #page_login_main #login table .td1 box{ padding-top:3px;}
+.rick #page_login_main #login table .td1 input{ width:250px;}
+.rick #page_login_main #login table .td1 #valid_startor{ color:#00AE00; cursor:pointer;}
+.rick #page_login_main #login #button_submit{ text-align:right; padding-right:30px; padding-top:10px;}
+.rick #page_login_main #login #button_submit img{ border-bottom: solid 2px #999; width:138px; height:32px;behavior: url("/img/iepngfix.htc");}
+
+.rick #foot{ width:1000px; margin:0 auto; text-align:center; color:#9F0000;}
+.rick #foot a{ text-decoration:none; color:#9F0000;}
+/*---------------------------------------------------------------------------page_list------*/
+.rick #page_list_main{ padding-top:5px; padding-bottom:40px;}
+.rick #page_list_main #navigation{}
+.rick #page_list_main #navigation p{ float:left; width:166px; padding-top:8px; height:22px; text-align:center; border-top:1px solid #999; border-bottom:1px solid #999; border-right:1px solid #999;}
+.rick #page_list_main #navigation .selected{background-image:url(../img/p1h.jpg); color:#00AE00; font-weight:bold;}
+
+.rick #page_list_main #AdTopMenuB{ padding-top:20px;}
+.rick #page_list_main #AdTopMenu{ list-style-type:none;}
+.rick #page_list_main #AdTopMenu li{ padding-left:20px; float:left; padding-bottom:8px;}
+.rick #page_list_main #AdTopMenu li p{ width:220px; height:24px; padding-top:11px; background-image:url(../img/admin/p1.gif); text-align:center; color:#00AE00; font-weight:bold; cursor:pointer;}
+/*---------------------------------------------------------------------------page_contents------*/
+.rick #header #opration_box_header .line1{ text-align:right; padding-top:4px; padding-bottom:3px;}
+.rick #header #opration_box_header .line1 span{ cursor:pointer; color:#00AE00;}
+.rick #header #opration_box_header #page_name_box{ float:right; padding-top:5px;}
+.rick #header #opration_box_header #page_name{ background-image:url(../img/admin/p2.gif); width:220px; height:24px; padding-top:11px; text-align:center; color:#912F00; font-weight:bold;}
+
+.rick #page_contents_main{ padding-bottom:40px;}
+.rick #page_contents_main #table_for_opration{ border-collapse: collapse; width:1000px;}
+.rick #page_contents_main #table_for_opration td{ padding-top:4px; padding-bottom:3px; border-bottom:#CCC 1px solid; text-align:center;}

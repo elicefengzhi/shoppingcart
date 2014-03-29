@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<link href="/css/c1.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/js/jsq/jquery-1.10.2.min.js" language="JavaScript"></script>
+<script type="text/javascript" src="/js/jsq/jquery-ui.custom.min.js" language="JavaScript"></script>
+<script type="text/javascript" src="/js/pt/png_ie6_fix.js" language="JavaScript"></script>
+<script type="text/javascript" src="/js/glb.js" language="JavaScript"></script>
+</head><body><div class="rick"><div id="center">
+<!-------------------------------------------------------------------tag_contents_start-->
+
+<!--header_start-->
+<div id="header">
+<div id="log"><a href="/admin"><img /></a></div>
+<div id="opration_box_header">
+<div class="line0">
+<?php if($this->url() != '/admin/index/login'): ?>
+<span class="zp10" id="top_back">管理トップ</span>
+<span class="zp10" id="logout">ログアウト</span>
+<?php endif;?>
+<span class="zp10"><select id="ad_lang">
+<option value="0" selected="selected">日本語版</option>
+<option value="1">中文版</option>
+</select></span>
+</div>
+</div><br clear="all" />
+</div>
+
+<!--main_start-->
+<?php echo $this->content; ?>
+
+<!--foot_start-->
+<div id="foot_box">
+<div id="foot">
+copyright&nbsp;(c)&nbsp;2008&nbsp;-&nbsp;2014&nbsp;<a href="/admin" target="index">http://cn.81hp.net</a>&nbsp;All&nbsp;rights&nbsp;reserved&nbsp;/
+created&nbsp;by&nbsp;<span id="foot_company_name"></span>
+</div>
+</div>
+</div></div></body></html>

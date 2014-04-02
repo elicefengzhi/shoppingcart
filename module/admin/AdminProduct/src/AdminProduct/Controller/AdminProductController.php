@@ -11,18 +11,21 @@ class AdminProductController extends AbstractActionController
     	$pageNum = $this->params('pageNum',1);
     	$count = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductAllCount();
     	$productList = false;
+    	$forum = false;
     	$paging = false;
     	if($count > 0) {
     		$paging = $this->serviceLocator->get('Paging');
-    		$paging->paginate($count,2,$pageNum,2);
+    		$paging->paginate($count,10,$pageNum,2);
     		$offset = $paging->getOffset();
     		$rowsperpage = $paging->getRowsPerPage();
     		$productList = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductAll($offset,$rowsperpage);
+    		$forum = $this->serviceLocator->get('DbSql')->dispatch('Forum')->getForumAll();
     	}
 
     	$viewHelper = $this->ViewHelper('Admin');
     	$viewHelper->setSourceData($productList);
-        return array('viewHelper' => $viewHelper,'paging' => $paging);
+    	$viewHelper->setSourceData($forum,'Forum');
+        return array('viewHelper' => $viewHelper,'paging' => $paging,'pageNum' => $pageNum);
     }
     
     public function addAction()
@@ -42,12 +45,9 @@ class AdminProductController extends AbstractActionController
     		if($return !== false) return $this->redirect()->toRoute('admin-product');
     	}
     	
-//     	$productType = $this->serviceLocator->get('DbSql')->dispatch('ProductType');
-//     	$typeList = $productType->getType(array('parent_id' => 0));
     	$ad = $this->serviceLocator->get('DbSql')->dispatch('Ad');
     	$adList = $ad->getAdAll();
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
-//     	$viewHelper->setSourceData($typeList,'type');
     	$viewHelper->setSourceData($adList,'ad');
     	$viewHelper->setSourceData($errorMessage,'errorMessage');
     	$user !== false && $return === false && $viewHelper->setSourceData($user->getSourceData());
@@ -67,6 +67,7 @@ class AdminProductController extends AbstractActionController
     		$model = new \AdminProduct\Model\AdminProductModel();
     		$model->insertProductImageAndAd($pId,'update');
     		$model->createChlidColumns('AdProduct','ad');
+    		$model->createChlidColumns('TypeProduct','ptypeId');
     		$model->setTimeData(true);
     		$return = $product->update(false,array('product_id' => $pId),array('name'),'Product','AdminProduct');
     		if($return === false) {
@@ -79,21 +80,23 @@ class AdminProductController extends AbstractActionController
     		}
     	}
 
-    	if($productList === false) $productList = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductById(array('product_id' => $pId,'delete_flg' => 0));
+    	if($productList === false) $productList = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductById(array('product_id' => (int)$pId,'delete_flg' => 0));
     	if($productList === false) return $this->redirect()->toRoute('admin-product');
-    	$ProductImage = $this->serviceLocator->get('DbSql')->dispatch('ProductImage')->getImageByProductId(array('image_id','image_path'),array('product_id' => $pId));
-//     	$productType = $this->serviceLocator->get('DbSql')->dispatch('ProductType');
-//     	$typeList = $productType->getType(array('parent_id' => 0));
+    	$ProductImage = $this->serviceLocator->get('DbSql')->dispatch('ProductImage')->getImageByProductId(array('image_id','image_path'),array('product_id' => (int)$pId));
+
     	$ad = $this->serviceLocator->get('DbSql')->dispatch('Ad');
     	$adList = $ad->getAdAll();
+    	$pptList = $this->serviceLocator->get('DbSql')->dispatch('ProductType')->getProductTypeByProductId((int)$pId,array('ptype_id','parent_id'),array());
+    	$adProductList = $this->serviceLocator->get('DbSql')->dispatch('AdProduct')->getAdProductByWhere(array('ad_id'),array('product_id' => (int)$pId));
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
-//     	$viewHelper->setSourceData($typeList,'type');
     	$viewHelper->setSourceData($adList,'ad');
+    	$viewHelper->setSourceData($pptList,'productTypeList');
+    	$viewHelper->setSourceData($adProductList,'adProductList');
     	$viewHelper->setSourceData($errorMessage,'errorMessage');
     	$viewHelper->setSourceData($ProductImage,'ProductImage');
     	$viewHelper->setSourceData($productList);
     	
-    	$viewModel = new \Zend\View\Model\ViewModel(array('viewHelper' => $viewHelper,'url' => $this->url()->fromRoute('admin-product/edit',array('pId' => $pId))));
+    	$viewModel = new \Zend\View\Model\ViewModel(array('viewHelper' => $viewHelper,'url' => $this->url()->fromRoute('admin-product/edit',array('pId' => (int)$pId))));
     	$viewModel->setTemplate('admin-product/admin-product/add');
     	return $viewModel;
     }
@@ -127,5 +130,31 @@ class AdminProductController extends AbstractActionController
     	}
     	 
     	return $this->redirect()->toRoute('admin-product');
+    }
+    
+    public function forumAction()
+    {
+    	$request = $this->request;
+    	if($request->isPost()) {
+    		$postData = $request->getPost()->toArray();
+    		$forumSelect = $postData['forumSelect'];
+    		$pageNum = $postData['pageNum'];
+    		$formId = $postData['formId'];
+    		$product = $postData['product'];
+    		if(count($product) > 0) {
+    			$productForum = $this->serviceLocator->get('DbSql')->dispatch('ProductForum');
+    			$productForum->beginTransaction();
+    			foreach($product as $data) {
+    				$forumSelect == 1 ? $return = $productForum->add(array('forum_id' => (int)$formId,'product_id' => (int)$data)) : $return = $productForum->del(array('forum_id' => (int)$formId,'product_id' => (int)$data));
+    				if($return === false) {
+    					$productForum->rollback();
+    					return $this->redirect()->toRoute('admin-product/index',array('pageNum' => $pageNum));
+    				}
+    			}
+    			$productForum->commit();
+    		}
+    	}
+    	
+    	return $this->redirect()->toRoute('admin-product/index',array('pageNum' => $pageNum));
     }
 }

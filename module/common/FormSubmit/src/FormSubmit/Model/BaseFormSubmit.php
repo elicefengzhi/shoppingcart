@@ -11,9 +11,11 @@ Class BaseFormSubmit
 	protected $dbModel;//数据库操作模块
 	protected $dbInsertFunction;//插入函数名
 	protected $insertExistsFunction;//插入数据存在检查函数名
+	protected $insertExistsSelect;//自定义插入数据存在检查(Db\Sql\Select对象)
 	protected $lastInsertId;//主表插入id
 	protected $dbUpdateFunction;////更新函数名
 	protected $updateExistsFunction;//更新数据存在函数名
+	protected $updateExistsSelect;//自定义更新数据存在检查(Db\Sql\Select对象)
 	protected $updateExistsValue;//检查更新数据是否存在时的对比值
 	protected $validateModel;//验证模块
 	protected $validateFunction;//验证函数名
@@ -25,6 +27,7 @@ Class BaseFormSubmit
 	protected $isUpdateWhere;//数据库更新是否有条件
 	protected $isTransaction;//是否开启事务
 	protected $isRollBack;//开启回滚
+	protected $isCustomExists;//是否自定义数据验证
 	protected $validateErrorMessage;//验证错误信息
 	protected $data;//传入原始数据
 	protected $chlidColumns = array();//子表字段集
@@ -36,6 +39,7 @@ Class BaseFormSubmit
 		$this->serviceLocator = $serviceLocator;
 		$this->isTransaction = false;
 		$this->isUpdateWhere = true;
+		$this->isCustomExists = false;
 		$this->events = new EventManager();
 	}
 	
@@ -103,11 +107,11 @@ Class BaseFormSubmit
 	}
 	
 	/**
-	 * 检查数据是否存在
+	 * 自定义检查数据是否存在
 	 * @param array $existsArray
 	 * @return boolean
-	 */
-	protected function exists($existsArray)
+ 	 */
+	protected function customExists($existsArray)
 	{
 		$type = $this->type;
 		$exists = false;
@@ -126,17 +130,34 @@ Class BaseFormSubmit
 		return $exists;
 	}
 	
-// 	protected function exists()
-// 	{
-// 		$type = $this->type;
-// 		$exists = false;
-// 		if($type == 'insert') {
+	/**
+	 * 检查数据是否存在
+	 * @param string $table 数据表名
+	 * @param array $existsArray
+	 * @return boolean
+	 */
+	protected function exists($table,$existsArray)
+	{
+		$type = $this->type;
+		$adapter = $this->serviceLocator->get('adapter');
+		$exists = false;
+
+		foreach($existsArray as $existsDataKey => $existsDataValue) {
+			if($type == 'insert') {
+				$insertExistsSelect = $this->insertExistsSelect;
+				is_object($insertExistsSelect) ? $recordExistsOption = $insertExistsSelect : $recordExistsOption = array('table' => $table,'field' => $existsDataKey,'adapter' => $adapter);
+			}
+			else {
+				$updateExistsSelect = $this->updateExistsSelect;
+				is_object($updateExistsSelect) ? $recordExistsOption = $updateExistsSelect : $recordExistsOption = array('table' => $table,'field' => $existsDataKey,'adapter' => $adapter,'exclude' => array('field' => key($this->updateExistsValue),'value' => current($this->updateExistsValue)));
+			}
+			$validator = new \Zend\Validator\Db\RecordExists($recordExistsOption);
 			
-// 		}
-// 		else {
+			if($validator->isValid($existsDataValue) === false) return false;
+		}
 			
-// 		}
-// 	}
+		return true;
+	}
 	
 	/**
 	 * 表单提交模块主函数
@@ -192,7 +213,7 @@ Class BaseFormSubmit
 			$this->events->trigger('FormSubmit/ExistsBefore',$this,array());
 			$existsArray = $this->getExistsArray($this->validatedData,$existsParams);
 			if($existsArray === false) return false;
-			$exists = $this->exists($existsArray);
+			$this->isCustomExists === false ? $exists = $this->exists($this->dbModel->getTableName(),$existsArray) : $exists = $this->customExists($existsArray);
 			$this->isExists = $exists;
 			//触发数据存在验证后事件
 			$this->events->trigger('FormSubmit/ExistsAfter',$this,array());
@@ -379,6 +400,33 @@ Class BaseFormSubmit
 	}
 	
 	/**
+	 * 设置自定义插入数据存在检查
+	 * @param object $select
+	 */
+	public function setinsertExistsSelect($select)
+	{
+		$this->insertExistsSelect = $select;
+	}
+	
+	/**
+	 * 设置自定义更新数据存在检查
+	 * @param object $select
+	 */
+	public function setupdateExistsSelect($select)
+	{
+		$this->updateExistsSelect = $select;
+	}
+	
+	/**
+	 * 设置是否自定义数据验证
+	 * @param boolean $isCustomExists
+	 */
+	public function setIsCustomExists($isCustomExists)
+	{
+		$this->isCustomExists = $isCustomExists;
+	}
+	
+	/**
 	 * 是否通过验证
 	 * @return boolean
 	 */
@@ -396,6 +444,9 @@ Class BaseFormSubmit
 		return $this->isExists;
 	}
 	
+	/**
+	 * 获得serviceManager
+	 */
 	public function getServiceLocator()
 	{
 		return $this->serviceLocator;

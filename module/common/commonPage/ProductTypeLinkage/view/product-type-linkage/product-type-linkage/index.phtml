@@ -1,4 +1,4 @@
-<select class="product-type-linkage">
+<select id="product-type-linkage-main" class="product-type-linkage">
 	<option value="-1">无</option>
 	<?php if($this->viewHelper->isLoop()): ?>
 	<?php foreach($this->viewHelper->getSourceData() as $data): ?>
@@ -13,7 +13,12 @@ $(document).ready(function(){
 		var _this = $(this);
 		var productTypeId = $(this).val();
 		$.ajax({ url: '<?php echo $this->url('product-type-linkage'); ?>'+productTypeId, dataType:'json', success: function(data){
-			_this.parent().find('.product-type-linkage-zi').remove();
+			if(_this.attr('id') == 'product-type-linkage-main') {
+				_this.next('.product-type-linkage-zi').remove();
+			}
+			else {
+				_this.parent().find('.product-type-linkage-zi').remove();
+			}
 	        if(data != false) {
 				var html = false;
 				$.each(data,function(key,value){

@@ -62,6 +62,15 @@ class BaseDb extends AbstractTableGateway
 	{
 		return $this->lastInsertValue;
 	}
+	
+	/**
+	 * 获得操作数据表名
+	 * @return string
+	 */
+	public function getTableName()
+	{
+		return $this->table;
+	}
 
 	/**
 	 * 执行手工sql语句

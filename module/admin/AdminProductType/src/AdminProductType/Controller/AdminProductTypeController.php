@@ -20,7 +20,7 @@ class AdminProductTypeController extends AbstractActionController
     		$typeList = $this->serviceLocator->get('DbSql')->dispatch('ProductType')->getTypeAll($offset,$rowsperpage);
     	}
     	
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+    	$viewHelper = $this->ViewHelper('Admin');
     	$viewHelper->setSourceData($typeList);
     	return array('viewHelper' => $viewHelper,'paging' => $paging);
     }
@@ -38,7 +38,7 @@ class AdminProductTypeController extends AbstractActionController
     	
     	$productType = $this->serviceLocator->get('DbSql')->dispatch('ProductType');
     	$typeList = $productType->getType(array('parent_id' => 0));
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+    	$viewHelper = $this->ViewHelper('Admin');
     	$viewHelper->setSourceData($typeList,'typeParentList');
 
     	return array('viewHelper' => $viewHelper,'errorMessage' => $errorMessage,'url' => $this->url()->fromRoute('admin-product-type/add'));
@@ -66,7 +66,7 @@ class AdminProductTypeController extends AbstractActionController
     	$typeParentList = $productType->getType(array('parent_id' => 0));
     	$typeList === false && $typeList = $productType->getType(array('ptype_id' => $typeId),true);
     	
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+    	$viewHelper = $this->ViewHelper('Admin');
     	$viewHelper->setSourceData($typeList);
     	$viewHelper->setSourceData($typeParentList,'typeParentList');
     	

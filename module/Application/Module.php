@@ -4,10 +4,21 @@ namespace Application;
 
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Application\Model\StaticApplication;
 
-class Module
+class Module implements AutoloaderProviderInterface 
 {
-	private $serviceManager;
+	public function getAutoloaderConfig()
+	{
+		return array(
+			'Zend\Loader\StandardAutoloader' => array(
+				'namespaces' => array(
+					__NAMESPACE__ => __DIR__ ,
+				),
+			),
+		);
+	}
 	
     public function getConfig()
     {
@@ -49,6 +60,10 @@ class Module
     		$is_admin = false;
     		$app = $event->getParam('application');
     		$serviceManager = $app->getServiceManager();
+    		
+    		//调用全局访问静态类
+    		StaticApplication::setServiceManager($serviceManager);
+    		
     		//获得配置
     		$init = $serviceManager->get('config');
     		//获得application模块配置

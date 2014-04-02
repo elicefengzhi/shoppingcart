@@ -17,6 +17,7 @@ class ValidateFactory implements FactoryInterface
     {
     	$serviceLocator->has('ImageUpload') ? $imageUploadModule = $serviceLocator->get('ImageUpload') : $imageUploadModule = false;
     	$serviceLocator->has('adapter') ? $adapter = $serviceLocator->get('adapter') : $adapter = false;
+
         return new Validate($imageUploadModule,$adapter);
     }
 }

@@ -35,9 +35,9 @@ class Module implements AutoloaderProviderInterface
     {
     	//监听其它模块写日志事件
     	$events = StaticEventManager::getInstance();
-    		$events->attach('*','setLog',function($event){
+    	$init = $this->getConfig();
+    	$events->attach('*','setLog',function($event) use($init){
     		$params = $event->getParams();
-    		$init = $this->getConfig();
     		isset($init['log/init']) ? $initArray = $init['log/init'] : $initArray = false;
     		$log = new \Log\Log\Log($initArray);
     		$log->write($params['model'],$params['message'], $params['level'], $params['fileName'],$params['line']);

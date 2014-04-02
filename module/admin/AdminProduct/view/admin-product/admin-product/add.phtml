@@ -15,7 +15,7 @@
 	商品库存 <input name="stock" type="text" value="<?php echo $this->viewHelper->string('stock'); ?>" /><br/>
    加入广告位 <?php if($this->viewHelper->isLoop('ad')): ?>
 			<?php foreach($this->viewHelper->getSourceData('ad') as $data): ?>
-				<input name="ad[]" type="checkbox" <?php echo $this->viewHelper->check('ad_id',$this->viewHelper->string('ad_id',$data)); ?> value="<?php echo $this->viewHelper->string('ad_id',$data); ?>" />&nbsp;<?php echo $this->viewHelper->string('ad_name',$data); ?>
+				<input name="ad[]" type="checkbox" <?php echo $this->viewHelper->adCheck($this->viewHelper->getSourceData('adProductList'),'ad_id',$data); ?> value="<?php echo $this->viewHelper->string('ad_id',$data); ?>" />&nbsp;<?php echo $this->viewHelper->string('ad_name',$data); ?>
 			<?php endforeach; ?>
 			<?php endif; ?><br/>
 	是否上架	<select name="is_add">
@@ -45,6 +45,15 @@ $(document).ready(function(){
 	$('#product-type').load('<?php echo $this->url('product-type-linkage'); ?>',function(){
 		$('#product-type').append('<a class="product-type-add" href="javascript:;">添加</a>');
 		$('#product-type').wrap('<p></p>');
+		<?php if($this->viewHelper->isLoop('productTypeList')): ?>
+		<?php foreach($this->viewHelper->getSourceData('productTypeList') as $type): ?>
+			<?php if($this->viewHelper->string('parent_id',$type) == 0): ?>
+			$('.product-type-linkage').eq(0).clone().appendTo('#product-type').wrap('<p></p>').after('&nbsp;<a class="product-type-del" href="javascript:;">删除</a>').removeAttr('id').val('<?php echo $this->viewHelper->string('ptype_id',$type) ?>');
+			<?php else: ?>
+			$('.product-type-linkage').eq(0).clone().appendTo('#product-type').wrap('<p></p>').after('&nbsp;<a class="product-type-del" href="javascript:;">删除</a>').removeAttr('id').val('<?php echo $this->viewHelper->string('parent_id',$type) ?>').change();
+			<?php endif; ?>
+		<?php endforeach; ?>
+		<?php endif; ?>
 	});
 	$('#product-submit').on('click',function(){
 		$('#product-form').append('<input type="hidden" name="description" value="'+UE.getEditor('editor').getContent()+'" />');
@@ -57,7 +66,7 @@ $(document).ready(function(){
 		$(this).parent().remove();
 	});
 	$('body').on('click','.product-type-add',function(){
-		$('.product-type-linkage').eq(0).clone().appendTo('#product-type').wrap('<p></p>').after('&nbsp;<a class="product-type-del" href="javascript:;">删除</a>');
+		$('.product-type-linkage').eq(0).clone().appendTo('#product-type').wrap('<p></p>').after('&nbsp;<a class="product-type-del" href="javascript:;">删除</a>').removeAttr('id');
 	});
 	$('body').on('click','.product-type-del',function(){
 		$(this).parent().remove();

@@ -64,6 +64,15 @@ return array(
                 			),
                 		),
                 	),
+                	'forum' => array(
+                		'type'    => 'Segment',
+                		'options' => array(
+                			'route'    => 'forum[/]',
+                			'defaults' => array(
+                				'action' => 'forum',
+                			),
+                		),
+                	),
                 ),
             ),
         ),

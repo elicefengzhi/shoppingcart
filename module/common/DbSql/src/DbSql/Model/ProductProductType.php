@@ -43,13 +43,14 @@ class ProductProductType extends BaseDb
     	return $return > 0 ? true : false;
     }
     
-    public function getExists($where)
+    public function getExistsByProductId($where)
     {
     	$select = $this->tableGateway->getSql()->select();
+    	$select->columns(array('count' => new \Zend\Db\Sql\Expression('COUNT(ppt_id)')));
     	$select->where($where);
     	$resultSet = $this->tableGateway->selectWith($select);
-    	$count = $resultSet->count();
-    	if($count > 0) {
+    	$current = $resultSet->toArray();
+    	if($current[0]['count'] > 0) {
     		return true;
     	}
     	

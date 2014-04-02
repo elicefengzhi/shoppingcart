@@ -74,6 +74,21 @@ class ProductType extends BaseDb
     	return false;
     }
     
+    public function getProductTypeByProductId($productId,$masterColumns,$joinColumns)
+    {
+    	$select = $this->tableGateway->getSql()->select();
+    	$select->columns($masterColumns);
+    	$select->join(array('ppt' => 'product_productType'),'ppt.ptype_id = product_type.ptype_id',$joinColumns);
+    	$select->where(array('ppt.product_id' => $productId));
+    	$resultSet = $this->tableGateway->selectWith($select);
+    	$current = $resultSet->toArray();
+    	if(count($current) > 0) {
+    		return $current;
+    	}
+    	
+    	return false;
+    }
+    
     public function getType($where = false,$isOne = false)
     {
     	$select = $this->tableGateway->getSql()->select();
@@ -84,19 +99,6 @@ class ProductType extends BaseDb
     		return $isOne === false ? $current : $current[0];
     	}
     
-    	return false;
-    }
-    
-    public function getExists($where)
-    {
-    	$select = $this->tableGateway->getSql()->select();
-    	$select->where($where);
-    	$resultSet = $this->tableGateway->selectWith($select);
-    	$count = $resultSet->count();
-    	if($count > 0) {
-    		return true;
-    	}
-    	
     	return false;
     }
     

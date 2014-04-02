@@ -1,8 +1,0 @@
-2014-03-28T12:28:18+08:00 DEBUG (7): 
-time:2014-03-28 12:28:18
-level:DEBUG
-model:validator
-fileName:/var/www/shoppingcart/module/common/Validate/src/Validate/Model/AdminProductType.php
-line:68
-message:Statement could not be executed
-

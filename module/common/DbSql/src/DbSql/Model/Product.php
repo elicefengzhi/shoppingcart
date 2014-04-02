@@ -85,19 +85,6 @@ class Product extends BaseDb
     	return false;
     }
     
-    public function getExists($where)
-    {
-    	$select = $this->tableGateway->getSql()->select();
-    	$select->where($where);
-    	$resultSet = $this->tableGateway->selectWith($select);
-    	$count = $resultSet->count();
-    	if($count > 0) {
-    		return true;
-    	}
-    	
-    	return false;
-    }
-    
     public function getById($where)
     {
     	$select = $this->tableGateway->getSql()->select();

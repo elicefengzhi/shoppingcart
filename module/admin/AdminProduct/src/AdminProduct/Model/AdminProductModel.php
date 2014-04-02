@@ -50,8 +50,11 @@ class AdminProductModel
 				//如果是更新商品广告，先删除原先数据内容
 				$type == 'update' && $delReturn = $serviceLocator->get('DbSql')->dispatch('AdProduct')->del(array('product_id' => $productId));
 				if($delReturn === false) {
-					$target->setIsRollBack(true);
-					return false;
+					$exists = $serviceLocator->get('DbSql')->dispatch('AdProduct')->getExistsByProductId(array('product_id' => $productId));
+					if($exists == true) {
+						$target->setIsRollBack(true);
+						return false;
+					}
 				}
 				foreach($chlidData as $data) {
 					$return = $serviceLocator->get('DbSql')->dispatch('AdProduct')->add(array('product_id' => $productId,'ad_id' => $data));
@@ -67,9 +70,13 @@ class AdminProductModel
 				$delReturn = true;
 				$type == 'update' && $delReturn = $serviceLocator->get('DbSql')->dispatch('ProductProductType')->del(array('product_id' => $productId));
 				if($delReturn === false) {
-					$target->setIsRollBack(true);
-					return false;
+					$exists = $serviceLocator->get('DbSql')->dispatch('ProductProductType')->getExistsByProductId(array('product_id' => $productId));
+					if($exists == true) {
+						$target->setIsRollBack(true);
+						return false;
+					}
 				}
+				$chlidData = array_unique($chlidData);
 				foreach($chlidData as $data) {
 					$return = $serviceLocator->get('DbSql')->dispatch('ProductProductType')->add(array('product_id' => $productId,'ptype_id' => $data));
 					if($return === false) {

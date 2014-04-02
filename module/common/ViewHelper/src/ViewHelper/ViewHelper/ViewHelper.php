@@ -21,6 +21,6 @@ class ViewHelper extends AbstractPlugin
     	if(empty($viewType)) return false;
     	 
     	$class = 'ViewHelper\Model\\'.$viewType;
-    	return new $class($this->imageModule);
+    	return new $class();
     }
 }

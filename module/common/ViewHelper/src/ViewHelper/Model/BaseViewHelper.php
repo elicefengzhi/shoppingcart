@@ -120,12 +120,18 @@ class BaseViewHelper extends AbstractHelper
 	 * @param string $key 数据源键名
 	 * @param array $option 附加参数(before：字符串前添加值；after：字符串后添加值;replaceValue：为空时的替换值)
 	 * @return string
+	 * 
+	 * 如果$dataString为false，$key为false，$data有值的情况，直接采用$data为数据源值。
 	 */
 	public function string($dataString,$data = false,$key = false,$option = false)
 	{
-		$data = $this->getData($data,$key);
-		$returnData = $this->isOk($dataString,$data);
-		
+		$returnData = false;
+		$dataString === false && $key === false && $data!== false && $returnData = $data;
+		if($returnData === false) {
+			$data = $this->getData($data,$key);
+			$returnData = $this->isOk($dataString,$data);
+		}
+
 		isset($option['after']) ? $after = $option['after'] : $after = '';
 		isset($option['before']) ? $before = $option['before'] : $before = '';
 		isset($option['isEscapeHtml']) ? $option['isEscapeHtml'] === true && $returnData = $this->escapeHtml($returnData) : $this->escapeHtml($returnData);

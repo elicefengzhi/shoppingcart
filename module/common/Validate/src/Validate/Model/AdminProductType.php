@@ -28,12 +28,6 @@ class AdminProductType extends BaseValidator
 				$this->errorMessage['nameCheck'][] = '分类名为必须';
 				return false;
 			}
-			
-			$ValidData = $this->DbExists('product_type','name',$ValidData);
-			if($ValidData === false) {
-				$this->errorMessage['nameCheck'][] = '分类名已存在';
-				return false;
-			}
 				
 			$this->data['name'] = $ValidData;
 		}

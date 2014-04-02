@@ -12,7 +12,7 @@ return array(
                 'options' => array(
                     'route'    => '/commonPage/productTypeLinkage[/:parentId][/]',
                 	'constraints' => array(
-                		'parentId' => '\d+|-1'
+                		'parentId' => '\d+|-1',
                 	),
                     'defaults' => array(
                         '__NAMESPACE__' => 'ProductTypeLinkage\Controller',

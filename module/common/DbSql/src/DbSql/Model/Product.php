@@ -42,7 +42,6 @@ class Product extends BaseDb
     	$select = $this->tableGateway->getSql()->select();
     	$select->columns(array('count' => new \Zend\Db\Sql\Expression('COUNT(product.product_id)')));
     	$select->join('product_type','product.ptype_id = product_type.ptype_id',array(),$select::JOIN_LEFT);
-    	$select->order('product.update_time desc');
     	$select->where(array('delete_flg' => 0));
     	$resultSet = $this->tableGateway->selectWith($select);
     	$current = $resultSet->toArray();
@@ -80,6 +79,21 @@ class Product extends BaseDb
     	$current = $resultSet->toArray();
     	if(count($current) > 0) {
     		return $current[0];
+    	}
+    	 
+    	return false;
+    }
+    
+    public function getProductTypeByOrderId($orderId,$mainColumns,$joinColumns)
+    {
+    	$select = $this->tableGateway->getSql()->select();
+    	$select->columns($mainColumns);
+    	$select->join(array('op' => 'order_product'),'op.product_id = product.product_id',$joinColumns,$select::JOIN_LEFT);
+    	$select->where(array('op.order_id' => $orderId));
+    	$resultSet = $this->tableGateway->selectWith($select);
+    	$current = $resultSet->toArray();
+    	if(count($current) > 0) {
+    		return $current;
     	}
     	 
     	return false;

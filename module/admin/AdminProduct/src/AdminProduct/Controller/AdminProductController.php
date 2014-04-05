@@ -118,6 +118,7 @@ class AdminProductController extends AbstractActionController
     		if(isset($postData['delete'])) {
     			$productType = $this->serviceLocator->get('DbSql')->dispatch('Product');
     			$productType->beginTransaction();
+    			$delete = array_merge($postData['delete'],array('update_time' => time()));
     			foreach($postData['delete'] as $data) {
     				$return = $productType->edit(array('delete_flg' => 1),array('product_id' => (int)$data));
     				if($return === false) {

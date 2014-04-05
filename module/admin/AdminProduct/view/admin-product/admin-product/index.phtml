@@ -76,6 +76,7 @@
 	</form>
 	<div style="clear:both;" ></div>
 	<div style="margin-top:10px;" id="paging-div">
+		<?php if($this->paging) : ?>
 		<?php if($this->paging->isFirstPage) : ?>
 		<a href="<?php echo $this->url('admin-product/index',array('pageNum' => 1)); ?>">第一页</a>
 		<?php endif;?>
@@ -90,6 +91,7 @@
 		<a href="<?php echo $this->url('admin-product/index',array('pageNum' => $this->paging->getPages())); ?>">最后一页</a>
 		<?php endif;?>
 		总页数&nbsp;<?php echo $this->paging->getPages(); ?>
+		<?php endif; ?>
 	</div>
 </div>
 

@@ -5,7 +5,7 @@ return array(
         'Application',
     	'ZendDeveloperTools','BjyProfiler','ThaConfigalyzer',
     	'Index',
-    	'AdminIndex','AdminProduct','AdminProductType','AdminProductImage',
+    	'AdminIndex','AdminProduct','AdminProductType','AdminProductImage','AdminProduct','AdminOrder','AdminPage',
     	'ProductTypeLinkage',
     	'DbSql','Log','ImageUpload','SendMail','ViewHelper','Validate','Paging','Fsession','FormSubmit','ShoppingCart'
     ),

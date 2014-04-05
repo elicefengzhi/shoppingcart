@@ -1,0 +1,77 @@
+<div id="page_contents_main">
+	<table cellspacing="0" id="table_for_opration">
+	<tr>
+	<td valign="middle"><input type="checkbox" id="cba" /></td>
+	<td valign="middle">订单编号</td>
+	<td valign="middle">用户名</td>
+	<td valign="middle">商品</td>
+	<td valign="middle">订单总金额</td>
+	<td valign="middle">状态</td>
+	<td valign="middle">创建时间</td>
+	<td valign="middle">最后修改时间</td>
+	<?php if($this->viewHelper->isLoop()): ?>
+	<?php foreach($this->viewHelper->getSourceData() as $data): ?>
+	<tr>
+	<td valign="middle"><input class="table-checkbox" type="checkbox" value="<?php echo $this->viewHelper->string('order_id',$data); ?>"/></td>
+	<td valign="middle"><span class="order-id"><?php echo $this->viewHelper->string('order_id',$data); ?></span></td>
+	<td valign="middle"><?php echo $this->viewHelper->string('user_name',$data); ?></td>
+	<?php $this->viewHelper->setSourceData($this->viewHelper->getProductTypeByOrderId($this->viewHelper->string('order_id',$data)),'product'); ?>
+	<td valign="middle">
+		<?php if($this->viewHelper->isLoop('product')) : ?>
+		<?php foreach($this->viewHelper->getSourceData('product') as $product) : ?>
+		<?php echo $this->viewHelper->string('name',$product,false,array('after' => '<br/>')); ?>
+		<?php endforeach; ?>
+		<?php endif; ?>
+	</td>
+	<td valign="middle"><?php echo $this->viewHelper->string('total',$data); ?></td>
+	<td valign="middle"><?php echo $this->viewHelper->orderStatus($this->viewHelper->string('status',$data)); ?></td>
+	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('creat_time','Y-m-d H:i:s',$data); ?></td>
+	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('update_time','Y-m-d H:i:s',$data); ?></td>
+	</tr>
+	<?php endforeach; ?>
+	<?php endif; ?>
+	</table>
+	<form id="order-form" action="<?php echo $this->url('admin-order/statusDelete',array('pageNum' => $pageNum)); ?>" method="post">
+		<select id="order-select" name="statusDelete" style="margin-top:10px;">
+			<option value="-1">请选择操作</option>
+			<option value="1">已支付</option>
+			<option value="2">未支付</option>
+			<option value="3">删除</option>
+		</select>
+	</form>
+	<div style="margin-top:10px;" id="paging-div">
+		<?php if($this->paging) : ?>
+		<?php if($this->paging->isFirstPage) : ?>
+		<a href="<?php echo $this->url('admin-product/index',array('pageNum' => 1)); ?>">第一页</a>
+		<?php endif;?>
+		<?php foreach($this->paging->numList as $num) : ?>
+		<?php if($this->paging->isNow($num)) : ?>
+		<?php echo $num;?>
+		<?php else :?>
+		<a href="<?php echo $this->url('admin-product/index',array('pageNum' => $num)); ?>"><?php echo $num; ?></a>
+		<?php endif; ?>
+		<?php endforeach;?>
+		<?php if($this->paging->isLastPage) : ?>
+		<a href="<?php echo $this->url('admin-product/index',array('pageNum' => $this->paging->getPages())); ?>">最后一页</a>
+		<?php endif;?>
+		总页数&nbsp;<?php echo $this->paging->getPages(); ?>
+		<?php endif; ?>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var lang=$("#ad_lang").val();
+	$(".rick #page_contents_main #table_for_opration tr:gt(0) td").css({'color':'#666'});
+	check_box_bind($(":checkbox[id=\"cba\"]"),$(":checkbox[id!=\"cba\"]"));
+	$('#order-select').on('change',function(){
+		if(confirm("操作确认") && $(this).val() != '-1') {
+			$('.table-checkbox').each(function(){
+				if(this.checked == true) {
+					$('#order-form').append('<input name="order[]" type="hidden" value="'+$(this).val()+'" />');
+				}
+			});
+			$('#order-form').submit();
+		}
+	});
+});
+</script>

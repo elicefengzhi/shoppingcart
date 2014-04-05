@@ -3,7 +3,7 @@
 <div id="navigation">
 <p data-ul="product" class="selected">商品管理</p>
 <p data-ul="type">商品分类管理</p>
-<p>订单管理</p>
+<p data-ul="order">订单管理</p>
 <p>用户管理</p>
 <br clear="all" />
 </div>
@@ -17,6 +17,10 @@
 	<ul id="AdTopMenu" class="type" style="display:none;">
 		<li><p><a href="<?php echo $this->url('admin-product-type'); ?>">商品分类查看</a></p></li>
 		<li><p><a href="<?php echo $this->url('admin-product-type/add'); ?>">商品分类添加</a></p></li>
+		<br clear="all" />
+	</ul>
+	<ul id="AdTopMenu" class="order" style="display:none;">
+		<li><p><a href="<?php echo $this->url('admin-order'); ?>">订单查看</a></p></li>
 		<br clear="all" />
 	</ul>
 </div>

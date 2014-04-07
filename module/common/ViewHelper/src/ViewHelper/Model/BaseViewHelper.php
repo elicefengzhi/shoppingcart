@@ -35,7 +35,12 @@ class BaseViewHelper extends AbstractHelper
 	 */
 	public function getSourceData($key = false)
 	{
-		return $key === false ? (isset($this->sourceData['main']) ? $this->sourceData['main'] : false) : $this->sourceData[$key];
+	    if($key === false) {
+	        return isset($this->sourceData['main']) ? $this->sourceData['main'] : false;
+	    }
+	    else {
+	        return isset($this->sourceData[$key]) ? $this->sourceData[$key] : false;
+	    }
 	}
 	
 	/**

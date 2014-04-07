@@ -30,7 +30,7 @@ class AdminProductTypeController extends AbstractActionController
     	$errorMessage = '';
     	$user = $this->serviceLocator->get('FormSubmit')->dispatch('Insert');
     	if($user !== false) {
-    		$return = $user->insert(false,array('name'),'ProductType','AdminProductType');
+    		$return = $user->insert(false,array('name'),array('table' => 'product_type'),'AdminProductType');
     		if($return !== false) return $this->redirect()->toRoute('admin-product-type');
     		$return === false && $user->isVal() === false && $errorMessage = $user->getValidateErrorMessage();
     		$return === false && $user->isExists() === true && $errorMessage = '商品分类名已存在';
@@ -53,7 +53,7 @@ class AdminProductTypeController extends AbstractActionController
     	
     	$user = $this->serviceLocator->get('FormSubmit')->dispatch('Update');
     	if($user !== false) {
-    		$return = $user->update(false,array('ptype_id' => $typeId),array('name'),'ProductType','AdminProductType');
+    		$return = $user->update(false,array('ptype_id' => $typeId),array('name'),array('table' => 'product_type'),'AdminProductType');
     		if($return !== false) {
     			return $this->redirect()->toRoute('admin-product-type');
     		}

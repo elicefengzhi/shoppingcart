@@ -10,7 +10,7 @@ return array(
             'admin-index' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'    => '/admin[[/index][/]]',
+                    'route'    => '/admin[/]',
                     'defaults' => array(
                         '__NAMESPACE__' => 'AdminIndex\Controller',
                         'controller'    => 'AdminIndex',

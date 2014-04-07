@@ -30,6 +30,7 @@ Class BaseFormSubmit
 	protected $isCustomExists;//是否自定义数据验证
 	protected $validateErrorMessage;//验证错误信息
 	protected $data;//传入原始数据
+	protected $tableName;//操作表名
 	protected $chlidColumns = array();//子表字段集
 	protected $chlidColumnsValues;//子表字段集值
 	
@@ -40,6 +41,7 @@ Class BaseFormSubmit
 		$this->isTransaction = false;
 		$this->isUpdateWhere = true;
 		$this->isCustomExists = false;
+		$this->tableName = false;
 		$this->events = new EventManager();
 	}
 	
@@ -77,7 +79,9 @@ Class BaseFormSubmit
 	protected function setInfo($type,$initArray,$dbDispatchName,$validateDispatName)
 	{
 		$this->type = $type;
-		$this->dbModel = $this->serviceLocator->get($initArray['dbModelName'])->dispatch($dbDispatchName);
+		//如果数据库操作模块分发名不是一个数组，执行模块分发
+		!is_array($dbDispatchName) && $this->dbModel = $this->serviceLocator->get($initArray['dbModelName'])->dispatch($dbDispatchName);
+		//$validateDispatName为false时，验证模块分发名使用数据库操作模块分发名值
 		$validateDispatName === false ? $this->validateModel = $this->serviceLocator->get($initArray['validateModelName'])->dispatch($dbDispatchName) : $this->validateModel = $this->serviceLocator->get($initArray['validateModelName'])->dispatch($validateDispatName);
 		$this->dbInsertFunction = $initArray['dbInsertFunction'];
 		$this->insertExistsFunction = $initArray['insertExistsFunction'];
@@ -160,6 +164,30 @@ Class BaseFormSubmit
 	}
 	
 	/**
+	 * 检查传入原始数据正确性
+	 * @param array $initArray
+	 * @param array $params
+	 * @param array|string $dbDispatchName
+	 * @param string $validateDispatName
+	 * @return boolean
+	 */
+	public function paramsIsOk($initArray,$params,$dbDispatchName,$validateDispatName)
+	{
+	    if(!isset($initArray) || !is_array($params) || count($params) <= 0) return false;
+	    $return = true;
+	    if(is_array($dbDispatchName)) {
+	        //如果数据库操作模块是数组形式，则准备使用本程序提供数据库操作方法，此处为操作表名赋值
+	    	isset($dbDispatchName['table']) || $return = false;
+	    	$return !== false && $this->tableName = $dbDispatchName['table'];
+	    }
+	    else {
+	    	trim((string)$dbDispatchName) == '' && $return = false;
+	    }
+
+	    return $return;
+	}
+	
+	/**
 	 * 表单提交模块主函数
 	 * @param string $type
 	 * @param array $params
@@ -172,7 +200,11 @@ Class BaseFormSubmit
 	{
 		$initArray = $this->initArray;
 		trim((string)$type) == '' && $type == 'insert';
-		if(!isset($initArray) || !is_array($params) || count($params) <= 0 || trim((string)$dbDispatchName) == '') return false;
+		$isOk = $this->paramsIsOk($initArray,$params,$dbDispatchName,$validateDispatName);
+		if($isOk === false) {
+		    $this->setLog('source params is error',__LINE__);
+		    return false;
+		}
 		$this->data = $params;
 
 		$this->setInfo($type,$initArray,$dbDispatchName,$validateDispatName);
@@ -213,7 +245,16 @@ Class BaseFormSubmit
 			$this->events->trigger('FormSubmit/ExistsBefore',$this,array());
 			$existsArray = $this->getExistsArray($this->validatedData,$existsParams);
 			if($existsArray === false) return false;
-			$this->isCustomExists === false ? $exists = $this->exists($this->dbModel->getTableName(),$existsArray) : $exists = $this->customExists($existsArray);
+			//判断是否执行用户自定义数据存在验证方法
+			if($this->isCustomExists === false) {
+			    //如果没有提供数据操作表名，通过调用DbSql基础类“getTableName”函数取得表名
+			    $this->tableName === false ? $tableName = $this->dbModel->getTableName() : $tableName = $this->tableName;
+			    $exists = $this->exists($tableName,$existsArray);
+			}
+			else {
+			    $exists = $this->customExists($existsArray);
+			}
+// 			$this->isCustomExists === false ? $exists = $this->exists($this->dbModel->getTableName(),$existsArray) : $exists = $this->customExists($existsArray);
 			$this->isExists = $exists;
 			//触发数据存在验证后事件
 			$this->events->trigger('FormSubmit/ExistsAfter',$this,array());
@@ -242,21 +283,36 @@ Class BaseFormSubmit
 			//执行插入或更新
 			if($type == 'insert') {
 				$function = $this->dbInsertFunction;
-				if(!method_exists($this->dbModel,$function)) {
-					$this->setLog('insert function is undefined',__LINE__);
-					return false;
+				if($this->tableName !== false) {
+				    //如果是程序自动插入，则调用函数执行插入
+					$sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('adapter'),$this->tableName);
+					$dbReturn = $sql->insert($validatedData);
+					$dbReturn !== false && $this->lastInsertId = $dbReturn;
 				}
-				$dbReturn = $this->dbModel->$function($validatedData);
-				$this->lastInsertId = $this->dbModel->lastInsertId();
+				else {
+				    if(!method_exists($this->dbModel,$function)) {
+				    	$this->setLog('insert function is undefined',__LINE__);
+				    	return false;
+				    }
+				    $dbReturn = $this->dbModel->$function($validatedData);
+				    $this->lastInsertId = $this->dbModel->lastInsertId();
+				}	
 			}
 			else {
 				$function = $this->dbUpdateFunction;
 				$this->isUpdateWhere === true ? $where = $this->updateExistsValue : $where = array();
-				if(!method_exists($this->dbModel,$function)) {
-					$this->setLog('update function is undefined',__LINE__);
-					return false;
+				if($this->tableName !== false) {
+				    //如果是程序自动更新，则调用函数执行更新
+				    $sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('adapter'),$this->tableName);
+				    $dbReturn = $sql->update($validatedData,$where);
 				}
-				$dbReturn= $this->dbModel->$function($validatedData,$where);
+				else {
+				    if(!method_exists($this->dbModel,$function)) {
+				    	$this->setLog('update function is undefined',__LINE__);
+				    	return false;
+				    }
+				    $dbReturn= $this->dbModel->$function($validatedData,$where);
+				}
 			}
 			//触发数据库操作后事件
 			$this->events->trigger('FormSubmit/DbAfter',$this,array());

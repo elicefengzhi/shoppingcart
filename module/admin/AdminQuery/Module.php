@@ -1,6 +1,6 @@
 <?php
 
-namespace AdminIndex;
+namespace AdminQuery;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 

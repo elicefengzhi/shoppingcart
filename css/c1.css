@@ -2,13 +2,18 @@
 *{margin:0px;padding:0px;font-size:13px;
 font-family: Verdana, Arial, Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Osaka, "MS P Gothic", "ＭＳ Ｐゴシック",sans-serif;}
 body{ background-color:#FF0;}
+.errorClass{color:red;text-align:center;}
+.trTitle{text-align:right;}
 .rick{}
-.rick #center{ width:1000px; margin:0 auto; padding-top:10px;}
+.rick #center{ width:1005px; margin:0 auto; padding-top:10px;}
 /*---------------------------------------------------------------------------parts---*/
 .rick .zp10{ padding-left:10px;}
 .rick .zp5{ padding-top:5px;}
 /*---------------------------------------------------------------------------page_login---*/
-.rick #header #log{ float:left;}
+#divCode{font-size:15px;}
+.rick #header #log , .divCode{ float:left;}
+#login-form #codeChange {margin-left:20px;margin-top:3px;}
+#button_submit img{cursor:pointer;}
 .rick #header #log a img{ border:none;behavior: url("/img/iepngfix.htc");}
 .rick #header #opration_box_header{ float:right;}
 .rick #header #opration_box_header .line0{ text-align:right; padding-top:4px; padding-bottom:3px;}
@@ -48,3 +53,7 @@ body{ background-color:#FF0;}
 .rick #page_contents_main{ padding-bottom:40px;}
 .rick #page_contents_main #table_for_opration{ border-collapse: collapse; width:1000px;}
 .rick #page_contents_main #table_for_opration td{ padding-top:4px; padding-bottom:3px; border-bottom:#CCC 1px solid; text-align:center;}
+/*---------------------------------------------------------admin------------------*/
+.admin-table{margin-left:20px;}
+.admin-table td{padding:5px;}
+#admin-nav{margin:5px 0 5px 0;}

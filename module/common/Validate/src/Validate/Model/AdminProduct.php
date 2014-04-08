@@ -29,13 +29,13 @@ class AdminProduct extends BaseValidator
 			$data = $this->sourceData[$data];
 			$ValidData = $this->NotEmety($data);
 			if($ValidData === false) {
-				$this->errorMessage['nameCheck'][] = '分类名为必须';
+				$this->errorMessage['nameCheck'][] = '商品名为必须';
 				return false;
 			}
 			
 			$ValidData = $this->StringLength($data,array('min'=>0,'max'=>50),false);
 			if($ValidData === false) {
-				$this->errorMessage['nameCheck'][] = '分类名必须在50字以内';
+				$this->errorMessage['nameCheck'][] = '商品名必须在50字以内';
 				return false;
 			}
 				

@@ -10,7 +10,7 @@ return array(
             'admin-page' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'    => '/admin/page',
+                    'route'    => '/admin/page[/]',
                     'defaults' => array(
                         '__NAMESPACE__' => 'AdminPage\Controller',
                         'controller'    => 'AdminPage',
@@ -19,17 +19,47 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    'default' => array(
+                    'add' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
+                            'route'    => 'add[/]',
                             'defaults' => array(
+                                'action' => 'add',
                             ),
                         ),
+                    ),
+                    'edit' => array(
+                		'type'    => 'Segment',
+                		'options' => array(
+            				'route'    => 'edit/[:pId[/]]',
+            				'constraints' => array(
+            					'pId' => '\d*'
+            				),
+            				'defaults' => array(
+            					'action' => 'edit',
+            				),
+                		),
+                    ),
+                    'show' => array(
+                		'type'    => 'Segment',
+                		'options' => array(
+            				'route'    => 'show/[:pId[/]]',
+            				'constraints' => array(
+            					'pId' => '\d*'
+            				),
+            				'defaults' => array(
+            					'action' => 'show',
+            				),
+                		),
+                    ),
+                    'delete' => array(
+                		'type'    => 'Segment',
+                		'options' => array(
+            				'route'    => 'delete[/]',
+            				'defaults' => array(
+            					'action' => 'delete',
+            				),
+                		),
                     ),
                 ),
             ),

@@ -1,40 +1,41 @@
-<p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<span>商品分类</span></p>
 <div id="page_contents_main">
 	<?php if($this->viewHelper->isLoop()): ?>
 	<table cellspacing="0" id="table_for_opration">
 	<tr>
 	<td valign="middle"><input type="checkbox" id="cba" /></td>
-	<td valign="middle">商品分类名</td>
-	<td valign="middle">父分类名</td>
+	<td valign="middle">询问编号</td>
+	<td valign="middle">询问标题</td>
+	<td valign="middle">创建时间</td>
 	<td valign="middle"></td>
 	</tr>
 	<?php foreach($this->viewHelper->getSourceData() as $data): ?>
 	<tr>
-	<td valign="middle"><input class="table-checkbox" type="checkbox" value="<?php echo $this->viewHelper->string('ptype_id',$data); ?>"/></td>
-	<td valign="middle"><?php echo $this->viewHelper->string('name',$data); ?></td>
-	<td valign="middle"><?php echo $this->viewHelper->string('parent_name',$data,false,array('replaceValue' => '无')); ?></td>
-	<td valign="middle"><a href="<?php echo $this->url('admin-product-type/edit',array('typeId' => $this->viewHelper->string('ptype_id',$data))); ?>">修改</a></td>
+	<td valign="middle"><input class="table-checkbox" type="checkbox" value="<?php echo $this->viewHelper->string('q_id',$data); ?>"/></td>
+	<td valign="middle"><?php echo $this->viewHelper->string('q_id',$data); ?></td>
+	<td valign="middle"><?php echo $this->viewHelper->string('q_title',$data); ?></td>
+	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('create_time','Y-m-d H:i:s',$data); ?></td>
+	<td valign="middle"><a href="<?php echo $this->url('admin-query/show',array('qId' => $this->viewHelper->string('q_id',$data))); ?>">查看</a></td>
 	</tr>
 	<?php endforeach; ?>
 	</table>
 	<?php endif; ?>
-	<form id="delete-form" action="<?php echo $this->url('admin-product-type/delete') ?>" method="post">
+	<form id="delete-form" action="<?php echo $this->url('admin-query/delete') ?>" method="post">
 		<input id="delete-button" style="margin-top:10px;" type="button" value="删除" />
 	</form>
 	<div style="margin-top:10px;" id="paging-div">
 		<?php if($this->paging) : ?>
 		<?php if($this->paging->isFirstPage) : ?>
-		<a href="<?php echo $this->url('admin-product-type/index',array('pageNum' => 1)); ?>">第一页</a>
+		<a href="<?php echo $this->url('admin-query/index',array('pageNum' => 1)); ?>">第一页</a>
 		<?php endif;?>
 		<?php foreach($this->paging->numList as $num) : ?>
 		<?php if($this->paging->isNow($num)) : ?>
 		<?php echo $num;?>
 		<?php else :?>
-		<a href="<?php echo $this->url('admin-product-type/index',array('pageNum' => $num)); ?>"><?php echo $num; ?></a>
+		<a href="<?php echo $this->url('admin-query/index',array('pageNum' => $num)); ?>"><?php echo $num; ?></a>
 		<?php endif; ?>
 		<?php endforeach;?>
 		<?php if($this->paging->isLastPage) : ?>
-		<a href="<?php echo $this->url('admin-product-type/index',array('pageNum' => $this->paging->getPages())); ?>">最后一页</a>
+		<a href="<?php echo $this->url('admin-query/index',array('pageNum' => $this->paging->getPages())); ?>">最后一页</a>
 		<?php endif;?>
 		总页数&nbsp;<?php echo $this->paging->getPages(); ?>
 		<?php endif; ?>

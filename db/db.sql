@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.1
+-- version 4.0.6deb1
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2014 年 04 月 08 日 14:28
--- 服务器版本: 5.5.24-log
--- PHP 版本: 5.4.3
+-- 生成日期: 2014-04-13 14:52:06
+-- 服务器版本: 5.5.35-0ubuntu0.13.10.2
+-- PHP 版本: 5.5.3-1ubuntu2.3
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `ad_product` (
   `ad_id` int(11) NOT NULL COMMENT '广告位id FK',
   `product_id` int(11) NOT NULL COMMENT '商品id FK',
   PRIMARY KEY (`ad_product_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=43 ;
 
 --
 -- 转存表中的数据 `ad_product`
@@ -88,7 +88,9 @@ INSERT INTO `ad_product` (`ad_product_id`, `ad_id`, `product_id`) VALUES
 (17, 2, 34),
 (34, 1, 31),
 (35, 3, 31),
-(36, 2, 22);
+(36, 2, 22),
+(41, 1, 36),
+(42, 2, 36);
 
 -- --------------------------------------------------------
 
@@ -171,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `image_product` (
   `product_id` int(11) NOT NULL COMMENT '商品表id',
   `image_path` varchar(50) NOT NULL COMMENT '图片路径',
   PRIMARY KEY (`image_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 --
 -- 转存表中的数据 `image_product`
@@ -186,7 +188,9 @@ INSERT INTO `image_product` (`image_id`, `product_id`, `image_path`) VALUES
 (7, 22, 'upload/1395650387405995.jpg'),
 (8, 31, 'upload/1395805941477787.jpg'),
 (9, 31, 'upload/1395805941756590.jpg'),
-(10, 34, 'upload/1396089508437477.jpg');
+(10, 34, 'upload/1396089508437477.jpg'),
+(13, 36, 'upload/1397011727560748.jpg'),
+(14, 36, 'upload/1397011727774318.jpg');
 
 -- --------------------------------------------------------
 
@@ -198,6 +202,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   `order_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `user_id` int(11) NOT NULL COMMENT '用户表id FK',
   `total` int(11) NOT NULL COMMENT '总金额',
+  `point` int(11) NOT NULL DEFAULT '0' COMMENT '点数',
   `status` int(11) DEFAULT '0' COMMENT '状态 0:未付款 1:已付款',
   `creat_time` int(11) NOT NULL COMMENT '创建时间',
   `update_time` int(11) NOT NULL COMMENT '修改时间',
@@ -209,8 +214,8 @@ CREATE TABLE IF NOT EXISTS `order` (
 -- 转存表中的数据 `order`
 --
 
-INSERT INTO `order` (`order_id`, `user_id`, `total`, `status`, `creat_time`, `update_time`, `delete_flg`) VALUES
-(1, 1, 200, 1, 1396421573, 1396425812, 0);
+INSERT INTO `order` (`order_id`, `user_id`, `total`, `point`, `status`, `creat_time`, `update_time`, `delete_flg`) VALUES
+(1, 1, 200, 100, 1, 1396421573, 1396425812, 0);
 
 -- --------------------------------------------------------
 
@@ -222,6 +227,7 @@ CREATE TABLE IF NOT EXISTS `order_product` (
   `oproduct_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `order_id` int(11) NOT NULL COMMENT '订单表id FK',
   `product_id` int(11) NOT NULL COMMENT '商品表id FK',
+  `product_count` int(11) NOT NULL COMMENT '商品数量',
   PRIMARY KEY (`oproduct_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='订单和商品关联表' AUTO_INCREMENT=4 ;
 
@@ -229,10 +235,10 @@ CREATE TABLE IF NOT EXISTS `order_product` (
 -- 转存表中的数据 `order_product`
 --
 
-INSERT INTO `order_product` (`oproduct_id`, `order_id`, `product_id`) VALUES
-(1, 1, 19),
-(2, 1, 22),
-(3, 1, 21);
+INSERT INTO `order_product` (`oproduct_id`, `order_id`, `product_id`, `product_count`) VALUES
+(1, 1, 19, 2),
+(2, 1, 22, 3),
+(3, 1, 21, 1);
 
 -- --------------------------------------------------------
 
@@ -269,50 +275,53 @@ CREATE TABLE IF NOT EXISTS `product` (
   `original_price` int(11) DEFAULT NULL COMMENT '原价',
   `price` int(11) NOT NULL COMMENT '现价',
   `stock` int(11) DEFAULT '0' COMMENT '库存',
+  `point` int(11) NOT NULL DEFAULT '0',
   `description` text COMMENT '介绍',
   `is_add` int(1) NOT NULL DEFAULT '0' COMMENT '是否上架 0:未上架 1:已上架',
   `creat_time` int(11) NOT NULL COMMENT '创建时间',
   `update_time` int(11) NOT NULL,
   `delete_flg` int(11) DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`product_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='商品表' AUTO_INCREMENT=35 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='商品表' AUTO_INCREMENT=37 ;
 
 --
 -- 转存表中的数据 `product`
 --
 
-INSERT INTO `product` (`product_id`, `name`, `ptype_id`, `original_price`, `price`, `stock`, `description`, `is_add`, `creat_time`, `update_time`, `delete_flg`) VALUES
-(19, 'æµ‹è¯•å•†å“1', 18, 100, 50, 10, '&lt;p&gt;æµ‹è¯•å•†å“1è¯´æ˜Ž&lt;/p&gt;', 1, 1395578769, 1395578769, 0),
-(22, 'æµ‹è¯•å•†å“3', 19, 250, 100, 10, '&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;æµ‹è¯•å•†å“3&lt;br/&gt;&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;', 1, 1395650387, 1396173923, 0),
-(21, 'æµ‹è¯•å•†å“2', 13, 200, 150, 20, '&lt;p&gt;\r\n				&lt;p&gt;æµ‹è¯•å•†å“2&lt;/p&gt;			&lt;/p&gt;', 1, 1395648844, 1395648844, 0),
-(31, 'æµ‹è¯•å•†å“4', 19, 400, 200, 10, '&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;				&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;æµ‹è¯•å•†å“4&lt;br/&gt;&lt;/p&gt;&lt;p&gt;			&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;', 1, 1395805941, 1396173901, 0),
-(34, 'æµ‹è¯•å•†å“5', 0, 100, 200, 10, '&lt;p&gt;				&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;æµ‹è¯•å•†å“5&lt;/p&gt;&lt;p&gt;			&lt;/p&gt;', 1, 1396089508, 1396172936, 0);
+INSERT INTO `product` (`product_id`, `name`, `ptype_id`, `original_price`, `price`, `stock`, `point`, `description`, `is_add`, `creat_time`, `update_time`, `delete_flg`) VALUES
+(19, 'æµ‹è¯•å•†å“1', 18, 100, 50, 10, 0, '&lt;p&gt;æµ‹è¯•å•†å“1è¯´æ˜Ž&lt;/p&gt;', 1, 1395578769, 1395578769, 0),
+(22, 'æµ‹è¯•å•†å“3', 19, 250, 100, 10, 0, '&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;æµ‹è¯•å•†å“3&lt;br/&gt;&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;', 1, 1395650387, 1396173923, 0),
+(21, 'æµ‹è¯•å•†å“2', 13, 200, 150, 20, 0, '&lt;p&gt;\r\n				&lt;p&gt;æµ‹è¯•å•†å“2&lt;/p&gt;			&lt;/p&gt;', 1, 1395648844, 1395648844, 0),
+(31, 'æµ‹è¯•å•†å“4', 19, 400, 200, 10, 0, '&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;				&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;æµ‹è¯•å•†å“4&lt;br/&gt;&lt;/p&gt;&lt;p&gt;			&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;			&lt;/p&gt;', 1, 1395805941, 1396173901, 0),
+(34, 'æµ‹è¯•å•†å“5', 0, 100, 200, 10, 0, '&lt;p&gt;				&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;æµ‹è¯•å•†å“5&lt;/p&gt;&lt;p&gt;			&lt;/p&gt;', 1, 1396089508, 1396172936, 0),
+(36, 'æµ‹è¯•å•†å“6', 0, 200, 100, 2, 20, '&lt;p&gt;\r\n				&lt;p&gt;\r\n				&lt;p&gt;				&lt;/p&gt;&lt;p&gt;æµ‹è¯•å•†å“6&lt;/p&gt;		 &nbsp; &nbsp; &nbsp; &nbsp;&lt;/p&gt;		 &nbsp; &nbsp; &nbsp; &nbsp;&lt;/p&gt;', 1, 1397011727, 1397017051, 0);
 
 -- --------------------------------------------------------
 
 --
--- 表的结构 `product_producttype`
+-- 表的结构 `product_productType`
 --
 
-CREATE TABLE IF NOT EXISTS `product_producttype` (
+CREATE TABLE IF NOT EXISTS `product_productType` (
   `ppt_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `ptype_id` int(11) NOT NULL COMMENT '商品类型id',
   `product_id` int(11) NOT NULL COMMENT '商品id',
   PRIMARY KEY (`ppt_id`),
   KEY `pt_id` (`ptype_id`),
   KEY `p_id` (`product_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
--- 转存表中的数据 `product_producttype`
+-- 转存表中的数据 `product_productType`
 --
 
-INSERT INTO `product_producttype` (`ppt_id`, `ptype_id`, `product_id`) VALUES
+INSERT INTO `product_productType` (`ppt_id`, `ptype_id`, `product_id`) VALUES
 (7, 23, 34),
 (8, 24, 34),
 (10, 23, 31),
 (11, 23, 22),
-(12, 22, 22);
+(12, 22, 22),
+(16, 23, 36);
 
 -- --------------------------------------------------------
 

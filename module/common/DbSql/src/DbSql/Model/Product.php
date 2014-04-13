@@ -55,7 +55,7 @@ class Product extends BaseDb
     public function getProductAll($offset,$rowsperpage)
     {
     	$select = $this->tableGateway->getSql()->select();
-    	$select->columns(array('product_id','name','original_price','price','stock','is_add','creat_time','update_time'));
+    	$select->columns(array('product_id','name','original_price','price','stock','point','is_add','creat_time','update_time'));
     	$select->join('product_type','product.ptype_id = product_type.ptype_id',array('type_name' => 'name'),$select::JOIN_LEFT);
     	$select->order('product.update_time desc');
     	$select->where(array('delete_flg' => 0));

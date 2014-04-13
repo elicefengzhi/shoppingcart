@@ -57,3 +57,6 @@ body{ background-color:#FF0;}
 .admin-table{margin-left:20px;}
 .admin-table td{padding:5px;}
 #admin-nav{margin:5px 0 5px 0;}
+#admin-product-type-div{padding:10px 0 10px 300px;}
+#admin-show-div{margin:0 0 50px 200px}
+#admin-showImage-div{margin:10px 0 10px 0;}

@@ -20,7 +20,7 @@ class Admin extends BaseViewHelper
     public function getProductTypeByOrderId($orderId)
     {
     	$sm = \Application\Model\StaticApplication::getServiceManager();
-    	return $sm->get('DbSql')->dispatch('Product')->getProductTypeByOrderId((int)$orderId,array('name'),array());
+    	return $sm->get('DbSql')->dispatch('Product')->getProductTypeByOrderId((int)$orderId,array('name'),array('product_count'));
     }
     
     public function getAdByProductId($pId)

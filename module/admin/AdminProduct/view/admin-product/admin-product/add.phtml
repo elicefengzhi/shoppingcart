@@ -1,32 +1,27 @@
 <p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<a href="<?php echo $this->url('admin-product'); ?>">商品</a>--<span>商品添加</span></p>
-<?php if($this->viewHelper->isLoop('errorMessage')): ?>
-<?php foreach($this->viewHelper->getSourceData('errorMessage') as $errorMessage): ?>
-<?php if($this->viewHelper->isLoop(false,$errorMessage)): ?>
-<?php foreach($errorMessage as $data): ?>
-<p class ="errorClass"><?php echo $data; ?></p>
-<?php endforeach; ?>
-<?php endif; ?>
-<?php endforeach; ?>
-<?php endif; ?>
+<?php echo $this->partial('admin/common/errorMessage',array('viewHelper' => $this->viewHelper,'loopName' => 'errorMessage')); ?>
 <form id="product-form" action="<?php echo $this->url; ?>" method="post" enctype="multipart/form-data">
     <table class="admin-table">
         <tr>
-            <td class="trTitle">商品名</td><td><input name="name" type="text" value="<?php echo $this->viewHelper->string('name'); ?>" /></td>
+            <td lang="productName" class="trTitle"></td><td><input name="name" type="text" value="<?php echo $this->viewHelper->string('name'); ?>" /></td>
         </tr>
         <tr>
-            <td class="trTitle">商品分类</td><td><div id="product-type"></div></td>
+            <td lang="productType" class="trTitle"></td><td><div id="product-type"></div></td>
         </tr>
         <tr>
-            <td class="trTitle">商品原价</td><td><input name="original_price" type="text" value="<?php echo $this->viewHelper->string('original_price'); ?>" /></td>
+            <td lang="productOriPrice" class="trTitle"></td><td><input name="original_price" type="text" value="<?php echo $this->viewHelper->string('original_price'); ?>" /></td>
         </tr>
         <tr>
-            <td class="trTitle">商品现价</td><td><input name="price" type="text" value="<?php echo $this->viewHelper->string('price'); ?>" /></td>
+            <td lang="productPrice" class="trTitle"></td><td><input name="price" type="text" value="<?php echo $this->viewHelper->string('price'); ?>" /></td>
         </tr>
         <tr>
-            <td class="trTitle">商品库存</td><td><input name="stock" type="text" value="<?php echo $this->viewHelper->string('stock'); ?>" /></td>
+            <td lang="productStock" class="trTitle"></td><td><input name="stock" type="text" value="<?php echo $this->viewHelper->string('stock'); ?>" /></td>
         </tr>
         <tr>
-            <td class="trTitle">加入广告位</td>
+            <td lang="point" class="trTitle"></td><td><input name="point" type="text" value="<?php echo $this->viewHelper->string('point'); ?>" /></td>
+        </tr>
+        <tr>
+            <td lang="insertAd" class="trTitle"></td>
             <td>
                 <?php if($this->viewHelper->isLoop('ad')): ?>
                 <?php foreach($this->viewHelper->getSourceData('ad') as $data): ?>
@@ -36,30 +31,30 @@
             </td>
         </tr>
         <tr>
-            <td class="trTitle">是否上架</td>
+            <td lang="productIsAdd" class="trTitle"></td>
             <td>
                 <select name="is_add">
-    				<option <?php echo $this->viewHelper->select('is_add',0); ?> value="0">否</option>
-    				<option <?php echo $this->viewHelper->select('is_add',1); ?> value="1">是</option>
+    				<option lang="statusTrue" <?php echo $this->viewHelper->select('is_add',0); ?> value="0"></option>
+    				<option lang="statusFalse" <?php echo $this->viewHelper->select('is_add',1); ?> value="1"></option>
 		        </select>
             </td>
         </tr>
         <tr>
-            <td class="trTitle">商品图片</td>
+            <td lang="productImg" class="trTitle"></td>
             <td>
                 <div id="product-image">
-				<p><input type="file" name="image[]" />&nbsp;(广告位图片选用此图)&nbsp;<a class="product-image-add" href="javascript:;">添加</a></p>
+				<p><input type="file" name="image[]" />&nbsp;(<span lang="adSelectImg"></span>)&nbsp;<a lang="add" class="product-image-add" href="javascript:;"></a></p>
     			</div>
     			<?php if($this->viewHelper->isLoop('ProductImage')): ?>
     			<?php foreach($this->viewHelper->getSourceData('ProductImage') as $image): ?>
-    			<p><a href="javascript:;" class="image-delete" data-imageId="<?php echo $this->viewHelper->string('image_id',$image); ?>">删除图片</a></p>
+    			<p><a lang="delete" href="javascript:;" class="image-delete" data-imageId="<?php echo $this->viewHelper->string('image_id',$image); ?>"></a></p>
     			<?php echo $this->viewHelper->img('image_path',$image,false,array('id' => 'product-image-'.$this->viewHelper->string('image_id',$image),'width' => '400px','style' => 'margin-top:10px;')); ?><br/>
     			<?php endforeach; ?>
     			<?php endif; ?>
             </td>
         </tr>
         <tr>
-            <td class="trTitle">商品说明</td>
+            <td lang="productDes" class="trTitle"></td>
             <td>
                 <script id="editor" type="text/plain" style="width:820px;height:500px;">
 				<?php echo $this->viewHelper->string('description'); ?>
@@ -67,7 +62,7 @@
             </td>
         </tr>
     </table>
-	<input id="product-submit" type="button" value="确认" />
+	<input id="product-submit" type="button" value="" />
 </form>
 <script type="text/javascript" charset="utf-8" src="/js/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/js/ueditor/ueditor.all.min.js"> </script>
@@ -77,20 +72,20 @@
 UE.getEditor('editor');
 $(document).ready(function(){
 	$('#product-type').load('<?php echo $this->url('product-type-linkage'); ?>',function(){
-		$('#product-type').append('<a class="product-type-add" href="javascript:;">添加</a>');
+		$('#product-type').append('<a class="product-type-add" href="javascript:;">'+productTypeAddString+'</a>');
 		$('#product-type').wrap('<p></p>');
 		<?php if($this->viewHelper->isLoop('productTypeList')): ?>
 		<?php foreach($this->viewHelper->getSourceData('productTypeList') as $type): ?>
 			<?php if($this->viewHelper->string('parent_id',$type) == 0): ?>
-			$('.product-type-linkage').eq(0).clone().appendTo('#product-type').wrap('<p></p>').after('&nbsp;<a class="product-type-del" href="javascript:;">删除</a>').removeAttr('id').val('<?php echo $this->viewHelper->string('ptype_id',$type) ?>');
+			$('.product-type-linkage').eq(0).clone().appendTo('#product-type').wrap('<p></p>').after('&nbsp;<a class="product-type-del" href="javascript:;">'+deleteString+'</a>').removeAttr('id').val('<?php echo $this->viewHelper->string('ptype_id',$type) ?>');
 			<?php else: ?>
-			$('.product-type-linkage').eq(0).clone().appendTo('#product-type').wrap('<p></p>').after('&nbsp;<a class="product-type-del" href="javascript:;">删除</a>').removeAttr('id').val('<?php echo $this->viewHelper->string('parent_id',$type) ?>').change();
+			$('.product-type-linkage').eq(0).clone().appendTo('#product-type').wrap('<p></p>').after('&nbsp;<a class="product-type-del" href="javascript:;">'+deleteString+'</a>').removeAttr('id').val('<?php echo $this->viewHelper->string('parent_id',$type) ?>').change();
 			<?php endif; ?>
 		<?php endforeach; ?>
 		<?php endif; ?>
 	});
 	$('.image-delete').on('click',function(){
-		if(confirm("删除确认")){
+		if(confirm(deleteKaku)){
 			var imageId = $(this).attr('data-imageId');
 			$.ajax({ url: '<?php echo $this->url('admin-product-image/delete'); ?>'+imageId, success: function(data){
 		        if(data == 'true') {

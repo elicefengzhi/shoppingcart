@@ -1,28 +1,23 @@
-<?php if($this->viewHelper->isLoop('errorMessage')): ?>
-<?php foreach($this->viewHelper->getSourceData('errorMessage') as $errorMessage): ?>
-<?php if($this->viewHelper->isLoop(false,$errorMessage)): ?>
-<?php foreach($errorMessage as $data): ?>
-<p><?php echo $data; ?></p>
-<?php endforeach; ?>
-<?php endif; ?>
-<?php endforeach; ?>
-<?php endif; ?>
+<p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<a href="<?php echo $this->url('admin-page'); ?>">页面</a>--<span>页面添加</span></p>
+<?php echo $this->partial('admin/common/errorMessage',array('viewHelper' => $this->viewHelper,'loopName' => 'errorMessage')); ?>
 <form id="page-form" action="<?php echo $this->url; ?>" method="post">
-页面标题<input name="page_title" value="<?php echo $this->viewHelper->string('page_title'); ?>" /><br/>
-页面内容<script id="editor" type="text/plain" style="width:820px;height:500px;">
-		<?php echo $this->viewHelper->string('page_body'); ?>
-     </script><br/>
-	<input id="page-submit" type="button" value="确认" />
+	<table class="admin-table">
+		<tr>
+			<td lang="pageTitle"></td>
+			<td><input name="page_title" value="<?php echo $this->viewHelper->string('page_title'); ?>" /></td>
+		</tr>
+		<tr>
+			<td lang="pageBody"></td>
+			<td>
+				<script id="editor" type="text/plain" style="width:820px;height:500px;">
+				<?php echo $this->viewHelper->string('page_body'); ?>
+     			</script>
+			</td>
+		</tr>
+	</table>
+	<input id="page-submit" type="button" />
 </form>
 <script type="text/javascript" charset="utf-8" src="/js/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/js/ueditor/ueditor.all.min.js"> </script>
 <script type="text/javascript" charset="utf-8" src="/js/ueditor/lang/zh-cn/zh-cn.js"></script>
-<script type="text/javascript">
-UE.getEditor('editor');
-$(document).ready(function(){
-	$('#page-submit').on('click',function(){
-		$('#page-form').append('<input type="hidden" name="page_body" value="'+UE.getEditor('editor').getContent()+'" />');
-		$('#page-form').submit();
-	});
-});
-</script>
+<script type="text/javascript" src="/js/admin/page_add.js"></script>

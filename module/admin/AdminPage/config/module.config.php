@@ -19,6 +19,18 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
+                	'index' => array(
+                		'type'    => 'Segment',
+                		'options' => array(
+                			'route'    => '[index][/:pageNum][/]',
+                			'constraints' => array(
+                				'pageNum' => '\d+'
+                			),
+                			'defaults' => array(
+                				'action' => 'index',
+                			),
+                		),
+                	),
                     'add' => array(
                         'type'    => 'Segment',
                         'options' => array(

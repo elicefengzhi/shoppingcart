@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="/css/colorbox.css" />
+<script type="text/javascript" src="/js/jquery.colorbox-min.js"></script>
+<p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<a href="<?php echo $this->url('admin-product'); ?>">商品</a>--<span>商品图片</span></p>
+<div id="admin-showImage-div">
+<?php if($this->viewHelper->isLoop()): ?>
+<?php foreach($this->viewHelper->getSourceData() as $data): ?>
+	<a class="group1" href="<?php echo $this->viewHelper->string('image_path',$data,false,array('before' => '/')); ?>" title="点击查看大图"><img style="width:200px;height:200px;border:1px solid #000000;padding:1px;" src="<?php echo $this->viewHelper->string('image_path',$data,false,array('before' => '/')); ?>" /></a>
+<?php endforeach; ?>
+<?php endif; ?>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".group1").colorbox({rel:'group1'});
+});
+</script>

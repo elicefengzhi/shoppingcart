@@ -1,3 +1,4 @@
+<p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<span>页面</span></p>
 <div id="page_contents_main">
 	<?php if($this->viewHelper->isLoop()): ?>
 	<table cellspacing="0" id="table_for_opration">
@@ -25,40 +26,6 @@
 	<form id="delete-form" action="<?php echo $this->url('admin-page/delete') ?>" method="post">
 		<input id="delete-button" style="margin-top:10px;" type="button" value="删除" />
 	</form>
-	<div style="margin-top:10px;" id="paging-div">
-		<?php if($this->paging) : ?>
-		<?php if($this->paging->isFirstPage) : ?>
-		<a href="<?php echo $this->url('admin-product-type/index',array('pageNum' => 1)); ?>">第一页</a>
-		<?php endif;?>
-		<?php foreach($this->paging->numList as $num) : ?>
-		<?php if($this->paging->isNow($num)) : ?>
-		<?php echo $num;?>
-		<?php else :?>
-		<a href="<?php echo $this->url('admin-product-type/index',array('pageNum' => $num)); ?>"><?php echo $num; ?></a>
-		<?php endif; ?>
-		<?php endforeach;?>
-		<?php if($this->paging->isLastPage) : ?>
-		<a href="<?php echo $this->url('admin-product-type/index',array('pageNum' => $this->paging->getPages())); ?>">最后一页</a>
-		<?php endif;?>
-		总页数&nbsp;<?php echo $this->paging->getPages(); ?>
-		<?php endif; ?>
-	</div>
+	<?php echo $this->partial('admin/common/paging',array('paging' => $this->paging,'routerName' => 'admin-page')); ?>
 </div>
-<script type="text/javascript" language="JavaScript">
-$(document).ready(function (){
-	var lang=$("#ad_lang").val();
-	$(".rick #page_contents_main #table_for_opration tr:gt(0) td").css({'color':'#666'});
-	check_box_bind($(":checkbox[id=\"cba\"]"),$(":checkbox[id!=\"cba\"]"));
-
-	$('#delete-button').on('click',function(){
-		if(confirm("删除确认")){
-			$('.table-checkbox').each(function(){
-				if(this.checked == true) {
-					$('#delete-form').append('<input name="delete[]" type="hidden" value="'+$(this).val()+'" />');
-				}
-			});
-			$('#delete-form').submit();
-		}
-	});
-});
-</script>
+<script type="text/javascript" src="/js/admin/page_index.js"></script>

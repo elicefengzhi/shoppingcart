@@ -19,6 +19,18 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
+                	'index' => array(
+                		'type'    => 'Segment',
+                		'options' => array(
+                			'route'    => 'index[/:pId][/]',
+                			'constraints' => array(
+                				'pId' => '\d+',
+                			),
+                			'defaults' => array(
+                				'action' => 'index',
+                			),
+                		),
+                	),
                     'delete' => array(
                         'type'    => 'Segment',
                         'options' => array(

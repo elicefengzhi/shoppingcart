@@ -18,6 +18,7 @@ class AdminProduct extends BaseValidator
 		$this->data['original_price'] = null;
 		$this->data['price'] = null;
 		$this->data['stock'] = 0;
+		$this->data['point'] = 0;
 		$this->data['description'] = null;
 		$this->data['is_add'] = 0;
 	}
@@ -94,6 +95,21 @@ class AdminProduct extends BaseValidator
 		}
 	}
 	
+	private function point($data)
+	{
+		$init = $this->dataInit(array($data));
+		if($init === true) {
+			$data = $this->sourceData[$data];
+			$ValidData = $this->Int($data);
+			if($ValidData === false) {
+				$this->errorMessage['pointCheck'][] = '点数请填写正常数字';
+				return false;
+			}
+	
+			$this->data['point'] = $ValidData;
+		}
+	}
+	
 	private function isAdd($data)
 	{
 		$init = $this->dataInit(array($data));
@@ -163,6 +179,7 @@ class AdminProduct extends BaseValidator
 			$this->originalPrice('original_price');
 			$this->price('price');
 			$this->stock('stock');
+			$this->point('point');
 			$this->isAdd('is_add');
 			$this->description('description');
 			$this->productImage();

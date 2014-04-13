@@ -1,12 +1,3 @@
-var Ntext=
-	[
-	 [/*0_Jp*/ 
-	  '津村ホームページ制作'
-	  ],
-	 [/*1_Ch*/
-	  '津村日语网页制作'
-	  ]
-	 ];
 /*function*/
 function hv_color(obj,Fcolorh,Fcolor){
 	obj.hover(
@@ -30,11 +21,6 @@ function check_box_bind(fc,sc){
 	});
 }/*function*/
 $(document).ready(function (){
-	var lang=$("#ad_lang").val();
-	/*-------------header_script_start-----------*/
-	$(".rick #log a img").prop('src','/img/login_text/Lang'+lang+'/TJW.png');
-	/*------------foot_script_start--------*/
-	$(".rick #foot #foot_company_name").html(Ntext[lang][0]);
 	hv_color($(".rick #foot a"),'#00E100','#9F0000');
 	/*------------#header #opration_buttons_start--------*/
 	$(".rick #header #opration_box_header .line0 #logout").click(function (){location.href='index.html'});

@@ -129,19 +129,21 @@ class ImageUpload
 			$sizeErrorMessage = $this->sizeErrorMessage;
 			trim((string)$sizeErrorMessage) != '' && $this->errormessage[] = sprintf($sizeErrorMessage,$maxSize);
 		}
-		if($mimeType->isValid($file['tmp_name']) === false) {
-			$returnMimeType = false;
-			$mimeType = $this->mimeType;
-			$typeErrorMessage = $this->typeErrorMessage;
-			$string = '';
-			if(is_array($mimeType) && count($mimeType) > 0) {
-				foreach($mimeType as $m) {
-					$string .= str_replace('image/','',$m).'、';
-				}	
+		if($returnFileSize === true) {
+			if($mimeType->isValid($file['tmp_name']) === false) {
+				$returnMimeType = false;
+				$mimeType = $this->mimeType;
+				$typeErrorMessage = $this->typeErrorMessage;
+				$string = '';
+				if(is_array($mimeType) && count($mimeType) > 0) {
+					foreach($mimeType as $m) {
+						$string .= str_replace('image/','',$m).'、';
+					}
+				}
+				trim((string)$typeErrorMessage) != '' && $this->errormessage[] = sprintf($typeErrorMessage,rtrim($string,'、'));
 			}
-			trim((string)$typeErrorMessage) != '' && $this->errormessage[] = sprintf($typeErrorMessage,rtrim($string,'、'));
 		}
-		
+
 		return $returnFileSize && $returnMimeType;
 	}
 	
@@ -170,7 +172,7 @@ class ImageUpload
 			try {
 				if ($http->receive($file['name'])) {
 					$fileExists = new \Zend\Validator\File\Exists();
-					if($fileExists->isValid($newFile) === true) {
+					if($fileExists->isValid($this->basePath.$newFile) === true) {	
 						return $newFile;
 					}
 					else {
@@ -226,16 +228,14 @@ class ImageUpload
 				} 
 				else {
 					$this->rollBackFiles($completeFiles);
-					$this->uploadErrorMessage = 'array file upload error';
 					$uploadReturn = false;
 					break;
 				} 
 			}
 		}
 		else {
-			$return = $this->fileUpload($http,$file,$path);
+			$return = $this->fileUpload($http,$file,$path);	
 			if($return === false) {
-				$this->uploadErrorMessage = 'file upload error';
 				$uploadReturn = false;
 			}
 			else {
@@ -243,7 +243,7 @@ class ImageUpload
 				$completeFiles = $return;
 			}
 		}
-		
+
 		$uploadReturn === false && $this->events->trigger('setLog', null, array('model' => 'imageUpload','message' => $this->uploadErrorMessage,'level' => 'WARN','fileName' => __FILE__,'line' => __LINE__));
 		is_array($completeFiles) && count($completeFiles) <= 0 && $completeFiles = false;
 		

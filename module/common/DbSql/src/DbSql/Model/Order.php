@@ -45,7 +45,7 @@ class Order extends BaseDb
     public function getOrderAll($offset,$rowsperpage)
     {
     	$select = $this->tableGateway->getSql()->select();
-    	$select->columns(array('order_id','total','status','creat_time','update_time'));
+    	$select->columns(array('order_id','total','point','status','creat_time','update_time'));
     	$select->join('user','user.user_id = order.user_id',array('user_id','user_name'),$select::JOIN_LEFT);
     	$select->order('order.update_time desc');
     	$select->where(array('delete_flg' => 0));

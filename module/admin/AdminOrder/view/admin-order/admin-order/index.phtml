@@ -1,14 +1,16 @@
+<p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<span>订单</span></p>
 <div id="page_contents_main">
 	<table cellspacing="0" id="table_for_opration">
 	<tr>
 	<td valign="middle"><input type="checkbox" id="cba" /></td>
-	<td valign="middle">订单编号</td>
-	<td valign="middle">用户名</td>
-	<td valign="middle">商品</td>
-	<td valign="middle">订单总金额</td>
-	<td valign="middle">状态</td>
-	<td valign="middle">创建时间</td>
-	<td valign="middle">最后修改时间</td>
+	<td lang="orderId" valign="middle"></td>
+	<td lang="userName" valign="middle"></td>
+	<td lang="product" valign="middle"></td>
+	<td lang="ordertal" valign="middle"></td>
+	<td lang="point" valign="middle"></td>
+	<td lang="status" valign="middle"></td>
+	<td lang="createTime" valign="middle"></td>
+	<td lang="updateTime" valign="middle"></td>
 	<?php if($this->viewHelper->isLoop()): ?>
 	<?php foreach($this->viewHelper->getSourceData() as $data): ?>
 	<tr>
@@ -19,11 +21,13 @@
 	<td valign="middle">
 		<?php if($this->viewHelper->isLoop('product')) : ?>
 		<?php foreach($this->viewHelper->getSourceData('product') as $product) : ?>
-		<?php echo $this->viewHelper->string('name',$product,false,array('after' => '<br/>')); ?>
+		<?php echo $this->viewHelper->string('name',$product); ?>
+		<?php echo $this->viewHelper->string('product_count',$product,false,array('before' => '(','after' => '件)<br/>')); ?>
 		<?php endforeach; ?>
 		<?php endif; ?>
 	</td>
 	<td valign="middle"><?php echo $this->viewHelper->string('total',$data); ?></td>
+	<td valign="middle"><?php echo $this->viewHelper->string('point',$data); ?></td>
 	<td valign="middle"><?php echo $this->viewHelper->orderStatus($this->viewHelper->string('status',$data)); ?></td>
 	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('creat_time','Y-m-d H:i:s',$data); ?></td>
 	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('update_time','Y-m-d H:i:s',$data); ?></td>
@@ -33,45 +37,12 @@
 	</table>
 	<form id="order-form" action="<?php echo $this->url('admin-order/statusDelete',array('pageNum' => $pageNum)); ?>" method="post">
 		<select id="order-select" name="statusDelete" style="margin-top:10px;">
-			<option value="-1">请选择操作</option>
-			<option value="1">已支付</option>
-			<option value="2">未支付</option>
-			<option value="3">删除</option>
+			<option lang="select" value="-1"></option>
+			<option lang="paid" value="1"></option>
+			<option lang="unpaid" value="2"></option>
+			<option lang="delete" value="3"></option>
 		</select>
 	</form>
-	<div style="margin-top:10px;" id="paging-div">
-		<?php if($this->paging) : ?>
-		<?php if($this->paging->isFirstPage) : ?>
-		<a href="<?php echo $this->url('admin-product/index',array('pageNum' => 1)); ?>">第一页</a>
-		<?php endif;?>
-		<?php foreach($this->paging->numList as $num) : ?>
-		<?php if($this->paging->isNow($num)) : ?>
-		<?php echo $num;?>
-		<?php else :?>
-		<a href="<?php echo $this->url('admin-product/index',array('pageNum' => $num)); ?>"><?php echo $num; ?></a>
-		<?php endif; ?>
-		<?php endforeach;?>
-		<?php if($this->paging->isLastPage) : ?>
-		<a href="<?php echo $this->url('admin-product/index',array('pageNum' => $this->paging->getPages())); ?>">最后一页</a>
-		<?php endif;?>
-		总页数&nbsp;<?php echo $this->paging->getPages(); ?>
-		<?php endif; ?>
-	</div>
+<?php echo $this->partial('admin/common/paging',array('paging' => $this->paging,'routerName' => 'admin-order/index')); ?>
 </div>
-<script type="text/javascript">
-$(document).ready(function(){
-	var lang=$("#ad_lang").val();
-	$(".rick #page_contents_main #table_for_opration tr:gt(0) td").css({'color':'#666'});
-	check_box_bind($(":checkbox[id=\"cba\"]"),$(":checkbox[id!=\"cba\"]"));
-	$('#order-select').on('change',function(){
-		if(confirm("操作确认") && $(this).val() != '-1') {
-			$('.table-checkbox').each(function(){
-				if(this.checked == true) {
-					$('#order-form').append('<input name="order[]" type="hidden" value="'+$(this).val()+'" />');
-				}
-			});
-			$('#order-form').submit();
-		}
-	});
-});
-</script>
+<script type="text/javascript" src="/js/admin/order_index.js"></script>

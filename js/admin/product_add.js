@@ -1,4 +1,14 @@
-$(document).ready(function(){	
+var productTypeAddString = '';
+var deleteString = '';
+var deleteKaku = '';
+function ChangeStringByLang()
+{
+	$('#product-submit').val(eval('message.'+lang+'.insert'));
+	productTypeAddString = eval('message.'+lang+'.add');
+	deleteString = eval('message.'+lang+'.delete');
+	deleteKaku = eval('message.'+lang+'.deleteKaku');
+}
+$(document).ready(function(){
 	$('#product-submit').on('click',function(){
 		$('#product-form').append('<input type="hidden" name="description" value="'+UE.getEditor('editor').getContent()+'" />');
 		$('#product-form').submit();

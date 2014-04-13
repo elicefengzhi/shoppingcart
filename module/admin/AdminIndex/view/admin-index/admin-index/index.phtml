@@ -1,36 +1,37 @@
 <div id="page_list_main">
 
 <div id="navigation">
-<p data-ul="product" class="selected">商品管理</p>
-<p data-ul="type">商品分类管理</p>
-<p data-ul="order">订单管理</p>
-<p data-ul="page">页面管理</p>
-<p data-ul="query">询问管理</p>
-<p>用户管理</p>
+<p lang="productTitle" data-ul="product" class="selected"></p>
+<p lang="typeTitle" data-ul="type"></p>
+<p lang="orderTitle" data-ul="order"></p>
+<p lang="pageTitle" data-ul="page"></p>
+<p lang="queryTitle" data-ul="query"></p>
+<p lang="userTitle"></p>
 <br clear="all" />
 </div>
 
 <div id="AdTopMenuB">
 	<ul id="AdTopMenu" class="product">
-		<li><p><a href="<?php echo $this->url('admin-product'); ?>">商品查看</a></p></li>
-		<li><p><a href="<?php echo $this->url('admin-product/add'); ?>">商品添加</a></p></li>
+		<li><p><a lang="productSub" href="<?php echo $this->url('admin-product'); ?>"></a></p></li>
+		<li><p><a lang="productSubAdd" href="<?php echo $this->url('admin-product/add'); ?>"></a></p></li>
 		<br clear="all" />
 	</ul>
 	<ul id="AdTopMenu" class="type" style="display:none;">
-		<li><p><a href="<?php echo $this->url('admin-product-type'); ?>">商品分类查看</a></p></li>
-		<li><p><a href="<?php echo $this->url('admin-product-type/add'); ?>">商品分类添加</a></p></li>
+		<li><p><a lang="typeSub" href="<?php echo $this->url('admin-product-type'); ?>"></a></p></li>
+		<li><p><a lang="typeSubAdd" href="<?php echo $this->url('admin-product-type/add'); ?>"></a></p></li>
 		<br clear="all" />
 	</ul>
 	<ul id="AdTopMenu" class="order" style="display:none;">
-		<li><p><a href="<?php echo $this->url('admin-order'); ?>">订单查看</a></p></li>
+		<li><p><a lang="orderSub" href="<?php echo $this->url('admin-order'); ?>"></a></p></li>
 		<br clear="all" />
 	</ul>
 	<ul id="AdTopMenu" class="page" style="display:none;">
-		<li><p><a href="<?php echo $this->url('admin-page'); ?>">页面查看</a></p></li>
+		<li><p><a lang="pageSub" href="<?php echo $this->url('admin-page'); ?>"></a></p></li>
+		<li><p><a lang="pageAdd" href="<?php echo $this->url('admin-page/add'); ?>"></a></p></li>
 		<br clear="all" />
 	</ul>
 	<ul id="AdTopMenu" class="query" style="display:none;">
-		<li><p><a href="<?php echo $this->url('admin-query'); ?>">询问查看</a></p></li>
+		<li><p><a lang="querySub" href="<?php echo $this->url('admin-query'); ?>"></a></p></li>
 		<br clear="all" />
 	</ul>
 </div>

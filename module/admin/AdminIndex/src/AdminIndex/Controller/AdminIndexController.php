@@ -22,7 +22,7 @@ class AdminIndexController extends AbstractActionController
     			$session = $this->serviceLocator->get('Fsession');
     			$session->setSession('adminId',$current['id']);
     			$session->setSession('adminLeve',$current['leve']);
-    			$this->redirect()->toRoute('admin-index');
+    			return $this->redirect()->toRoute('admin-index');
     		}
     	}
     	return array();

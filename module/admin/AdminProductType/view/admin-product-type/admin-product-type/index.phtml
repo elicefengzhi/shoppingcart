@@ -1,11 +1,11 @@
-<p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<span>商品分类</span></p>
+<p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin-index'); ?>"></a>--<span lang="productType"></span></p>
 <div id="page_contents_main">
 	<?php if($this->viewHelper->isLoop()): ?>
 	<table cellspacing="0" id="table_for_opration">
 	<tr>
 	<td valign="middle"><input type="checkbox" id="cba" /></td>
-	<td valign="middle">商品分类名</td>
-	<td valign="middle">父分类名</td>
+	<td lang="productType" valign="middle"></td>
+	<td lang="productTypeParent" valign="middle"></td>
 	<td valign="middle"></td>
 	</tr>
 	<?php foreach($this->viewHelper->getSourceData() as $data): ?>
@@ -13,13 +13,13 @@
 	<td valign="middle"><input class="table-checkbox" type="checkbox" value="<?php echo $this->viewHelper->string('ptype_id',$data); ?>"/></td>
 	<td valign="middle"><?php echo $this->viewHelper->string('name',$data); ?></td>
 	<td valign="middle"><?php echo $this->viewHelper->string('parent_name',$data,false,array('replaceValue' => '无')); ?></td>
-	<td valign="middle"><a href="<?php echo $this->url('admin-product-type/edit',array('typeId' => $this->viewHelper->string('ptype_id',$data))); ?>">修改</a></td>
+	<td valign="middle"><a lang="edit" href="<?php echo $this->url('admin-product-type/edit',array('typeId' => $this->viewHelper->string('ptype_id',$data))); ?>"></a></td>
 	</tr>
 	<?php endforeach; ?>
 	</table>
 	<?php endif; ?>
 	<form id="delete-form" action="<?php echo $this->url('admin-product-type/delete') ?>" method="post">
-		<input id="delete-button" style="margin-top:10px;" type="button" value="删除" />
+		<input id="delete-button" style="margin-top:10px;" type="button" />
 	</form>
 	<?php echo $this->partial('admin/common/paging',array('paging' => $this->paging,'routerName' => 'admin-product-type/index')); ?>
 </div>

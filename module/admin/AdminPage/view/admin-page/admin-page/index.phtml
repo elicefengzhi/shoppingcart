@@ -1,12 +1,12 @@
-<p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<span>页面</span></p>
+<p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin-index'); ?>"></a>--<span lang="page"></span></p>
 <div id="page_contents_main">
 	<?php if($this->viewHelper->isLoop()): ?>
 	<table cellspacing="0" id="table_for_opration">
 	<tr>
 	<td valign="middle"><input type="checkbox" id="cba" /></td>
-	<td valign="middle">页面标题名</td>
-	<td valign="middle">创建时间</td>
-	<td valign="middle">最后更新时间</td>
+	<td lang="pageTitle" valign="middle"></td>
+	<td lang="createTime" valign="middle"></td>
+	<td lang="updateTime" valign="middle"></td>
 	<td valign="middle"></td>
 	</tr>
 	<?php foreach($this->viewHelper->getSourceData() as $data): ?>
@@ -16,15 +16,15 @@
 	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('create_time','Y-m-d H:i:s',$data); ?></td>
 	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('update_time','Y-m-d H:i:s',$data); ?></td>
 	<td valign="middle">
-	    <a href="<?php echo $this->url('admin-page/edit',array('pId' => $this->viewHelper->string('page_id',$data))); ?>">修改</a>
-	    <a href="<?php echo $this->url('admin-page/show',array('pId' => $this->viewHelper->string('page_id',$data))); ?>">查看</a>
+	    <a lang="edit" href="<?php echo $this->url('admin-page/edit',array('pId' => $this->viewHelper->string('page_id',$data))); ?>"></a>
+	    <a lang="show" href="<?php echo $this->url('admin-page/show',array('pId' => $this->viewHelper->string('page_id',$data))); ?>"></a>
 	</td>
 	</tr>
 	<?php endforeach; ?>
 	</table>
 	<?php endif; ?>
 	<form id="delete-form" action="<?php echo $this->url('admin-page/delete') ?>" method="post">
-		<input id="delete-button" style="margin-top:10px;" type="button" value="删除" />
+		<input id="delete-button" style="margin-top:10px;" type="button" />
 	</form>
 	<?php echo $this->partial('admin/common/paging',array('paging' => $this->paging,'routerName' => 'admin-page')); ?>
 </div>

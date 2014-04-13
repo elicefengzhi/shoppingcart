@@ -1,12 +1,12 @@
-<p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<span>询问</span></p>
+<p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin-index'); ?>"></a>--<span lang="query"></span></p>
 <div id="page_contents_main">
 	<?php if($this->viewHelper->isLoop()): ?>
 	<table cellspacing="0" id="table_for_opration">
 	<tr>
 	<td valign="middle"><input type="checkbox" id="cba" /></td>
-	<td valign="middle">询问编号</td>
-	<td valign="middle">询问标题</td>
-	<td valign="middle">创建时间</td>
+	<td lang="queryId" valign="middle"></td>
+	<td lang="queryTitle" valign="middle"></td>
+	<td lang="createTime" valign="middle"></td>
 	<td valign="middle"></td>
 	</tr>
 	<?php foreach($this->viewHelper->getSourceData() as $data): ?>
@@ -15,13 +15,13 @@
 	<td valign="middle"><?php echo $this->viewHelper->string('q_id',$data); ?></td>
 	<td valign="middle"><?php echo $this->viewHelper->string('q_title',$data); ?></td>
 	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('create_time','Y-m-d H:i:s',$data); ?></td>
-	<td valign="middle"><a href="<?php echo $this->url('admin-query/show',array('qId' => $this->viewHelper->string('q_id',$data))); ?>">查看</a></td>
+	<td valign="middle"><a lang="show" href="<?php echo $this->url('admin-query/show',array('qId' => $this->viewHelper->string('q_id',$data))); ?>"></a></td>
 	</tr>
 	<?php endforeach; ?>
 	</table>
 	<?php endif; ?>
 	<form id="delete-form" action="<?php echo $this->url('admin-query/delete') ?>" method="post">
-		<input id="delete-button" style="margin-top:10px;" type="button" value="删除" />
+		<input id="delete-button" style="margin-top:10px;" type="button" />
 	</form>
 	<?php echo $this->partial('admin/common/paging',array('paging' => $this->paging,'routerName' => 'admin-query/index')); ?>
 </div>

@@ -1,24 +1,24 @@
-<p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<a href="<?php echo $this->url('admin-query'); ?>">询问</a>--<span>询问查看</span></p>
+<p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin-index'); ?>"></a>--<a lang="query" href="<?php echo $this->url('admin-query'); ?>"></a>--<span lang="querySub"></span></p>
 <div id="admin-show-div">
 	<table class="admin-table">
 		<tr>
-			<td class="trTitle">询问人</td>
+			<td lang="queryRen" class="trTitle"></td>
 			<td><?php echo $this->viewHelper->string('q_name'); ?></td>
 		</tr>
 		<tr>
-			<td class="trTitle">询问人电话</td>
+			<td lang="tel" class="trTitle"></td>
 			<td><?php echo $this->viewHelper->string('q_tel'); ?></td>
 		</tr>
 		<tr>
-			<td class="trTitle">询问人邮件</td>
+			<td lang="mail" class="trTitle"></td>
 			<td><?php echo $this->viewHelper->string('q_email'); ?></td>
 		</tr>
 		<tr>
-			<td class="trTitle">标题</td>
+			<td lang="title" class="trTitle"></td>
 			<td><?php echo $this->viewHelper->string('q_title'); ?></td>
 		</tr>
 		<tr>
-			<td class="trTitle">内容</td>
+			<td lang="body" class="trTitle"></td>
 			<td><?php echo $this->viewHelper->string('q_body'); ?></td>
 		</tr>
 	</table>

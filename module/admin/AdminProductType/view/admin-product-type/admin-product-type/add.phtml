@@ -1,16 +1,17 @@
-<p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<a href="<?php echo $this->url('admin-product-type'); ?>">商品分类</a>--<span>商品分类添加</span></p>
+<p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin-index'); ?>"></a>--<a lang="productType" href="<?php echo $this->url('admin-product-type'); ?>"></a>--<span lang="typeSubAdd"></span></p>
 <div id="admin-product-type-div">
 	<?php echo $this->viewHelper->string(false,$errorMessage,false,array('before' => '<p>','after' => '</p>')); ?>
 	<form action="<?php echo $this->url; ?>" method="post">
 		<input name="name" type="text" value="<?php echo $this->viewHelper->string('name'); ?>" />
 		<select name="parent_id">
-			<option value="0">无</option>
+			<option lang="false" value="0"></option>
 			<?php if($this->viewHelper->isLoop('typeParentList')): ?>
 			<?php foreach($this->viewHelper->getSourceData('typeParentList') as $data): ?>
 			<option <?php echo $this->viewHelper->select('ptype_id',$this->viewHelper->string('parent_id'),$data) ?> value="<?php echo $this->viewHelper->string('ptype_id',$data); ?>"><?php echo $this->viewHelper->string('name',$data); ?></option>
 			<?php endforeach; ?>
 			<?php endif; ?>
 		</select>
-		<input type="submit" value="确定" />
+		<input id="product-type-submit" type="submit" />
 	</form>
 </div>
+<script type="text/javascript" src="/js/admin/product_type_add.js"></script>

@@ -1,4 +1,4 @@
-<p id="admin-nav"><a href="<?php echo $this->url('admin-index'); ?>">首页</a>--<a href="<?php echo $this->url('admin-product'); ?>">商品</a>--<span>商品添加</span></p>
+<p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin-index'); ?>"></a>--<a lang="product" href="<?php echo $this->url('admin-product'); ?>"></a>--<span lang="productSubAdd"></span></p>
 <?php echo $this->partial('admin/common/errorMessage',array('viewHelper' => $this->viewHelper,'loopName' => 'errorMessage')); ?>
 <form id="product-form" action="<?php echo $this->url; ?>" method="post" enctype="multipart/form-data">
     <table class="admin-table">

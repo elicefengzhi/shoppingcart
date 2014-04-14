@@ -39,5 +39,5 @@ return array(
             'AdminIndex' => __DIR__ . '/../view',
         ),
     ),
-	'viewHelper/dispatch' => 'Admin'
+	'viewHelper/dispatch' => 'Admin',
 );

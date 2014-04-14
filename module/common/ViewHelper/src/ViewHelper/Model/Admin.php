@@ -52,13 +52,13 @@ class Admin extends BaseViewHelper
     	$value = '';
     	switch ($status) {
     		case 0 :
-    		    $value = '未支付';
+    		    $value = '未払い';
     		    break;
     		case 1:
-    			$value = '已支付';
+    			$value = '支払完了';
     			break;
     		default:
-    			$value = '未支付';
+    			$value = '未払い';
     	}
     	
     	return $value;

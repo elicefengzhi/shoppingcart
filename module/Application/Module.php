@@ -55,6 +55,12 @@ class Module implements AutoloaderProviderInterface
     {
     	$eventManager = $event->getParam('application')->getEventManager();
     	
+    	$eventManager->attach(MvcEvent::EVENT_RENDER,function(MvcEvent $event){
+    		//设置页面title
+    		$layoutTitle = new \Application\Model\LayoutTitle($event);
+    		$layoutTitle->setLayoutTitle();
+    	});
+    	
     	//根据mvc调度事件，通过路由名启用后台布局页以及判断后台登陆
     	$eventManager->attach(MvcEvent::EVENT_DISPATCH, function(MvcEvent $event){
     		$is_admin = false;

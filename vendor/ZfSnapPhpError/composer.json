@@ -1,0 +1,36 @@
+{
+    "name": "snapshotpl/zf-snap-php-error",
+    "description": "PHP Error module for Zend Framework 2",
+    "keywords": [
+        "php-error",
+        "zf2",
+        "zend framework",
+        "zend framework 2",
+        "debug",
+        "exception",
+        "error"
+    ],
+    "authors": [
+        {
+            "name": "Witold Wasiczko",
+            "email": "witold@wasiczko.pl",
+            "homepage": "http://www.psd2html.pl/"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/snapshotpl/PHP-Error"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "joseph-lenton/PHP-error": "dev-fixes as dev-master",
+        "zendframework/zendframework": "2.*"
+    },
+    "autoload": {
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}

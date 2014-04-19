@@ -2,9 +2,9 @@
 
 namespace AdminQuery\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\Admin\BaseController;
 
-class AdminQueryController extends AbstractActionController
+class AdminQueryController extends BaseController
 {	
     public function indexAction()
     {

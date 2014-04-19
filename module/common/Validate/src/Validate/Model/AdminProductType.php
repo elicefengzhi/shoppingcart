@@ -25,7 +25,7 @@ class AdminProductType extends BaseValidator
 			$data = $this->sourceData[$data];
 			$ValidData = $this->NotEmety($data);
 			if($ValidData === false) {
-				$this->errorMessage['nameCheck'][] = '分类名为必须';
+				$this->errorMessage['nameCheck'][] = '商品カテゴリを入力してください';
 				return false;
 			}
 				

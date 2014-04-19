@@ -10,7 +10,7 @@ return array(
             'index' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'    => '/[index[/]]',
+                    'route'    => '/[index][/]',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Index\Controller',
                         'controller'    => 'Index',

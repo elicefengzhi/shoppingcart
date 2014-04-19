@@ -2,9 +2,9 @@
 
 namespace AdminPage\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\Admin\BaseController;
 
-class AdminPageController extends AbstractActionController
+class AdminPageController extends BaseController
 {
     public function indexAction()
     {
@@ -29,7 +29,7 @@ class AdminPageController extends AbstractActionController
         if($page !== false) {
             $return = $page->insert(false,array('page_title'),'Page','AdminPage');
             $return === false && $page->isVal() === false && $errorMessage = $page->getValidateErrorMessage();
-            $return === false && $page->isExists() === true && $errorMessage[][] = '页面标题已存在';
+            $return === false && $page->isExists() === true && $errorMessage[][] = 'タイトルは既に登録されております';
             if($return !== false) return $this->redirect()->toRoute('admin-page');
         }
         $viewHelper = $this->ViewHelper('Admin');
@@ -52,7 +52,7 @@ class AdminPageController extends AbstractActionController
     			return $this->redirect()->toRoute('admin-page');
     		}
     		$page->isVal() === false && $errorMessage = $page->getValidateErrorMessage();
-    		$page->isExists() === true && $errorMessage = '页面标题已存在';
+    		$page->isExists() === true && $errorMessage = 'タイトルは既に登録されております';
     		$pageList = $page->getSourceData();
     	}
     	

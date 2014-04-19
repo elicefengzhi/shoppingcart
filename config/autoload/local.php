@@ -5,7 +5,7 @@ $dbParams = array(
 		'password'  => '',
 		'hostname'  => 'localhost',
 		// buffer_results - only for mysqli buffered queries, skip for others
-		'options' => array('buffer_results' => true)
+		'options' => array('buffer_results' => true,PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'')
 );
 
 return array(
@@ -32,11 +32,12 @@ return array(
 						'password'  => $dbParams['password'],
 						'hostname'  => $dbParams['hostname'],
 				));
-
-				if (php_sapi_name() == 'cli') {
+				//php_sapi_name() == 'cli'
+				if (true) {
 					$logger = new Zend\Log\Logger();
 					// write queries profiling info to stdout in CLI mode
-					$writer = new Zend\Log\Writer\Stream('php://output');
+					$writer = new Zend\Log\Writer\Stream('Log/site.log');
+					//$writer = new Zend\Log\Writer\Stream('php://output');
 					$logger->addWriter($writer, Zend\Log\Logger::DEBUG);
 					$adapter->setProfiler(new BjyProfiler\Db\Profiler\LoggingProfiler($logger));
 				} else {
@@ -51,5 +52,9 @@ return array(
 				return $adapter;
 			},
 		),
+	),
+	'php-error' => array(
+		'enabled' => true,
+		'options' => array(),
 	),
 );

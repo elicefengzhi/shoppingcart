@@ -6,6 +6,7 @@ body{ background-color:#FF0;}
 .trTitle{text-align:right;}
 .rick{}
 .rick #center{ width:1005px; margin:0 auto; padding-top:10px;}
+#error-div{margin:30px 0 30px 20px;text-algin:center;}
 /*---------------------------------------------------------------------------parts---*/
 .rick .zp10{ padding-left:10px;}
 .rick .zp5{ padding-top:5px;}
@@ -60,3 +61,4 @@ body{ background-color:#FF0;}
 #admin-product-type-div{padding:10px 0 10px 300px;}
 #admin-show-div{margin:0 0 50px 200px}
 #admin-showImage-div{margin:10px 0 10px 0;}
+#foot_box{margin:0 0 20px 0;}

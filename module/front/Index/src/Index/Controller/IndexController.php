@@ -1,27 +1,14 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/Index for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
 
 namespace Index\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\Front\BaseController;
 
-class IndexController extends AbstractActionController
+class IndexController extends BaseController
 {
     public function indexAction()
     {
-        return array();
-    }
-
-    public function fooAction()
-    {
-        // This shows the :controller and :action parameters in default route
-        // are working when you browse to /index/index/foo
+    	$productList = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductToList(1,array('name'));
         return array();
     }
 }

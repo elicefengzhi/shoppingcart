@@ -25,7 +25,7 @@ class AdminPage extends BaseValidator
 			$data = $this->sourceData[$data];
 			$ValidData = $this->NotEmety($data);
 			if($ValidData === false) {
-				$this->errorMessage['titleCheck'][] = '页面标题不为空';
+				$this->errorMessage['titleCheck'][] = 'タイトルを入力してください';
 				return false;
 			}
 				
@@ -38,9 +38,9 @@ class AdminPage extends BaseValidator
 		$init = $this->dataInit(array($data));
 		if($init === true) {
 			$data = $this->sourceData[$data];
-			$ValidData = $this->NotEmety($data);
+			$ValidData = $this->NotEmety($data,array('stringTrim'));
 			if($ValidData === false) {
-				$this->errorMessage['bodyCheck'][] = '页面内容不为空';
+				$this->errorMessage['bodyCheck'][] = '内容を入力してください';
 				return false;
 			}
 				

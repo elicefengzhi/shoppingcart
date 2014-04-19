@@ -68,6 +68,9 @@ message.jp={
     "updateTime": "最終更新時間",
     "image": "画像",
     "footerTitle": "津村ホームページ制作",
+    "String404": "お探しのページは見つかりませんでした",
+    "Link404": "管理トップページへ行く",
+    "String500": "500",
 }; 
 message.zh={
 	"loginTitle": "管理首页",
@@ -138,4 +141,7 @@ message.zh={
     "updateTime": "最后更新时间",
     "image": "图片",
     "footerTitle": "津村日语网页制作",
+    "String404": "您所寻找的页面不存在",
+    "Link404": "前往管理首页",
+    "String500": "500",
 };

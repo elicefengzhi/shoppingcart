@@ -2,9 +2,9 @@
 
 namespace AdminProductImage\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\Admin\BaseController;
 
-class AdminProductImageController extends AbstractActionController
+class AdminProductImageController extends BaseController
 {
     public function indexAction()
     {

@@ -198,6 +198,7 @@ Class BaseFormSubmit
 	 */
 	protected function formSubmit($type,$params,$existsParams,$dbDispatchName,$validateDispatName)
 	{
+		$dbReturn = true;
 		$initArray = $this->initArray;
 		trim((string)$type) == '' && $type == 'insert';
 		$isOk = $this->paramsIsOk($initArray,$params,$dbDispatchName,$validateDispatName);

@@ -23,8 +23,8 @@ function check_box_bind(fc,sc){
 $(document).ready(function (){
 	hv_color($(".rick #foot a"),'#00E100','#9F0000');
 	/*------------#header #opration_buttons_start--------*/
-	$(".rick #header #opration_box_header .line0 #logout").click(function (){location.href='index.html'});
-	$(".rick #header #opration_box_header .line0 #top_back").click(function (){location.href='page_list.html'});
+	$(".rick #header #opration_box_header .line0 #logout").click(function (){location.href='/admin/logout'});
+	$(".rick #header #opration_box_header .line0 #top_back").click(function (){location.href='/admin'});
 	hv_color($(".rick #header #opration_box_header .line0 span"),'#00E100','#000');
 	hv_color($(".rick #header #opration_box_header .line1 span"),'#00E100','#00AE00');
 });

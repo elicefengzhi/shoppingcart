@@ -30,13 +30,13 @@ class AdminProduct extends BaseValidator
 			$data = $this->sourceData[$data];
 			$ValidData = $this->NotEmety($data);
 			if($ValidData === false) {
-				$this->errorMessage['nameCheck'][] = '商品名为必须';
+				$this->errorMessage['nameCheck'][] = '商品名を入力してください';
 				return false;
 			}
 			
 			$ValidData = $this->StringLength($data,array('min'=>0,'max'=>50),false);
 			if($ValidData === false) {
-				$this->errorMessage['nameCheck'][] = '商品名必须在50字以内';
+				$this->errorMessage['nameCheck'][] = '商品名は50文字までです';
 				return false;
 			}
 				
@@ -51,7 +51,7 @@ class AdminProduct extends BaseValidator
 			$data = $this->sourceData[$data];
 			$ValidData = $this->Int($data);
 			if($ValidData === false) {
-				$this->errorMessage['IntCheck'][] = '原价请填写正常数字';
+				$this->errorMessage['IntCheck'][] = '原価を入力してください';
 				return false;
 			}
 	
@@ -66,13 +66,13 @@ class AdminProduct extends BaseValidator
 			$data = $this->sourceData[$data];
 			$ValidData = $this->NotEmety($data);
 			if($ValidData === false) {
-				$this->errorMessage['priceCheck'][] = '现价为必须';
+				$this->errorMessage['priceCheck'][] = '定価を入力してください';
 				return false;
 			}
 			
 			$ValidData = $this->Int($ValidData,false);
 			if($ValidData === false) {
-				$this->errorMessage['priceCheck'][] = '现价请填写正常数字';
+				$this->errorMessage['priceCheck'][] = '正しい定価を入力してください';
 				return false;
 			}
 	
@@ -87,7 +87,7 @@ class AdminProduct extends BaseValidator
 			$data = $this->sourceData[$data];
 			$ValidData = $this->Int($data);
 			if($ValidData === false) {
-				$this->errorMessage['stockCheck'][] = '库存请填写正常数字';
+				$this->errorMessage['stockCheck'][] = '正しい在庫品数を入力してください';
 				return false;
 			}
 	
@@ -102,7 +102,7 @@ class AdminProduct extends BaseValidator
 			$data = $this->sourceData[$data];
 			$ValidData = $this->Int($data);
 			if($ValidData === false) {
-				$this->errorMessage['pointCheck'][] = '点数请填写正常数字';
+				$this->errorMessage['pointCheck'][] = '正しいポイントを入力してください';
 				return false;
 			}
 	
@@ -133,7 +133,7 @@ class AdminProduct extends BaseValidator
 			$data = $this->sourceData[$data];
 			$ValidData = $this->StringLength($data,array('min' => 0,'max' => 5000),array('stringTrim','htmlEntities'));
 			if($ValidData === false) {
-				$this->errorMessage['nameCheck'][] = '商品说明必须在5000字以内';
+				$this->errorMessage['nameCheck'][] = '商品説明は5000文字までです';
 				return false;
 			}
 	

@@ -2,7 +2,11 @@
 return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
-        'Application','Index','AdminIndex','DbSql'
+        'Application',
+    	'Index',
+    	'AdminIndex','AdminProduct','AdminProductType','AdminProductImage','AdminProduct','AdminOrder','AdminPage','AdminQuery',
+    	'ProductTypeLinkage',
+    	'DbSql','Log','ImageUpload','SendMail','ViewHelper','Validate','Paging','Fsession','FormSubmit','ShoppingCart'
     ),
 
     // These are various options for the listeners attached to the ModuleManager
@@ -16,6 +20,7 @@ return array(
         	'./module/admin',
         	'./module/front',
         	'./module/common',
+        	'./module/common/commonPage',
             './vendor',
         ),
 

@@ -30,6 +30,17 @@ return array(
                             ),
                         ),
                     ),
+                	'logout' => array(
+                		'type'    => 'Segment',
+                		'options' => array(
+                			'route'    => 'logout[/]',
+                			'defaults' => array(
+                				'__NAMESPACE__' => 'AdminIndex\Controller',
+                				'controller'    => 'AdminIndex',
+                				'action'        => 'logout',
+                			),
+                		),
+                	),
                 ),
             ),
         ),

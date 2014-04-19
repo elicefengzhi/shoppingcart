@@ -8,6 +8,7 @@
 // 设置常量
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', 'local');
 defined('BASEPATH') || define('BASEPATH', realpath(__DIR__).'/');
+defined('APPLICATIONPATH') || define('APPLICATIONPATH', BASEPATH.'module/Application/');
 defined('BASEURL') || define('BASEURL', '/');
 
 // Setup autoloading

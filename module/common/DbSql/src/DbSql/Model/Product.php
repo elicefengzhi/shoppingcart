@@ -99,6 +99,22 @@ class Product extends BaseDb
     	return false;
     }
     
+    public function getProductToList($forumId,$mainColumns)
+    {
+    	$select = $this->tableGateway->getSql()->select();
+    	$select->columns($mainColumns);
+    	$select->join(array('fp' => 'forum_product'),'product.product_id = fp.product_id',array(),$select::JOIN_LEFT);
+    	$select->join(array('pt' => 'product_type'),'product.ptype_id = pt.ptype_id',array('name'),$select::JOIN_LEFT);
+    	$select->where(array('fp.forum_id' => $forumId));
+    	$resultSet = $this->tableGateway->selectWith($select);
+    	$current = $resultSet->toArray();
+    	if(count($current) > 0) {
+    		return $current;
+    	}
+    	
+    	return false;
+    }
+    
     public function getById($where)
     {
     	$select = $this->tableGateway->getSql()->select();

@@ -2,9 +2,9 @@
 
 namespace AdminProductType\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\Admin\BaseController;
 
-class AdminProductTypeController extends AbstractActionController
+class AdminProductTypeController extends BaseController
 {
     public function indexAction()
     {
@@ -33,7 +33,7 @@ class AdminProductTypeController extends AbstractActionController
     		$return = $user->insert(false,array('name'),array('table' => 'product_type'),'AdminProductType');
     		if($return !== false) return $this->redirect()->toRoute('admin-product-type');
     		$return === false && $user->isVal() === false && $errorMessage = $user->getValidateErrorMessage();
-    		$return === false && $user->isExists() === true && $errorMessage = '商品分类名已存在';
+    		$return === false && $user->isExists() === true && $errorMessage = '商品カテゴリは既に登録されております';
     	}
     	
     	$productType = $this->serviceLocator->get('DbSql')->dispatch('ProductType');
@@ -58,7 +58,7 @@ class AdminProductTypeController extends AbstractActionController
     			return $this->redirect()->toRoute('admin-product-type');
     		}
     		$user->isVal() === false && $errorMessage = $user->getValidateErrorMessage();
-    		$user->isExists() === true && $errorMessage = '商品分类名已存在';
+    		$user->isExists() === true && $errorMessage = '商品カテゴリは既に登録されております';
     		$typeList = $user->getSourceData();
     	}
     	

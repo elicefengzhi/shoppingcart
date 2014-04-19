@@ -2,9 +2,9 @@
 
 namespace AdminIndex\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\Admin\BaseController;
 
-class AdminIndexController extends AbstractActionController
+class AdminIndexController extends BaseController
 {	
     public function indexAction()
     {
@@ -26,5 +26,11 @@ class AdminIndexController extends AbstractActionController
     		}
     	}
     	return array();
+    }
+    
+    public function logoutAction()
+    {
+    	$session = $this->serviceLocator->get('Fsession')->clear();
+    	return $this->redirect()->toRoute('admin-index/login');
     }
 }

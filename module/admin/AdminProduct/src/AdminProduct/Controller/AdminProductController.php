@@ -2,9 +2,9 @@
 
 namespace AdminProduct\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\Admin\BaseController;
 
-class AdminProductController extends AbstractActionController
+class AdminProductController extends BaseController
 {
     public function indexAction()
     {
@@ -41,7 +41,7 @@ class AdminProductController extends AbstractActionController
     		$model->createChlidColumns('TypeProduct','ptypeId');
     		$return = $user->insert(false,array('name'),'Product','AdminProduct');
     		$return === false && $user->isVal() === false && $errorMessage = $user->getValidateErrorMessage();
-    		$return === false && $user->isExists() === true && $errorMessage[][] = '商品名已存在';
+    		$return === false && $user->isExists() === true && $errorMessage[][] = '商品名は既に登録されております';
     		if($return !== false) return $this->redirect()->toRoute('admin-product');
     	}
     	
@@ -72,7 +72,7 @@ class AdminProductController extends AbstractActionController
     		$return = $product->update(false,array('product_id' => $pId),array('name'),'Product','AdminProduct');
     		if($return === false) {
     			$product->isVal() === false && $errorMessage = $return->getValidateErrorMessage();
-    			$product->isExists() === true && $errorMessage = '商品分类名已存在';
+    			$product->isExists() === true && $errorMessage = '商品名は既に登録されております';
     			$productList = $product->getSourceData();
     		}
     		else {

@@ -31,9 +31,4 @@ return array(
 			'ViewHelper' => 'ViewHelper\ViewHelper\ViewHelper',
 		)
 	),
-	'Application/init' => array(
-		'adminRoutePrefix' => 'admin\-',
-        'sessionCheckName' => 'adminId',
-        'loginRouteName'   => 'admin-index/login'
-     )
 );

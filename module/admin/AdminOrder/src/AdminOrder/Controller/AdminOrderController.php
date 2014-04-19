@@ -2,9 +2,9 @@
 
 namespace AdminOrder\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\Admin\BaseController;
 
-class AdminOrderController extends AbstractActionController
+class AdminOrderController extends BaseController
 {
     public function indexAction()
     {

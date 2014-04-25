@@ -1,3 +1,54 @@
-<strong>Module:</strong>        Index &raquo;
-<strong>Controller:</strong>    Index &raquo;
-<strong>Action:</strong>        index
+<p>カテゴリ</p>
+<?php if($viewHelper->isLoop('productType')) : ?>
+<?php foreach($viewHelper->getSourceData('productType') as $type): ?>
+<?php echo $viewHelper->string('name',$type); ?><br/>
+<?php endforeach; ?>
+<?php endif; ?>
+<p>新着ニュース</p>
+<?php if($viewHelper->isLoop('news')) : ?>
+<?php foreach($viewHelper->getSourceData('news') as $n): ?>
+<a href="<?php echo $viewHelper->string('news_id',$n); ?>"><?php echo $viewHelper->string('news_title',$n); ?></a><br/>
+<?php echo $viewHelper->dataFormatter('update_time','Y-m-d H:i:s',$n); ?><br/>
+<?php endforeach; ?>
+<?php endif; ?>
+<p>新着商品</p>
+<?php if($viewHelper->isLoop('newProductList')) : ?>
+<?php foreach($viewHelper->getSourceData('newProductList') as $list): ?>
+<?php echo $viewHelper->string('name',$list); ?><br/>
+<?php echo $viewHelper->string('original_price',$list); ?><br/>
+<?php echo $viewHelper->string('price',$list); ?><br/>
+<?php echo $viewHelper->string('stock',$list); ?><br/>
+<?php $productTypeList = $viewHelper->getProductTypeByProductId($viewHelper->string('product_id',$list)); ?>
+	<?php if($viewHelper->isLoop(false,$productTypeList)) : ?>
+	<?php foreach($productTypeList as $ptList) : ?>
+	<?php echo $viewHelper->string('name',$ptList); ?>
+	<?php endforeach; ?>
+	<?php endif; ?><br/>
+<?php $productImage = $viewHelper->getImageByProductId($viewHelper->string('product_id',$list)); ?>
+<?php echo $viewHelper->img('image_path',$productImage,false); ?><br/>
+<?php endforeach; ?>
+<?php endif; ?>
+<p>おすすめ商品</p>
+<?php if($viewHelper->isLoop('ossmProductList')) : ?>
+<?php foreach($viewHelper->getSourceData('ossmProductList') as $list): ?>
+<?php echo $viewHelper->string('name',$list); ?><br/>
+<?php echo $viewHelper->string('original_price',$list); ?><br/>
+<?php echo $viewHelper->string('price',$list); ?><br/>
+<?php echo $viewHelper->string('stock',$list); ?><br/>
+<?php $productTypeList = $viewHelper->getProductTypeByProductId($viewHelper->string('product_id',$list)); ?>
+	<?php if($viewHelper->isLoop(false,$productTypeList)) : ?>
+	<?php foreach($productTypeList as $ptList) : ?>
+	<?php echo $viewHelper->string('name',$ptList); ?>
+	<?php endforeach; ?>
+	<?php endif; ?><br/>
+<?php $productImage = $viewHelper->getImageByProductId($viewHelper->string('product_id',$list)); ?>
+<?php echo $viewHelper->img('image_path',$productImage,false); ?><br/>
+<?php endforeach; ?>
+<?php endif; ?>
+<p>商品</p>
+<div id="product-ajax"></div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#product-ajax').load('<?php echo $this->url('product/index'); ?>');
+});
+</script>

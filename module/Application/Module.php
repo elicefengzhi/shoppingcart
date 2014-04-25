@@ -5,7 +5,6 @@ namespace Application;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Application\Model\StaticApplication;
 
 class Module implements AutoloaderProviderInterface 
 {
@@ -64,11 +63,6 @@ class Module implements AutoloaderProviderInterface
     			$moduleName == 'admin' && $event->getResult()->setTemplate('admin_error/index');
     			$response->setStatusCode(500);
     			$response->sendHeaders();
-    		}
-    		//200或其它
-    		else {
-    			//调用全局访问静态类
-    			StaticApplication::setServiceManager($serviceManager);
     		}
     	});
     }

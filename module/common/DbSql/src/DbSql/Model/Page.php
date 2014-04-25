@@ -7,11 +7,6 @@ use DbSql\Model\BaseDb;
 class Page extends BaseDb
 {
     protected $table = 'page';
-
-    public function __construct($adapter)
-    {
-        parent::__construct($this->table,$adapter);
-    }
     
     public function add($data)
     {

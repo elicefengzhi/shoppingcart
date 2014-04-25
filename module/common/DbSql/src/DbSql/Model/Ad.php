@@ -7,11 +7,6 @@ use DbSql\Model\BaseDb;
 class Ad extends BaseDb
 {
     protected $table = 'advertisement';
-
-    public function __construct($adapter)
-    {
-        parent::__construct($this->table,$adapter);
-    }
     
     public function getAdAll()
     {

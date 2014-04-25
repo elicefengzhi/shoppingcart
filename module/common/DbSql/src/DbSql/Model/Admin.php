@@ -7,11 +7,6 @@ use DbSql\Model\BaseDb;
 class Admin extends BaseDb
 {
     protected $table = 'admin';
-
-    public function __construct($adapter)
-    {
-        parent::__construct($this->table,$adapter);
-    }
     
     public function getAdminBycolumns($columns,$where)
     {

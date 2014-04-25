@@ -46,7 +46,7 @@ class AdminProduct extends BaseValidator
 	
 	private function originalPrice($data)
 	{
-		$init = $this->dataInit(array($data));
+		$init = $this->dataInit(array($data),true);
 		if($init === true) {
 			$data = $this->sourceData[$data];
 			$ValidData = $this->Int($data);
@@ -82,7 +82,7 @@ class AdminProduct extends BaseValidator
 	
 	private function stock($data)
 	{
-		$init = $this->dataInit(array($data));
+		$init = $this->dataInit(array($data),true);
 		if($init === true) {
 			$data = $this->sourceData[$data];
 			$ValidData = $this->Int($data);

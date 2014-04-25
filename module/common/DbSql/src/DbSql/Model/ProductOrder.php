@@ -7,11 +7,6 @@ use DbSql\Model\BaseDb;
 class ProductOrder extends BaseDb
 {
     protected $table = 'order_product';
-
-    public function __construct($adapter)
-    {
-        parent::__construct($this->table,$adapter);
-    }
     
     public function add($data)
     {

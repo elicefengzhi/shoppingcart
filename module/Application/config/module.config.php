@@ -24,7 +24,11 @@ return array(
         	'admin_error/index'    		=> __DIR__ . '/../view/error/admin_500.phtml',
         	'admin/common/paging'  		=> __DIR__ . '/../view/common/admin/paging.php',
         	'admin/common/errorMessage' => __DIR__ . '/../view/common/admin/errorMessage.php',
+        	'front/common/paging'  		=> __DIR__ . '/../view/common/front/paging.php',
         ),
+        'strategies' => array (
+        	'ViewJsonStrategy'//添加json策略
+        )
     ),
 	'controller_plugins' => array(
 		'invokables' => array(

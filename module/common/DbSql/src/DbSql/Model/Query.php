@@ -7,11 +7,6 @@ use DbSql\Model\BaseDb;
 class Query extends BaseDb
 {
     protected $table = 'query';
-
-    public function __construct($adapter)
-    {
-        parent::__construct($this->table,$adapter);
-    }
     
     public function del($where)
     {

@@ -35,7 +35,7 @@ class AdminPage extends BaseValidator
 	
 	private function pageBody($data)
 	{
-		$init = $this->dataInit(array($data));
+		$init = $this->dataInit(array($data),true);
 		if($init === true) {
 			$data = $this->sourceData[$data];
 			$ValidData = $this->NotEmety($data,array('stringTrim'));

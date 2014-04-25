@@ -4,8 +4,11 @@ $dbParams = array(
 		'username'  => 'root',
 		'password'  => '',
 		'hostname'  => 'localhost',
+		'driver_options' => array(
+			PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"
+		),
 		// buffer_results - only for mysqli buffered queries, skip for others
-		'options' => array('buffer_results' => true,PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'')
+		'options' => array('buffer_results' => true)
 );
 
 return array(
@@ -54,7 +57,7 @@ return array(
 		),
 	),
 	'php-error' => array(
-		'enabled' => true,
+		'enabled' => false,
 		'options' => array(),
 	),
 );

@@ -19,6 +19,19 @@ class Module implements AutoloaderProviderInterface
             ),
         );
     }
+    
+    public function getServiceConfig()
+    {
+    	return array(
+    		'factories' => array(
+    			'admin/product/logic' => function ($sm) {
+    				$productLogic = new \AdminProduct\Logic\AdminProductLogic();
+    				$productLogic->setServiceManager($sm);
+    				return $productLogic;
+    			}
+    		)
+    	);
+    }
 
     public function getConfig()
     {

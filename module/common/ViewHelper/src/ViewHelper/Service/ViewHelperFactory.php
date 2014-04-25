@@ -15,6 +15,8 @@ class ViewHelperFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new ViewHelper();
+        $viewHelper = new ViewHelper();
+        $viewHelper->init($serviceLocator);
+        return $viewHelper;
     }
 }

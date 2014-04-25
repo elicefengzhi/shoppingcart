@@ -8,7 +8,15 @@ class IndexController extends BaseController
 {
     public function indexAction()
     {
-    	$productList = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductToList(1,array('name'));
-        return array();
+    	$newProductList = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductToList(1,array('product_id','name','original_price','price','stock'));
+    	$ossmProductList = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductToList(2,array('product_id','name','original_price','price','stock'));
+    	$productType = $this->serviceLocator->get('DbSql')->dispatch('ProductType')->getType(array('parent_id' => 0));
+    	$news = $this->serviceLocator->get('DbSql')->dispatch('News')->getNews(false,false,array('news_id','news_title','update_time'),10);
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Front');
+    	$viewHelper->setSourceData($newProductList,'newProductList');
+    	$viewHelper->setSourceData($ossmProductList,'ossmProductList');
+    	$viewHelper->setSourceData($productType,'productType');
+    	$viewHelper->setSourceData($news,'news');
+        return array('viewHelper' => $viewHelper);
     }
 }

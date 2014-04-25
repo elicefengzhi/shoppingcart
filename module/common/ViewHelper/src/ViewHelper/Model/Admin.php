@@ -13,26 +13,22 @@ class Admin extends BaseViewHelper
     
     public function getProductTypeById($pId)
     {
-    	$sm = \Application\Model\StaticApplication::getServiceManager();
-    	return $sm->get('DbSql')->dispatch('ProductType')->getProductTypeByProductId((int)$pId,array('name'),array());
+    	return $this->serviceManager->get('DbSql')->dispatch('ProductType')->getProductTypeByProductId((int)$pId,array('name'),array());
     }
     
     public function getProductTypeByOrderId($orderId)
     {
-    	$sm = \Application\Model\StaticApplication::getServiceManager();
-    	return $sm->get('DbSql')->dispatch('Product')->getProductTypeByOrderId((int)$orderId,array('name'),array('product_count'));
+    	return $this->serviceManager->get('DbSql')->dispatch('Product')->getProductTypeByOrderId((int)$orderId,array('name'),array('product_count'));
     }
     
     public function getAdByProductId($pId)
     {
-    	$sm = \Application\Model\StaticApplication::getServiceManager();
-    	return $sm->get('DbSql')->dispatch('Ad')->getAdProductByProductId((int)$pId,array('ad_name'),array());
+    	return $this->serviceManager->get('DbSql')->dispatch('Ad')->getAdProductByProductId((int)$pId,array('ad_name'),array());
     }
     
     public function getForumByProductId($pId)
     {
-    	$sm = \Application\Model\StaticApplication::getServiceManager();
-    	return $sm->get('DbSql')->dispatch('Forum')->getForumByProductId((int)$pId,array('forum_name'),array());
+    	return $this->serviceManager->get('DbSql')->dispatch('Forum')->getForumByProductId((int)$pId,array('forum_name'),array());
     }
     
     public function adCheck($adProductList,$dataString,$key)

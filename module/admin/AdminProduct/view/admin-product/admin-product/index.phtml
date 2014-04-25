@@ -1,5 +1,6 @@
 <p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin-index'); ?>"></a>--<span lang="product"></span></p>
 <div id="page_contents_main">
+	<?php if($viewHelper->isLoop()): ?>
 	<table cellspacing="0" id="table_for_opration">
 	<tr>
 		<td valign="middle"><input type="checkbox" id="cba" /></td>
@@ -16,59 +17,57 @@
 		<td lang="updateTime" valign="middle"></td>
 		<td valign="middle"></td>
 	</tr>
-	<?php if($this->viewHelper->isLoop()): ?>
-	<?php foreach($this->viewHelper->getSourceData() as $data): ?>
+	<?php foreach($viewHelper->getSourceData() as $data): ?>
 	<tr>
-	<td valign="middle"><input class="table-checkbox" type="checkbox" value="<?php echo $this->viewHelper->string('product_id',$data); ?>"/></td>
-	<td valign="middle"><?php echo $this->viewHelper->string('name',$data); ?></td>
-	<?php $this->viewHelper->setSourceData($this->viewHelper->getProductTypeById($this->viewHelper->string('product_id',$data)),'productType'); ?>
+	<td valign="middle"><input class="table-checkbox" type="checkbox" value="<?php echo $viewHelper->string('product_id',$data); ?>"/></td>
+	<td valign="middle"><?php echo $viewHelper->string('name',$data); ?></td>
+	<?php $viewHelper->setSourceData($viewHelper->getProductTypeById($viewHelper->string('product_id',$data)),'productType'); ?>
 	<td valign="middle">
-		<?php if($this->viewHelper->isLoop('productType')) : ?>
-		<?php foreach($this->viewHelper->getSourceData('productType') as $type) : ?>
-		<span style="margin:0 5px 0 5px;"><?php echo $this->viewHelper->string('name',$type); ?></span>
+		<?php if($viewHelper->isLoop('productType')) : ?>
+		<?php foreach($viewHelper->getSourceData('productType') as $type) : ?>
+		<span style="margin:0 5px 0 5px;"><?php echo $viewHelper->string('name',$type); ?></span>
 		<?php endforeach; ?>
 		<?php endif; ?>
 	</td>
-	<?php $this->viewHelper->setSourceData($this->viewHelper->getAdByProductId($this->viewHelper->string('product_id',$data)),'productAd'); ?>
+	<?php $viewHelper->setSourceData($viewHelper->getAdByProductId($viewHelper->string('product_id',$data)),'productAd'); ?>
 	<td valign="middle">
-		<?php if($this->viewHelper->isLoop('productAd')) : ?>
-		<?php foreach($this->viewHelper->getSourceData('productAd') as $ad) : ?>
-		<span style="margin:0 5px 0 5px;"><?php echo $this->viewHelper->string('ad_name',$ad); ?></span>
+		<?php if($viewHelper->isLoop('productAd')) : ?>
+		<?php foreach($viewHelper->getSourceData('productAd') as $ad) : ?>
+		<span style="margin:0 5px 0 5px;"><?php echo $viewHelper->string('ad_name',$ad); ?></span>
 		<?php endforeach; ?>
 		<?php endif; ?>
 	</td>
-	<?php $this->viewHelper->setSourceData($this->viewHelper->getForumByProductId($this->viewHelper->string('product_id',$data)),'productForum'); ?>
+	<?php $viewHelper->setSourceData($viewHelper->getForumByProductId($viewHelper->string('product_id',$data)),'productForum'); ?>
 	<td valign="middle">
-		<?php if($this->viewHelper->isLoop('productForum')) : ?>
-		<?php foreach($this->viewHelper->getSourceData('productForum') as $forum) : ?>
-		<span style="margin:0 5px 0 5px;"><?php echo $this->viewHelper->string('forum_name',$forum); ?></span>
+		<?php if($viewHelper->isLoop('productForum')) : ?>
+		<?php foreach($viewHelper->getSourceData('productForum') as $forum) : ?>
+		<span style="margin:0 5px 0 5px;"><?php echo $viewHelper->string('forum_name',$forum); ?></span>
 		<?php endforeach; ?>
 		<?php endif; ?>
 	</td>
-	<td valign="middle"><?php echo $this->viewHelper->string('original_price',$data); ?></td>
-	<td valign="middle"><?php echo $this->viewHelper->string('price',$data); ?></td>
-	<td valign="middle"><?php echo $this->viewHelper->string('stock',$data); ?></td>
-	<td valign="middle"><?php echo $this->viewHelper->string('point',$data); ?></td>
-	<td valign="middle"><?php $this->viewHelper->string('is_add',$data) == 1 ? print '有効' : print '無効'; ?></td>
-	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('creat_time','Y-m-d H:i:s',$data); ?></td>
-	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('update_time','Y-m-d H:i:s',$data); ?></td>
+	<td valign="middle"><?php echo $viewHelper->string('original_price',$data); ?></td>
+	<td valign="middle"><?php echo $viewHelper->string('price',$data); ?></td>
+	<td valign="middle"><?php echo $viewHelper->string('stock',$data); ?></td>
+	<td valign="middle"><?php echo $viewHelper->string('point',$data); ?></td>
+	<td valign="middle"><?php $viewHelper->string('is_add',$data) == 1 ? print '有効' : print '無効'; ?></td>
+	<td valign="middle"><?php echo $viewHelper->dataFormatter('creat_time','Y-m-d H:i:s',$data); ?></td>
+	<td valign="middle"><?php echo $viewHelper->dataFormatter('update_time','Y-m-d H:i:s',$data); ?></td>
 	<td valign="middle">
-		<a lang="image" href="<?php echo $this->url('admin-product-image/index',array('pId' => $this->viewHelper->string('product_id',$data))); ?>"></a>&nbsp;
-		<a lang="edit" href="<?php echo $this->url('admin-product/edit',array('pId' => $this->viewHelper->string('product_id',$data))); ?>"></a>&nbsp;
-		<a lang="delete" class="product-delete" data-pId="<?php echo $this->viewHelper->string('product_id',$data); ?>" href="javascript:;"></a>
+		<a lang="image" href="<?php echo $this->url('admin-product-image/index',array('pId' => $viewHelper->string('product_id',$data))); ?>"></a>&nbsp;
+		<a lang="edit" href="<?php echo $this->url('admin-product/edit',array('pId' => $viewHelper->string('product_id',$data))); ?>"></a>&nbsp;
+		<a lang="delete" class="product-delete" data-pId="<?php echo $viewHelper->string('product_id',$data); ?>" href="javascript:;"></a>
 	</td>
 	</tr>
 	<?php endforeach; ?>
-	<?php endif; ?>
 	</table>
 	<form style="float:left;" id="product-delete-form" action="<?php echo $this->url('admin-product/delete'); ?>" method="post">
 		<input style="margin-top:10px;" id="product-delete" type="submit" />
 	</form>
 	<form style="float:left;" id="product-forum-form" action="<?php echo $this->url('admin-product/forum'); ?>" method="post">
-		<?php if($this->viewHelper->isLoop('Forum')) : ?>
-		<?php foreach($this->viewHelper->getSourceData('Forum') as $forum) : ?>
-		<select data-formId="<?php echo $this->viewHelper->string('forum_id',$forum); ?>" class="product-forum-select" style="margin-top:10px;">
-			<option value="-1"><?php echo $this->viewHelper->string('forum_name',$forum); ?></option>
+		<?php if($viewHelper->isLoop('Forum')) : ?>
+		<?php foreach($viewHelper->getSourceData('Forum') as $forum) : ?>
+		<select data-formId="<?php echo $viewHelper->string('forum_id',$forum); ?>" class="product-forum-select" style="margin-top:10px;">
+			<option value="-1"><?php echo $viewHelper->string('forum_name',$forum); ?></option>
 			<option lang="add" value="1"></option>
 			<option lang="delete" value="0"></option>
 		</select>
@@ -76,7 +75,8 @@
 		<?php endif; ?>
 	</form>
 	<div style="clear:both;" ></div>
-	<?php echo $this->partial('admin/common/paging',array('paging' => $this->paging,'routerName' => 'admin-product/index')); ?>
+	<?php endif; ?>
+	<?php echo $this->partial('admin/common/paging',array('paging' => $paging,'routerName' => 'admin-product/index')); ?>
 </div>
 
 <script type="text/javascript" language="JavaScript">
@@ -122,7 +122,7 @@ $(document).ready(function (){
 					}
 				});
 				$('#product-forum-form').append('<input name="forumSelect" type="hidden" value="'+selectValue+'" />');
-				$('#product-forum-form').append('<input name="pageNum" type="hidden" value="'+<?php echo $this->pageNum; ?>+'" />');
+				$('#product-forum-form').append('<input name="pageNum" type="hidden" value="'+<?php echo $pageNum; ?>+'" />');
 				$('#product-forum-form').append('<input name="formId" type="hidden" value="'+forumId+'" />');
 				$('#product-forum-form').submit();	
 			}

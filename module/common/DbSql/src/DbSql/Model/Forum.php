@@ -7,11 +7,6 @@ use DbSql\Model\BaseDb;
 class Forum extends BaseDb
 {
     protected $table = 'forum';
-
-    public function __construct($adapter)
-    {
-        parent::__construct($this->table,$adapter);
-    }
     
     public function getForumAll()
     {

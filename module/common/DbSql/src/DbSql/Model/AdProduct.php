@@ -7,11 +7,6 @@ use DbSql\Model\BaseDb;
 class AdProduct extends BaseDb
 {
     protected $table = 'ad_product';
-
-    public function __construct($adapter)
-    {
-        parent::__construct($this->table,$adapter);
-    }
     
     public function add($data)
     {

@@ -7,11 +7,6 @@ use DbSql\Model\BaseDb;
 class ProductImage extends BaseDb
 {
     protected $table = 'image_product';
-
-    public function __construct($adapter)
-    {
-        parent::__construct($this->table,$adapter);
-    }
     
     public function add($data)
     {
@@ -43,11 +38,12 @@ class ProductImage extends BaseDb
     	return $return > 0 ? true : false;
     }
     
-    public function getImageByProductId($columns = false,$where,$isOne = false)
+    public function getImageByProductId($columns = false,$where,$isOne = false,$limit = false)
     {
         if(is_array($columns)) {
     		$select = $this->tableGateway->getSql()->select();
     		$select->columns($columns)->where($where);
+			$limit !== false && $select->limit($limit);
     		$resultSet = $this->tableGateway->selectWith($select);
     	}
     	else {

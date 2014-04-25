@@ -3,11 +3,20 @@
 namespace ViewHelper\ViewHelper;
 
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+use ViewHelper\Model\BaseViewHelper;
 
 class ViewHelper extends AbstractPlugin
 {	
-	public function __invoke($viewType)
+	private $serviceManager;//数据库适配器
+	
+	function init($serviceManager)
 	{
+		$this->serviceManager = $serviceManager;
+	}
+	
+	public function __invoke($viewType,$serviceManager)
+	{
+		$this->serviceManager = $serviceManager;
 		return $this->dispatch($viewType);
 	}
 	
@@ -19,8 +28,10 @@ class ViewHelper extends AbstractPlugin
     public function dispatch($viewType)
     {
     	if(empty($viewType)) return false;
-    	 
+
     	$class = 'ViewHelper\Model\\'.$viewType;
-    	return new $class();
+    	$viewHelper = new $class();
+    	$viewHelper->setServiceManager($this->serviceManager);
+    	return $viewHelper;
     }
 }

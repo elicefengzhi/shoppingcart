@@ -17,10 +17,10 @@
 	</tr>
 	<?php endforeach; ?>
 	</table>
-	<?php endif; ?>
 	<form id="delete-form" action="<?php echo $this->url('admin-product-type/delete') ?>" method="post">
 		<input id="delete-button" style="margin-top:10px;" type="button" />
 	</form>
+	<?php endif; ?>
 	<?php echo $this->partial('admin/common/paging',array('paging' => $this->paging,'routerName' => 'admin-product-type/index')); ?>
 </div>
 <script type="text/javascript" src="/js/admin/product_type_index.js"></script>

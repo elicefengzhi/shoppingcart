@@ -4,7 +4,14 @@ namespace ViewHelper\Model;
 use Zend\View\Helper\AbstractHelper;
 
 class BaseViewHelper extends AbstractHelper
-{
+{	
+	protected $serviceManager;
+	
+	public function setServiceManager($serviceManager)
+	{
+		$this->serviceManager = $serviceManager;
+	}
+	
 	protected $sourceData = array();//数据源
 	
 	/**
@@ -253,16 +260,17 @@ class BaseViewHelper extends AbstractHelper
 		$image = '';
 		$replaceDate = '';
 		$return = '';
+		$tagString = array();
 
-		isset($option['width']) ? $width = 'width="'.$option['width'].'"' : $width = '';
-		isset($option['height']) ? $height = 'height="'.$option['height'].'"' : $height = '';
+		isset($option['width']) && $tagString['width'] = 'width="'.$option['width'].'"';
+		isset($option['height']) && $tagString['height'] = 'height="'.$option['height'].'"';
 		isset($option['alt']) ? $alt = $option['alt'] : $alt = '';
 		isset($option['after']) ? $after = $option['after'] : $after = '';
 		isset($option['before']) ? $before = $option['before'] : $before = '';
 		isset($option['replaceImg']) ? $replaceImg = $option['replaceImg'] : $replaceImg = false;
 		isset($option['replaceString']) ? $replaceString = $option['replaceString'] : $replaceString = false;
-		isset($option['style']) ? $style = 'style="'.$option['style'].'"' : $style = '';
-		isset($option['id']) ? $id = 'id="'.$option['id'].'"' : $id = '';
+		isset($option['style']) && $tagString['style'] = 'style="'.$option['style'].'"';
+		isset($option['id']) && $tagString['id'] = 'id="'.$option['id'].'"';
 		
 		if($returnData === false && $replaceImg === false) {
 			return '';
@@ -277,11 +285,11 @@ class BaseViewHelper extends AbstractHelper
 		}
 
 		if($replaceDate != '') {
-			$return['img'] = $before.'<img '.$style.' '.$width.' '.$height.' src="'.$image.'" alt="'.$alt.'" />'.$after;
+			$return['img'] = $before.'<img '.implode(' ',$tagString).' src="'.$image.'" alt="'.$alt.'" />'.$after;
 			$return['replaceString'] = $replaceDate;
 		}
 		else {
-			$return = $before.'<img '.$id.' '.$style.' '.$width.' '.$height.' src="'.$image.'" alt="'.$alt.'" />'.$after;
+			$return = $before.'<img '.implode(' ',$tagString).' src="'.$image.'" alt="'.$alt.'" />'.$after;
 		}
 
 		return $return;

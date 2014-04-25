@@ -39,6 +39,17 @@ return array(
 			'title' => '商品管理'
 		),
 	),
+	'AdminNews\Controller\AdminNews' => array(
+		'index' => array(
+			'title' => 'ニュース管理'
+		),
+		'add' => array(
+			'title' => 'ニュース管理'
+		),
+		'edit' => array(
+			'title' => 'ニュース管理'
+		),
+	),
 	'AdminProductImage\Controller\AdminProductImage' => array(
 		'index' => array(
 			'title' => '商品画像'

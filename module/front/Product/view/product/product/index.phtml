@@ -1,0 +1,66 @@
+<?php if($viewHelper->isLoop()) : ?>
+<?php foreach($viewHelper->getSourceData() as $key => $product): ?>
+<p id="product-name<?php echo $key; ?>"><?php echo $viewHelper->string('name',$product); ?></p>
+<?php if($viewHelper->isLoop(false,$product['type_name'])): ?>
+<?php foreach($product['type_name'] as $type): ?>
+<?php $typeName = $viewHelper->string('type_name',$type,false,array('after' => ' ')); ?>
+<?php endforeach; ?>
+<?php endif; ?>
+<p id="product-type<?php echo $key; ?>"><?php echo rtrim($typeName,'、'); ?></p>
+<p id="product-original_price<?php echo $key; ?>"><?php echo $viewHelper->string('original_price',$product); ?></p>
+<p id="product-price<?php echo $key; ?>"><?php echo $viewHelper->string('price',$product); ?></p>
+<p id="product-stock<?php echo $key; ?>"><?php echo $viewHelper->string('stock',$product); ?></p>
+<p id="product-point<?php echo $key; ?>"><?php echo $viewHelper->string('point',$product); ?></p>
+<p id="product-update_time<?php echo $key; ?>"><?php echo $viewHelper->dataFormatter('update_time','Y-m-d H:i:s',$product); ?></p>
+<p id="product-image<?php echo $key; ?>"><?php echo $viewHelper->img('image',$product); ?></p>
+<?php endforeach; ?>
+<?php endif; ?>
+<div style="margin-top:10px;" id="paging-div">
+	<?php if($paging) : ?>
+	<?php if($paging->isFirstPage) : ?>
+	<a class="product-paging" data-num="1" href="javascript:;">最初のページ</a>
+	<?php endif;?>
+	<?php foreach($paging->numList as $num) : ?>
+	<?php if($paging->isNow($num)) : ?>
+	<?php echo $num;?>
+	<?php else :?>
+	<a class="product-paging" data-num="<?php echo $num; ?>" href="javascript:;"><?php echo $num; ?></a>
+	<?php endif; ?>
+	<?php endforeach;?>
+	<?php if($paging->isLastPage) : ?>
+	<a class="product-paging" data-num="<?php echo $paging->getPages(); ?>" href="javascript:;">最後のページ</a>
+	<?php endif;?>
+	<span>総ページ数</span>&nbsp;<?php echo $paging->getPages(); ?>
+	<?php endif; ?>
+</div>
+<script type="text/javascript" src="/js/date-format.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.product-paging').on('click',function(){
+		var num = $(this).attr('data-num');
+		$.ajax({
+			dataType : 'json',
+			url : '<?php echo $this->url('product/ajax',array('type' => 'productList')); ?>',
+			data : {
+				'pageNum' : num
+			},
+			success : function(data){
+				$.each(data,function(key,value){
+					$('#product-name'+key).html(value.name);
+					var typeName = '';
+					$.each(value.type_name,function(typeKey,typeValue){
+						typeName += typeValue.type_name + ' ';
+					});
+					$('#product-type'+key).html(typeName);
+					$('#product-original_price'+key).html(value.original_price);
+					$('#product-price'+key).html(value.price);
+					$('#product-stock'+key).html(value.stock);
+					$('#product-point'+key).html(value.point);
+					$('#product-update_time'+key).html(date('Y-m-d H:i:s',value.update_time));
+					$('#product-image'+key+' img').attr('src','/'+value.image);
+				});
+			}
+		});
+	});
+});
+</script>

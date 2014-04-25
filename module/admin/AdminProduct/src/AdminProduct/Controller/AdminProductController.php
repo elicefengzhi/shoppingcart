@@ -22,7 +22,7 @@ class AdminProductController extends BaseController
     		$forum = $this->serviceLocator->get('DbSql')->dispatch('Forum')->getForumAll();
     	}
 
-    	$viewHelper = $this->ViewHelper('Admin');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
     	$viewHelper->setSourceData($productList);
     	$viewHelper->setSourceData($forum,'Forum');
         return array('viewHelper' => $viewHelper,'paging' => $paging,'pageNum' => $pageNum);
@@ -34,11 +34,11 @@ class AdminProductController extends BaseController
     	$user = $this->serviceLocator->get('FormSubmit')->dispatch('Insert');
     	if($user !== false) {
     		$user->createChlidColumnsByFiles('productImage','image');
-    		$model = new \AdminProduct\Model\AdminProductModel();
-    		$model->setTimeData();
-    		$model->insertProductImageAndAd();
-    		$model->createChlidColumns('AdProduct','ad');
-    		$model->createChlidColumns('TypeProduct','ptypeId');
+    		$logic = $this->serviceLocator->get('front/product/logic');
+    		$logic->setTimeData();
+    		$logic->insertProductImageAndAd();
+    		$logic->createChlidColumns('AdProduct','ad');
+    		$logic->createChlidColumns('TypeProduct','ptypeId');
     		$return = $user->insert(false,array('name'),'Product','AdminProduct');
     		$return === false && $user->isVal() === false && $errorMessage = $user->getValidateErrorMessage();
     		$return === false && $user->isExists() === true && $errorMessage[][] = '商品名は既に登録されております';
@@ -64,11 +64,11 @@ class AdminProductController extends BaseController
     	$product = $this->serviceLocator->get('FormSubmit')->dispatch('Update');
     	if($product !== false) {
     		$product->createChlidColumnsByFiles('productImage','image');
-    		$model = new \AdminProduct\Model\AdminProductModel();
-    		$model->insertProductImageAndAd($pId,'update');
-    		$model->createChlidColumns('AdProduct','ad');
-    		$model->createChlidColumns('TypeProduct','ptypeId');
-    		$model->setTimeData(true);
+    		$logic = $this->serviceLocator->get('front/product/logic');
+    		$logic->insertProductImageAndAd($pId,'update');
+    		$logic->createChlidColumns('AdProduct','ad');
+    		$logic->createChlidColumns('TypeProduct','ptypeId');
+    		$logic->setTimeData(true);
     		$return = $product->update(false,array('product_id' => $pId),array('name'),'Product','AdminProduct');
     		if($return === false) {
     			$product->isVal() === false && $errorMessage = $return->getValidateErrorMessage();

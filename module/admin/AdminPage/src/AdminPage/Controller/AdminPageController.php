@@ -17,7 +17,7 @@ class AdminPageController extends BaseController
         	$paging->paginate($count,10,$pageNum,2);
         	$pageList = $this->serviceLocator->get('DbSql')->dispatch('Page')->getPageAll($paging->getOffset(),$paging->getRowsPerPage());
         }
-        $viewHelper = $this->ViewHelper('Admin');
+        $viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
         $viewHelper->setSourceData($pageList);
         return array('viewHelper' => $viewHelper,'paging' => $paging,'pageNum' => $pageNum);
     }
@@ -32,7 +32,7 @@ class AdminPageController extends BaseController
             $return === false && $page->isExists() === true && $errorMessage[][] = 'タイトルは既に登録されております';
             if($return !== false) return $this->redirect()->toRoute('admin-page');
         }
-        $viewHelper = $this->ViewHelper('Admin');
+        $viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
         $viewHelper->setSourceData($errorMessage,'errorMessage');
         $page !== false && $return === false && $viewHelper->setSourceData($page->getSourceData());
     	return array('viewHelper' => $viewHelper,'url' => $this->url()->fromRoute('admin-page/add'));
@@ -59,7 +59,7 @@ class AdminPageController extends BaseController
     	$pageOne = $this->serviceLocator->get('DbSql')->dispatch('Page');
     	$pageList === false && $pageList = $pageOne->getPage(array('page_id' => $pId),true);
     	
-    	$viewHelper = $this->ViewHelper('Admin');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
     	$viewHelper->setSourceData($pageList);
     	
     	$viewModel = new \Zend\View\Model\ViewModel(array('viewHelper' => $viewHelper,'errorMessage' => $errorMessage,'url' => $this->url()->fromRoute('admin-page/edit',array('pId' => $pId))));
@@ -73,7 +73,7 @@ class AdminPageController extends BaseController
         if($pId === false) return $this->redirect()->toRoute('admin-page');
         
         $page = $this->serviceLocator->get('DbSql')->dispatch('Page')->getPage(array('page_id' => $pId),true);
-        $viewHelper = $this->ViewHelper('Admin');
+        $viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
         $viewHelper->setSourceData($page);
         return array('viewHelper' => $viewHelper);
     }

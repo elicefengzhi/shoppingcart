@@ -10,7 +10,7 @@ class AdminProductImageController extends BaseController
     {
     	$pId = $this->params('pId',false);
     	$imageList = $this->serviceLocator->get('DbSql')->dispatch('ProductImage')->getImageByProductId(array('image_path'),array('product_id' => (int)$pId));
-    	$viewHelper = $this->viewHelper('Admin');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
     	$viewHelper->setSourceData($imageList);
         return array('viewHelper' => $viewHelper);
     }

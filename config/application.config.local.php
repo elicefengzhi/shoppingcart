@@ -4,8 +4,8 @@ return array(
     'modules' => array(
         'Application',
     	'ZendDeveloperTools','BjyProfiler','ThaConfigalyzer','ZfSnapPhpError',
-    	'Index',
-    	'AdminIndex','AdminProduct','AdminProductType','AdminProductImage','AdminProduct','AdminOrder','AdminPage','AdminQuery',
+    	'Index','Product',
+    	'AdminIndex','AdminProduct','AdminProductType','AdminProductImage','AdminProduct','AdminOrder','AdminPage','AdminQuery','AdminNews',
     	'ProductTypeLinkage',
     	'DbSql','Log','ImageUpload','SendMail','ViewHelper','Validate','Paging','Fsession','FormSubmit','ShoppingCart'
     ),

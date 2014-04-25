@@ -17,7 +17,7 @@ class ProductTypeLinkageController extends AbstractActionController
     		exit;
     	}
     	
-    	$viewHelper = $this->ViewHelper('Front');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Front');
     	$viewHelper->setSourceData($typeList);
     	$viewModel = new \Zend\View\Model\ViewModel(array('viewHelper' => $viewHelper));
     	$viewModel->setTerminal(true);

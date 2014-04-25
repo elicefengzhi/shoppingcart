@@ -15,10 +15,10 @@ class BaseDb extends AbstractTableGateway
 	protected $isContention;
 	protected $tableGateway;
 	
-	function __construct($talbe,$adapter)
+	public function init($adapter)
 	{
-		$this->tableGateway = new TableGateway($this->table, $adapter);
 		$this->adapter = $adapter;
+		$this->tableGateway = new TableGateway($this->table,$adapter);
 		$this->isContention = $this->isContention();
 	}
 	

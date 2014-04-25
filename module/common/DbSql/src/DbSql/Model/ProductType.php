@@ -7,11 +7,6 @@ use DbSql\Model\BaseDb;
 class ProductType extends BaseDb
 {
     protected $table = 'product_type';
-
-    public function __construct($adapter)
-    {
-        parent::__construct($this->table,$adapter);
-    }
     
     public function del($where)
     {
@@ -56,6 +51,7 @@ class ProductType extends BaseDb
     	$select->columns($masterColumns);
     	$select->join(array('ppt' => 'product_productType'),'ppt.ptype_id = product_type.ptype_id',$joinColumns);
     	$select->where(array('ppt.product_id' => $productId));
+    	$select->order('parent_id asc');
     	$resultSet = $this->tableGateway->selectWith($select);
     	$current = $resultSet->toArray();
     	if(count($current) > 0) {

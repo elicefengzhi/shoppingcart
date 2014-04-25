@@ -7,11 +7,6 @@ use DbSql\Model\BaseDb;
 class Product extends BaseDb
 {
     protected $table = 'product';
-
-    public function __construct($adapter)
-    {
-        parent::__construct($this->table,$adapter);
-    }
     
     public function add($data)
     {
@@ -41,7 +36,7 @@ class Product extends BaseDb
     {
     	$select = $this->tableGateway->getSql()->select();
     	$select->columns(array('count' => new \Zend\Db\Sql\Expression('COUNT(product.product_id)')));
-    	$select->join('product_type','product.ptype_id = product_type.ptype_id',array(),$select::JOIN_LEFT);
+    	//$select->join('product_type','product.ptype_id = product_type.ptype_id',array(),$select::JOIN_LEFT);
     	$select->where(array('delete_flg' => 0));
     	$resultSet = $this->tableGateway->selectWith($select);
     	$current = $resultSet->toArray();
@@ -56,7 +51,7 @@ class Product extends BaseDb
     {
     	$select = $this->tableGateway->getSql()->select();
     	$select->columns(array('product_id','name','original_price','price','stock','point','is_add','creat_time','update_time'));
-    	$select->join('product_type','product.ptype_id = product_type.ptype_id',array('type_name' => 'name'),$select::JOIN_LEFT);
+    	//$select->join('product_type','product.ptype_id = product_type.ptype_id',array('type_name' => 'name'),$select::JOIN_LEFT);
     	$select->order('product.update_time desc');
     	$select->where(array('delete_flg' => 0));
     	$select->offset($offset);
@@ -104,8 +99,8 @@ class Product extends BaseDb
     	$select = $this->tableGateway->getSql()->select();
     	$select->columns($mainColumns);
     	$select->join(array('fp' => 'forum_product'),'product.product_id = fp.product_id',array(),$select::JOIN_LEFT);
-    	$select->join(array('pt' => 'product_type'),'product.ptype_id = pt.ptype_id',array('name'),$select::JOIN_LEFT);
     	$select->where(array('fp.forum_id' => $forumId));
+    	$select->where(array('delete_flg' => 0));
     	$resultSet = $this->tableGateway->selectWith($select);
     	$current = $resultSet->toArray();
     	if(count($current) > 0) {

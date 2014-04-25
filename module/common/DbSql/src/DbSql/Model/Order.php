@@ -7,11 +7,6 @@ use DbSql\Model\BaseDb;
 class Order extends BaseDb
 {
     protected $table = 'order';
-
-    public function __construct($adapter)
-    {
-        parent::__construct($this->table,$adapter);
-    }
     
     public function edit($data,$where)
     {

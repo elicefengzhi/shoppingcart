@@ -3,7 +3,6 @@
 namespace ViewHelper\ViewHelper;
 
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
-use ViewHelper\Model\BaseViewHelper;
 
 class ViewHelper extends AbstractPlugin
 {	

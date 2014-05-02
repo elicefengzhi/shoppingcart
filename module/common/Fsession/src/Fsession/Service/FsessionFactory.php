@@ -17,6 +17,7 @@ class FsessionFactory implements FactoryInterface
     {
     	$init = $serviceLocator->get('config');
     	isset($init['Fsession/init']) ? $initArray = $init['Fsession/init'] : $initArray = false;
-        return new Fsession($initArray);
+    	$dbAdapter = $serviceLocator->get('adapter');
+        return new Fsession($initArray,$dbAdapter);
     }
 }

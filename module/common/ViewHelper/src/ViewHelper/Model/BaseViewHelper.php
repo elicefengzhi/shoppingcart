@@ -109,18 +109,14 @@ class BaseViewHelper extends AbstractHelper
 		$isSet = false;
 		$value = '';
 		$dataString === false && $value = $data;
-		is_object($data) && isset($data->$dataString) && $isSet = true && $value = $data->$dataString;
-		is_array($data) && isset($data[$dataString]) && $isSet = true && $value = $data[$dataString];
-
-// 		if($isSet === false) {
-// 			return false;
-// 		}
-// 		else if(trim((string)$value) == ''){
-// 			return false;
-// 		}
-// 		else {
-// 			return $value;
-// 		}
+		if(is_object($data) && isset($data->$dataString)) {
+			$isSet = true;
+			$value = $data->$dataString;
+		}
+		if(is_array($data) && isset($data[$dataString])) {
+			$isSet = true;
+			$value = $data[$dataString];
+		}
 
 		return $isSet === false ? false : (trim((string)$value) == '' ? false : $value);
 	}

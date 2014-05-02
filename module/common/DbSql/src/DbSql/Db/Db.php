@@ -24,7 +24,7 @@ class Db
     {
     	if(empty($table)) return false;
     	
-    	$class = 'DbSql\Model\\'.$table;
+    	$class = 'DbSql\Table\\'.$table;
         $dbSql = new $class();
         $dbSql->init($this->adapter);
         return $dbSql;

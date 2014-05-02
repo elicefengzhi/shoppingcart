@@ -22,6 +22,9 @@ class Log
 			isset($init['maxSize']) && $this->maxSize = $init['maxSize'];
 			isset($init['isPigeonhole']) && $this->isPigeonhole = $init['isPigeonhole'];
 		}
+		else {
+			throw new \Exception("init error");
+		}
 	}
 
 	public function setPath($path)
@@ -80,7 +83,10 @@ class Log
 		$directoryName = $this->directoryName;
 		$logRealPath = $path.$directoryName.'/';
 		if(trim((string)($fileName)) == '' || trim((string)($path)) == '' || trim((string)($directoryName)) == '') return false;
-		if($this->mkdirs($logRealPath) === false) return false;
+		if($this->mkdirs($logRealPath) === false) {
+			throw new \Exception("mkdirs error");
+			return false;
+		}
 		
 		if($this->isPigeonhole === true) {
 			//日志文件超过最大容量进行归档
@@ -115,7 +121,10 @@ class Log
 	 */
 	public function write($model,$message,$level,$fileName,$line)
 	{
-		if($this->init() === false) return false;
+		if($this->init() === false) {
+			throw new \Exception("write init error");
+			return false;
+		}
 		$writer = new Stream($this->path.$this->directoryName.'/'.$this->fileName);
 		$string = "\n";
 		$string.= 'time:'.date('Y-m-d H:i:s',time())."\n";

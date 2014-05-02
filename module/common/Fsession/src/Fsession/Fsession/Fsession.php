@@ -4,26 +4,39 @@ namespace Fsession\Fsession;
 
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
-use Zend\Session\Config\StandardConfig;
 
 class Fsession
 {
 	private $name;
-	private $remember_me_seconds;
+	private $storage;
+	private $config;
+	private $database;
 	private $session;
+	private $dbAdapter;
 	
-	function __construct($init)
+	function __construct($init,$dbAdapter)
 	{
+		$this->dbAdapter = $dbAdapter;
 		if($init !== false) {
 			isset($init['name']) && $this->name = $init['name'];
-			isset($init['remember_me_seconds']) && $this->remember_me_seconds = $init['remember_me_seconds'];
+			isset($init['storage']) && $this->storage = $init['storage'];
+			isset($init['config']) && $this->config = $init['config'];
+			isset($init['database']) && $this->database = $init['database'];
+		}
+		else {
+			throw new \Exception("init params error");
 		}
 		$this->init();
 	}
 
-	public function setSecond($remember_me_seconds)
+	public function setConfig($config)
 	{
-		$this->remember_me_seconds = (int)$remember_me_seconds;
+		$this->config = $config;
+	}
+	
+	public function storage($storage)
+	{
+		$this->storage = $storage;
 	}
 	
 	/**
@@ -32,24 +45,53 @@ class Fsession
 	 */
 	private function init()
 	{
-		if(trim((string)$this->name) == '' || trim((string)$this->remember_me_seconds) == '') return false;
-		
+		if(trim((string)$this->name) == '' || count($this->config) <= 0) {
+			throw new \Exception("name and config params error");
+			return false;
+		}
+		$storage = $this->storage;
+	
+		//session设置
+		$sessionManager = new SessionManager();
+		if($storage == 'database') {
+			$database = $this->database;
+			if(count($database) <= 0) {
+				throw new \Exception("database params error");
+				return false;
+			}
+			
+			$gwOpts = new \Zend\Session\SaveHandler\DbTableGatewayOptions();
+			$gwOpts->setDataColumn($database['dataColumnName']);
+			$gwOpts->setIdColumn($database['idColumnName']);
+			$gwOpts->setLifetimeColumn($database['lifetimeColumnName']);
+			$gwOpts->setModifiedColumn($database['modifiedColumnName']);
+			$gwOpts->setNameColumn($database['nameColumnName']);
+			
+			$saveHandler = new \Zend\Session\SaveHandler\DbTableGateway(new \Zend\Db\TableGateway\TableGateway($database['tableName'],$this->dbAdapter),$gwOpts);
+			$sessionConfig = new \Zend\Session\Config\SessionConfig();
+			$sessionConfig->setOptions($this->config);
+			
+			$sessionManager->setConfig($sessionConfig);
+			$sessionManager->setSaveHandler($saveHandler);
+			$sessionManager->regenerateId(true);//新sessionID
+			Container::setDefaultManager($sessionManager);
+			$sessionManager->start();
+		}
+		else {
+			$config = new \Zend\Session\Config\StandardConfig();
+			$config->setOptions($this->config);
+			$sessionManager->setConfig($config);
+			$sessionManager->regenerateId(true);//新sessionID
+			Container::setDefaultManager($sessionManager);
+			$sessionManager->getValidatorChain()->attach('session.validate', array(new \Zend\Session\Validator\HttpUserAgent(), 'isValid'));
+			$sessionManager->getValidatorChain()->attach('session.validate', array(new \Zend\Session\Validator\RemoteAddr(), 'isValid'));
+		}
 		$container = new Container($this->name);
 		if (!isset($container->init)) {
-			//セッション基本的設定
-			$config = new StandardConfig();
-			$config->setOptions(array(
-				'remember_me_seconds' => $this->remember_me_seconds,//セッションデータのクリア時間
-			));
-			$manager = new SessionManager($config);
-			$manager->regenerateId(true);//セッションIDを新規に発行する
+			$sessionManager->regenerateId(true);
 			$container->init = 1;
-			Container::setDefaultManager($manager);
-			$manager->getValidatorChain()->attach('session.validate', array(new \Zend\Session\Validator\HttpUserAgent(), 'isValid'));
-			$manager->getValidatorChain()->attach('session.validate', array(new \Zend\Session\Validator\RemoteAddr(), 'isValid'));
 		}
-		
-		$this->session = $container;
+     	$this->session = $container;
 	}
 	
 	/**

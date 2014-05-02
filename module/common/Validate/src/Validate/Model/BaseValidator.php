@@ -40,6 +40,7 @@ class BaseValidator
 	protected function setLog($message,$level,$fileName,$line)
 	{
 		return $this->events->trigger('setLog', null, array('model' => 'validator','message' => $message,'level' => $level,'fileName' => $fileName,'line' => $line));
+		throw new \Exception($message);
 	}
 	
 	protected function GetAlabNum($fnum){
@@ -334,7 +335,10 @@ class BaseValidator
 	 */
 	protected function Upload($file,$data = false)
 	{
-		if(!isset($file[$data])) return false; 
+		if(!isset($file[$data])) {
+			throw new \Exception("upload file data error");
+			return false;
+		} 
 		$validator = new \Zend\Validator\File\UploadFile();
 		if ($validator->isValid($file[$data])) {
 			return $data;

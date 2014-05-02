@@ -1,0 +1,30 @@
+<?php echo $this->viewHelper->string('name'); ?><br/>
+<?php echo $this->viewHelper->string('original_price'); ?><br/>
+<?php echo $this->viewHelper->string('price'); ?><br/>
+<?php echo $this->viewHelper->string('stock'); ?><br/>
+<?php echo $this->viewHelper->string('point'); ?><br/>
+<select id="product-size">
+	<option value="s">S</option>
+	<option value="m">M</option>
+	<option value="l">L</option>
+</select>
+<input id="product-min" type="button" value="-" />
+個数<input id="product-qty" type="text" value="1" />
+<input id="product-add" type="button" value="+" /><br/>
+<p id="product-total"></p>
+<a id="product-shoppingcart" href="javascript:;">カゴに入れる</a>
+<?php if($this->viewHelper->isLoop('productType')): ?>
+<?php foreach($this->viewHelper->getSourceData('productType') as $type): ?>
+<?php echo $this->viewHelper->string('name',$type); ?><br/>
+<?php endforeach; ?>
+<?php endif; ?><br/>
+<?php if($this->viewHelper->isLoop('productImage')): ?>
+<?php foreach($this->viewHelper->getSourceData('productImage') as $image): ?>
+<?php echo $this->viewHelper->img('image_path',$image,false,array('width' => '400px')); ?><br/>
+<?php endforeach; ?>
+<?php endif; ?>
+<script type="text/javascript">
+var shoppingcartUrl = '<?php echo $this->url('shopping-cart/add',array('pId' => $this->viewHelper->string('product_id'))); ?>';
+var product_price = '<?php echo $this->viewHelper->string('price'); ?>';
+</script>
+<script type="text/javascript" src="/js/front/shoppingcart.js"></script>

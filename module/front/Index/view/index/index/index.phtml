@@ -14,7 +14,7 @@
 <p>新着商品</p>
 <?php if($viewHelper->isLoop('newProductList')) : ?>
 <?php foreach($viewHelper->getSourceData('newProductList') as $list): ?>
-<?php echo $viewHelper->string('name',$list); ?><br/>
+<a target="_blank" href="<?php echo $this->url('product/show',array('pId' => $viewHelper->string('product_id',$list))) ?>"><?php echo $viewHelper->string('name',$list); ?></a><br/>
 <?php echo $viewHelper->string('original_price',$list); ?><br/>
 <?php echo $viewHelper->string('price',$list); ?><br/>
 <?php echo $viewHelper->string('stock',$list); ?><br/>

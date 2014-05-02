@@ -28,6 +28,18 @@ return array(
                 			),
                 		),
                 	),
+                	'show' => array(
+                		'type'    => 'Segment',
+                		'options' => array(
+                			'route'    => 'show/:pId[/]',
+                			'constraints' => array(
+                				'pId' => '\d+'
+                			),
+                			'defaults' => array(
+                				'action' => 'show',
+                			),
+                		),
+                	),
                 	'ajax' => array(
                 		'type'    => 'Segment',
                 		'options' => array(

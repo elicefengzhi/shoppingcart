@@ -42,7 +42,10 @@ class SendMail
 	 */
     public function smtpMail($to,$title,$sendhtml)
     {
-    	if(trim((string)$this->host) == '' || trim((string)$this->from) == '' || trim((string)$this->username) == '' || trim((string)$this->password) == '' || trim((string)$this->connectionClass) == '') return false;
+    	if(trim((string)$this->host) == '' || trim((string)$this->from) == '' || trim((string)$this->username) == '' || trim((string)$this->password) == '' || trim((string)$this->connectionClass) == '') {
+    		throw new \Exception("smtpMail params error");
+    		return false;
+    	} 
     	
     	$message = new \Zend\Mail\Message();
     	trim((string)$this->coding) != '' && $message->setEncoding($this->coding);
@@ -73,6 +76,7 @@ class SendMail
 	    	$transport->send($message);
     	}
     	catch (\Exception $e) {
+    		throw new \Exception($e->getMessage());
     		$this->events->trigger('setLog', null, array('model' => 'sendMail','message' => $e->getMessage(),'level' => 'WARN','fileName' => __FILE__,'line' => __LINE__));
     		return false;
     	}

@@ -2,7 +2,9 @@
 
 namespace AdminProduct\Logic;
 
-class AdminProductLogic
+use Application\Logic\BaseLogic;
+
+class AdminProductLogic extends BaseLogic
 {
 	public function setTimeData($isOnlyUpdate = false)
 	{

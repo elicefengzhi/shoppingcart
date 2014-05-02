@@ -7,7 +7,7 @@ return array(
     	'Index','Product',
     	'AdminIndex','AdminProduct','AdminProductType','AdminProductImage','AdminProduct','AdminOrder','AdminPage','AdminQuery','AdminNews',
     	'ProductTypeLinkage',
-    	'DbSql','Log','ImageUpload','SendMail','ViewHelper','Validate','Paging','Fsession','FormSubmit','ShoppingCart'
+    	'DbSql','Log','ImageUpload','SendMail','ViewHelper','Validate','Paging','Fsession','FormSubmit','ZendCart'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

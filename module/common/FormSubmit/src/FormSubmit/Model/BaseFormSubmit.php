@@ -53,6 +53,7 @@ Class BaseFormSubmit
 	private function setLog($message,$line)
 	{
 		$this->events->trigger('setLog', null, array('model' => 'FormSubmit','message' => $message,'level' => 'WARN','fileName' => __FILE__,'line' => $line));
+		throw new \Exception($message);
 	}
 	
 	/**

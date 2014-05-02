@@ -39,6 +39,9 @@ class ImageUpload
 			isset($init['WHErrorMessage']) && $this->WHErrorMessage = $init['WHErrorMessage'];
 			isset($init['typeErrorMessage']) && $this->typeErrorMessage = $init['typeErrorMessage'];
 		}
+		else {
+			throw new \Exception("init params error");
+		}
 		$this->events = new EventManager();
 	}
 	
@@ -161,7 +164,10 @@ class ImageUpload
 			$uploadPath = $this->uploadPath;
 			$path !== false && $uploadPath .= $path.'/';
 			$mkdirs_ok = $this->mkdirs($this->basePath.$uploadPath);
-			if($mkdirs_ok === false) return false;
+			if($mkdirs_ok === false) {
+				throw new \Exception("mkdirs error");
+				return false;
+			}
 				
 			$newFile = $uploadPath.$newName;
 			$http->addFilter('File\Rename',

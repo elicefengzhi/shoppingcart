@@ -16,8 +16,10 @@ return array(
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
         'template_map' => array(
-            'layout/layout'        		=> __DIR__ . '/../view/layout/front.phtml',
-        	'admin/layout'         		=> __DIR__ . '/../view/layout/admin.phtml',
+            'layout/layout'        		=> __DIR__ . '/../view/layout/front/front.phtml',
+        	'admin/layout'         		=> __DIR__ . '/../view/layout/admin/admin.phtml',
+        	'admin/error/layout'		=> __DIR__ . '/../view/layout/admin/error.phtml',
+        	'admin/login/layout'		=> __DIR__ . '/../view/layout/admin/login.phtml',
             'error/404'           		=> __DIR__ . '/../view/error/404.phtml',
             'error/index'          		=> __DIR__ . '/../view/error/500.phtml',
         	'admin_error/404'      		=> __DIR__ . '/../view/error/admin_404.phtml',

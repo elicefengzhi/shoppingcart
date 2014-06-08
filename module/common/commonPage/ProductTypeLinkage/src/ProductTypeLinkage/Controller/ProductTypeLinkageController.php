@@ -10,7 +10,7 @@ class ProductTypeLinkageController extends AbstractActionController
     {
     	$parentId = $this->params('parentId',0);
 
-    	$typeList = $this->serviceLocator->get('DbSql')->dispatch('ProductType')->getType(array('parent_id' => $parentId));
+    	$typeList = $this->serviceLocator->get('DbSql')->ProductType()->getType(array('parent_id' => $parentId));
     	
     	if($parentId != 0) {
     		$typeList === false ? print 'false' : print json_encode($typeList);

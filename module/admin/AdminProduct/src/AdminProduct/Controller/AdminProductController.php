@@ -9,7 +9,7 @@ class AdminProductController extends BaseController
     public function indexAction()
     {
     	$pageNum = $this->params('pageNum',1);
-    	$count = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductAllCount();
+    	$count = $this->serviceLocator->get('DbSql')->Product()->getProductAllCount();
     	$productList = false;
     	$forum = false;
     	$paging = false;
@@ -18,8 +18,8 @@ class AdminProductController extends BaseController
     		$paging->paginate($count,10,$pageNum,2);
     		$offset = $paging->getOffset();
     		$rowsperpage = $paging->getRowsPerPage();
-    		$productList = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductAll($offset,$rowsperpage);
-    		$forum = $this->serviceLocator->get('DbSql')->dispatch('Forum')->getForumAll();
+    		$productList = $this->serviceLocator->get('DbSql')->Product()->getProductAll($offset,$rowsperpage);
+    		$forum = $this->serviceLocator->get('DbSql')->Forum()->getForumAll();
     	}
 
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
@@ -45,7 +45,7 @@ class AdminProductController extends BaseController
     		if($return !== false) return $this->redirect()->toRoute('admin-product');
     	}
     	
-    	$ad = $this->serviceLocator->get('DbSql')->dispatch('Ad');
+    	$ad = $this->serviceLocator->get('DbSql')->Ad();
     	$adList = $ad->getAdAll();
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
     	$viewHelper->setSourceData($adList,'ad');
@@ -80,14 +80,14 @@ class AdminProductController extends BaseController
     		}
     	}
 
-    	if($productList === false) $productList = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductById(array('product_id' => (int)$pId,'delete_flg' => 0));
+    	if($productList === false) $productList = $this->serviceLocator->get('DbSql')->Product()->getProductById(array('product_id' => (int)$pId,'delete_flg' => 0));
     	if($productList === false) return $this->redirect()->toRoute('admin-product');
-    	$ProductImage = $this->serviceLocator->get('DbSql')->dispatch('ProductImage')->getImageByProductId(array('image_id','image_path'),array('product_id' => (int)$pId));
+    	$ProductImage = $this->serviceLocator->get('DbSql')->ProductImage()->getImageByProductId(array('image_id','image_path'),array('product_id' => (int)$pId));
 
-    	$ad = $this->serviceLocator->get('DbSql')->dispatch('Ad');
+    	$ad = $this->serviceLocator->get('DbSql')->Ad();
     	$adList = $ad->getAdAll();
-    	$pptList = $this->serviceLocator->get('DbSql')->dispatch('ProductType')->getProductTypeByProductId((int)$pId,array('ptype_id','parent_id'),array());
-    	$adProductList = $this->serviceLocator->get('DbSql')->dispatch('AdProduct')->getAdProductByWhere(array('ad_id'),array('product_id' => (int)$pId));
+    	$pptList = $this->serviceLocator->get('DbSql')->ProductType()->getProductTypeByProductId((int)$pId,array('ptype_id','parent_id'),array());
+    	$adProductList = $this->serviceLocator->get('DbSql')->AdProduct()->getAdProductByWhere(array('ad_id'),array('product_id' => (int)$pId));
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
     	$viewHelper->setSourceData($adList,'ad');
     	$viewHelper->setSourceData($pptList,'productTypeList');
@@ -105,7 +105,7 @@ class AdminProductController extends BaseController
     {
     	$pId = $this->params('pId',false);
     	if($pId !== false) {
-	    	$return = $this->serviceLocator->get('DbSql')->dispatch('Product')->edit(array('delete_flg' => 1),array('product_id' => (int)$pId));
+	    	$return = $this->serviceLocator->get('DbSql')->Product()->edit(array('delete_flg' => 1),array('product_id' => (int)$pId));
 	    	$return === true ? $return = 'true' : $return = 'false';
 	    	
 	    	echo $return;
@@ -116,7 +116,7 @@ class AdminProductController extends BaseController
     	if($request->isPost()) {
     		$postData = $request->getPost()->toArray();
     		if(isset($postData['delete'])) {
-    			$productType = $this->serviceLocator->get('DbSql')->dispatch('Product');
+    			$productType = $this->serviceLocator->get('DbSql')->Product();
     			$productType->beginTransaction();
     			$delete = array_merge($postData['delete'],array('update_time' => time()));
     			foreach($postData['delete'] as $data) {
@@ -143,7 +143,7 @@ class AdminProductController extends BaseController
     		$formId = $postData['formId'];
     		$product = $postData['product'];
     		if(count($product) > 0) {
-    			$productForum = $this->serviceLocator->get('DbSql')->dispatch('ProductForum');
+    			$productForum = $this->serviceLocator->get('DbSql')->ProductForum();
     			$productForum->beginTransaction();
     			foreach($product as $data) {
     				$forumSelect == 1 ? $return = $productForum->add(array('forum_id' => (int)$formId,'product_id' => (int)$data)) : $return = $productForum->del(array('forum_id' => (int)$formId,'product_id' => (int)$data));

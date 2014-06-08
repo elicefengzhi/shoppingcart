@@ -41,19 +41,23 @@ class Module implements AutoloaderProviderInterface
     public function onBootstrap (EventInterface $event)
     {
     	$eventManager = $event->getParam('application')->getEventManager();
-    	
-    	$eventManager->attach(MvcEvent::EVENT_DISPATCH, function(MvcEvent $event){
+
+    	$eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function(MvcEvent $event){
     		$app = $event->getParam('application');
     		$serviceManager = $app->getServiceManager();
     		
     		$statusCode = $event->getResponse()->getStatusCode();
+    		$error = $event->getError();
     		$response = $event->getResponse();
     		$moduleName = strstr(ltrim($event->getRequest()->getRequestUri(),DIRECTORY_SEPARATOR),DIRECTORY_SEPARATOR,true);
     		$moduleName == '' && $moduleName = ltrim($event->getRequest()->getRequestUri(),DIRECTORY_SEPARATOR);
 
     		//404
-    		if($statusCode == 404) {
-    			$moduleName == 'admin' && $event->getResult()->setTemplate('admin_error/404');
+    		if($error == 'error-router-no-match') {
+    			if($moduleName == 'admin') {
+    				//$event->getResult()->setTemplate('admin_error/404');
+    				$event->getViewModel()->setTemplate('admin_error/404');
+    			}
     			$response->setStatusCode(404);
     			$response->sendHeaders();
     			
@@ -64,6 +68,6 @@ class Module implements AutoloaderProviderInterface
     			$response->setStatusCode(500);
     			$response->sendHeaders();
     		}
-    	});
+    	},10);
     }
 }

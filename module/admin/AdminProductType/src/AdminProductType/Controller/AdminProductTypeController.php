@@ -9,7 +9,7 @@ class AdminProductTypeController extends BaseController
     public function indexAction()
     {
     	$pageNum = $this->params('pageNum',1);
-    	$count = $this->serviceLocator->get('DbSql')->dispatch('ProductType')->getAllCount();
+    	$count = $this->serviceLocator->get('DbSql')->ProductType()->getAllCount();
     	$typeList = false;
     	$paging = false;
     	if($count > 0) {
@@ -17,7 +17,7 @@ class AdminProductTypeController extends BaseController
     		$paging->paginate($count,10,$pageNum,2);
     		$offset = $paging->getOffset();
     		$rowsperpage = $paging->getRowsPerPage();
-    		$typeList = $this->serviceLocator->get('DbSql')->dispatch('ProductType')->getTypeAll($offset,$rowsperpage);
+    		$typeList = $this->serviceLocator->get('DbSql')->ProductType()->getTypeAll($offset,$rowsperpage);
     	}
     	
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
@@ -36,7 +36,7 @@ class AdminProductTypeController extends BaseController
     		$return === false && $user->isExists() === true && $errorMessage = '商品カテゴリは既に登録されております';
     	}
     	
-    	$productType = $this->serviceLocator->get('DbSql')->dispatch('ProductType');
+    	$productType = $this->serviceLocator->get('DbSql')->ProductType();
     	$typeList = $productType->getType(array('parent_id' => 0));
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
     	$viewHelper->setSourceData($typeList,'typeParentList');
@@ -62,7 +62,7 @@ class AdminProductTypeController extends BaseController
     		$typeList = $user->getSourceData();
     	}
     	
-    	$productType = $this->serviceLocator->get('DbSql')->dispatch('ProductType');
+    	$productType = $this->serviceLocator->get('DbSql')->ProductType();
     	$typeParentList = $productType->getType(array('parent_id' => 0));
     	$typeList === false && $typeList = $productType->getType(array('ptype_id' => $typeId),true);
     	
@@ -81,7 +81,7 @@ class AdminProductTypeController extends BaseController
     	if($request->isPost()) {
     		$postData = $request->getPost()->toArray();
     		if(isset($postData['delete'])) {
-    			$productType = $this->serviceLocator->get('DbSql')->dispatch('ProductType');
+    			$productType = $this->serviceLocator->get('DbSql')->ProductType();
     			$productType->beginTransaction();
     			foreach($postData['delete'] as $data) {
     				$return = $productType->del(array('ptype_id' => (int)$data));

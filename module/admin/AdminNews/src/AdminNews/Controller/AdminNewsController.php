@@ -10,12 +10,12 @@ class AdminNewsController extends BaseController
     {
         $pageNum = $this->params('pageNum',1);
         $newsList = false;
-        $count = $this->serviceLocator->get('DbSql')->dispatch('News')->getNewsAllCount();
+        $count = $this->serviceLocator->get('DbSql')->News()->getNewsAllCount();
         $paging = false;
         if($count > 0) {
         	$paging = $this->serviceLocator->get('Paging');
         	$paging->paginate($count,10,$pageNum,2);
-        	$newsList = $this->serviceLocator->get('DbSql')->dispatch('News')->getNewsAll($paging->getOffset(),$paging->getRowsPerPage());
+        	$newsList = $this->serviceLocator->get('DbSql')->News()->getNewsAll($paging->getOffset(),$paging->getRowsPerPage());
         }
         $viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
         $viewHelper->setSourceData($newsList);
@@ -23,7 +23,7 @@ class AdminNewsController extends BaseController
     }
     
     public function addAction()
-    {
+    {	
     	$errorMessage = '';
     	$page = $this->serviceLocator->get('FormSubmit')->dispatch('Insert');
     	if($page !== false) {
@@ -56,7 +56,7 @@ class AdminNewsController extends BaseController
     		$pageList = $page->getSourceData();
     	}
     	 
-    	$pageOne = $this->serviceLocator->get('DbSql')->dispatch('News');
+    	$pageOne = $this->serviceLocator->get('DbSql')->News();
     	$pageList === false && $pageList = $pageOne->getNews(array('news_id' => $nId),true);
     	 
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
@@ -72,7 +72,7 @@ class AdminNewsController extends BaseController
     	$nId = $this->params('nId',false);
     	if($nId === false) return $this->redirect()->toRoute('admin-news');
     
-    	$page = $this->serviceLocator->get('DbSql')->dispatch('News')->getNews(array('news_id' => $nId),true);
+    	$page = $this->serviceLocator->get('DbSql')->News()->getNews(array('news_id' => $nId),true);
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
     	$viewHelper->setSourceData($page);
     	return array('viewHelper' => $viewHelper);
@@ -84,7 +84,7 @@ class AdminNewsController extends BaseController
     	if($request->isPost()) {
     		$postData = $request->getPost()->toArray();
     		if(isset($postData['delete'])) {
-    			$news = $this->serviceLocator->get('DbSql')->dispatch('News');
+    			$news = $this->serviceLocator->get('DbSql')->News();
     			$news->beginTransaction();
     			foreach($postData['delete'] as $data) {
     				$return = $news->edit(array('delete_flg' => 1),array('news_id' => (int)$data));

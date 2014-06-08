@@ -9,7 +9,7 @@ class AdminOrderController extends BaseController
     public function indexAction()
     {
     	$pageNum = $this->params('pageNum',1);
-    	$count = $this->serviceLocator->get('DbSql')->dispatch('Order')->getOrderAllCount();
+    	$count = $this->serviceLocator->get('DbSql')->Order()->getOrderAllCount();
     	$orderList = false;
     	$paging = false;
     	if($count > 0) {
@@ -17,7 +17,7 @@ class AdminOrderController extends BaseController
     		$paging->paginate($count,10,$pageNum,2);
     		$offset = $paging->getOffset();
     		$rowsperpage = $paging->getRowsPerPage();
-    		$orderList = $this->serviceLocator->get('DbSql')->dispatch('Order')->getOrderAll($offset,$rowsperpage);
+    		$orderList = $this->serviceLocator->get('DbSql')->Order()->getOrderAll($offset,$rowsperpage);
     	}
     	
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
@@ -46,10 +46,10 @@ class AdminOrderController extends BaseController
     		
     		if($data !== false && is_array($postData['order']) && count($postData['order']) > 0) {
     			$data = array_merge($data,array('update_time' => time()));
-    			$order = $this->serviceLocator->get('DbSql')->dispatch('Order');
+    			$order = $this->serviceLocator->get('DbSql')->Order();
     			$order->beginTransaction();
     			foreach($postData['order'] as $orderId) {
-    				$return = $this->serviceLocator->get('DbSql')->dispatch('Order')->edit($data,array('order_id' => $orderId));
+    				$return = $this->serviceLocator->get('DbSql')->Order()->edit($data,array('order_id' => $orderId));
     				if($return === false) {
     					$order->rollback();
     					return $this->redirect()->toRoute('admin-order/index',array('pageNum' => $pageNum));

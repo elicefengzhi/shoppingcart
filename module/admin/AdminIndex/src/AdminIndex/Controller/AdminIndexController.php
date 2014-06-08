@@ -16,7 +16,7 @@ class AdminIndexController extends BaseController
     	$request = $this->getRequest();
     	if($request->isPost()) {
     		$post = $request->getPost()->toArray();
-    		$admin = $this->serviceLocator->get('DbSql')->dispatch('Admin');
+    		$admin = $this->serviceLocator->get('DbSql')->Admin();
     		$current = $admin->getAdminBycolumns(array('id','leve'),array('uname' => $post['uname'],'pwd' => md5($post['pwd']),'delete_flg' => 0));
     		if($current !== false) {
     			$session = $this->serviceLocator->get('Fsession');

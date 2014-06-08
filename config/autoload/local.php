@@ -56,8 +56,4 @@ return array(
 			},
 		),
 	),
-	'php-error' => array(
-		'enabled' => false,
-		'options' => array(),
-	),
 );

@@ -8,9 +8,10 @@ class ShoppingCartController extends BaseController
 {
     public function indexAction()
     {
-    	$productItem = $this->ZendCart()->cart();
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Front');
-    	$viewHelper->setSourceData($productItem,'productItem');
+    	$viewHelper->setSourceData($this->ZendCart()->cart());
+    	$viewHelper->setSourceData($this->ZendCart()->total_items(),'totalItems');
+    	$viewHelper->setSourceData($this->ZendCart()->total(),'total');
         return array($viewHelper);
     }
     
@@ -18,8 +19,9 @@ class ShoppingCartController extends BaseController
     {
     	$pId = (int)$this->params('pId');
     	$count = (int)$this->params()->fromQuery('count');
+    	$count < 0 && $count = 1;
     	$size = $this->serviceLocator->get('front/shoppingCart/logic')->checkProductSize($this->params()->fromQuery('size'));
-    	$product = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductById(array('delete_flg' => 0,'product_id' => $pId));
+    	$product = $this->serviceLocator->get('DbSql')->Product()->getProductById(array('delete_flg' => 0,'product_id' => $pId));
     	$product = array('id' => $product['product_id'],'price' => $product['price'],'name' => $product['name'],'qty' => $count,'options' => array('Size' => $size));
     	$return = $this->ZendCart()->insert($product);
     	 

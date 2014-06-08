@@ -10,12 +10,12 @@ class AdminPageController extends BaseController
     {
         $pageNum = $this->params('pageNum',1);
         $pageList = false;
-        $count = $this->serviceLocator->get('DbSql')->dispatch('Page')->getPageAllCount();
+        $count = $this->serviceLocator->get('DbSql')->Page()->getPageAllCount();
         $paging = false;
         if($count > 0) {
         	$paging = $this->serviceLocator->get('Paging');
         	$paging->paginate($count,10,$pageNum,2);
-        	$pageList = $this->serviceLocator->get('DbSql')->dispatch('Page')->getPageAll($paging->getOffset(),$paging->getRowsPerPage());
+        	$pageList = $this->serviceLocator->get('DbSql')->Page()->getPageAll($paging->getOffset(),$paging->getRowsPerPage());
         }
         $viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
         $viewHelper->setSourceData($pageList);
@@ -56,7 +56,7 @@ class AdminPageController extends BaseController
     		$pageList = $page->getSourceData();
     	}
     	
-    	$pageOne = $this->serviceLocator->get('DbSql')->dispatch('Page');
+    	$pageOne = $this->serviceLocator->get('DbSql')->Page();
     	$pageList === false && $pageList = $pageOne->getPage(array('page_id' => $pId),true);
     	
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
@@ -72,7 +72,7 @@ class AdminPageController extends BaseController
         $pId = $this->params('pId',false);
         if($pId === false) return $this->redirect()->toRoute('admin-page');
         
-        $page = $this->serviceLocator->get('DbSql')->dispatch('Page')->getPage(array('page_id' => $pId),true);
+        $page = $this->serviceLocator->get('DbSql')->Page()->getPage(array('page_id' => $pId),true);
         $viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
         $viewHelper->setSourceData($page);
         return array('viewHelper' => $viewHelper);
@@ -84,7 +84,7 @@ class AdminPageController extends BaseController
     	if($request->isPost()) {
     		$postData = $request->getPost()->toArray();
     		if(isset($postData['delete'])) {
-    			$page = $this->serviceLocator->get('DbSql')->dispatch('Page');
+    			$page = $this->serviceLocator->get('DbSql')->Page();
     			$page->beginTransaction();
     			foreach($postData['delete'] as $data) {
     				$return = $page->del(array('page_id' => (int)$data));

@@ -22,9 +22,9 @@ class ProductController extends BaseController
     public function showAction()
     {
     	$pId = $this->params('pId');
-    	$product = $this->serviceLocator->get('DbSql')->dispatch('Product')->getProductById(array('delete_flg' => 0,'product_id' => (int)$pId));
-    	$productImage = $this->serviceLocator->get('DbSql')->dispatch('ProductImage')->getImageByProductId(array('image_id','image_path'),array('product_id' => (int)$pId));
-    	$pptList = $this->serviceLocator->get('DbSql')->dispatch('ProductType')->getProductTypeByProductId((int)$pId,array('name'),array());
+    	$product = $this->serviceLocator->get('DbSql')->Product()->getProductById(array('delete_flg' => 0,'product_id' => (int)$pId));
+    	$productImage = $this->serviceLocator->get('DbSql')->ProductImage()->getImageByProductId(array('image_id','image_path'),array('product_id' => (int)$pId));
+    	$pptList = $this->serviceLocator->get('DbSql')->ProductType()->getProductTypeByProductId((int)$pId,array('name'),array());
 
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Front');
     	$viewHelper->setSourceData($productImage,'productImage');

@@ -28,11 +28,16 @@ class BaseController extends AbstractActionController
 			$response->setStatusCode(302);
 			$response->sendHeaders();
 		}
+		else if($routeName == 'admin-index/login'){
+			//设置后台登陆布局页
+			$event->getViewModel()->setTemplate('admin/login/layout');
+		}
+		else {
+			//设置后台布局页
+			$event->getViewModel()->setTemplate('admin/layout');
+		}
 		//设置页面title
 		$this->setLayoutTitle($event);
-		
-		//设置后台布局页
-		$event->getViewModel()->setTemplate('admin/layout');
 	}
 	
 	public function setLayoutTitle($event)

@@ -20,8 +20,10 @@ return array(
         	'./module/admin',
         	'./module/front',
         	'./module/common',
+        	'./module/common/module',
         	'./module/common/commonPage',
             './vendor',
+        	'./vendor/module',
         ),
 
         // An array of paths from which to glob configuration files after

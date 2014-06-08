@@ -3,11 +3,11 @@ return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
         'Application',
-    	'ZendDeveloperTools','BjyProfiler','ThaConfigalyzer','ZfSnapPhpError',
-    	'Index','Product',
+    	'ZendDeveloperTools','BjyProfiler','ThaConfigalyzer',
+    	'Index','Product','ShoppingCart','User',
     	'AdminIndex','AdminProduct','AdminProductType','AdminProductImage','AdminProduct','AdminOrder','AdminPage','AdminQuery','AdminNews',
     	'ProductTypeLinkage',
-    	'DbSql','Log','ImageUpload','SendMail','ViewHelper','Validate','Paging','Fsession','FormSubmit','ZendCart'
+    	'DbSql','Log','ImageUpload','SendMail','ViewHelper','Validate','Paging','Fsession','FormSubmit','ZendCart','Image',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
@@ -21,8 +21,10 @@ return array(
         	'./module/admin',
         	'./module/front',
         	'./module/common',
+        	'./module/common/module',
         	'./module/common/commonPage',
             './vendor',
+        	'./vendor/module',
         ),
 
         // An array of paths from which to glob configuration files after

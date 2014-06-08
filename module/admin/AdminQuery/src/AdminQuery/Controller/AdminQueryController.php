@@ -10,12 +10,12 @@ class AdminQueryController extends BaseController
     {
         $pageNum = $this->params('pageNum',1);
         $pageList = false;
-        $count = $this->serviceLocator->get('DbSql')->dispatch('Query')->getQueryAllCount();
+        $count = $this->serviceLocator->get('DbSql')->Query()->getQueryAllCount();
         $paging = false;
         if($count > 0) {
         	$paging = $this->serviceLocator->get('Paging');
         	$paging->paginate($count,10,$pageNum,2);
-        	$pageList = $this->serviceLocator->get('DbSql')->dispatch('Query')->getQueryAll(array('q_id','q_title','create_time'),$paging->getOffset(),$paging->getRowsPerPage());
+        	$pageList = $this->serviceLocator->get('DbSql')->Query()->getQueryAll(array('q_id','q_title','create_time'),$paging->getOffset(),$paging->getRowsPerPage());
         }
         $viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
         $viewHelper->setSourceData($pageList);
@@ -27,7 +27,7 @@ class AdminQueryController extends BaseController
         $qId = $this->params('qId',false);
         if($qId === false) return $this->redirect()->toRoute('admin-query');
         
-        $page = $this->serviceLocator->get('DbSql')->dispatch('Query')->getQuery(array('q_id' => $qId),true);
+        $page = $this->serviceLocator->get('DbSql')->Query()->getQuery(array('q_id' => $qId),true);
         $viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
         $viewHelper->setSourceData($page);
         return array('viewHelper' => $viewHelper);
@@ -39,7 +39,7 @@ class AdminQueryController extends BaseController
         if($request->isPost()) {
         	$postData = $request->getPost()->toArray();
         	if(isset($postData['delete'])) {
-        		$productType = $this->serviceLocator->get('DbSql')->dispatch('Query');
+        		$productType = $this->serviceLocator->get('DbSql')->Query();
         		$productType->beginTransaction();
         		foreach($postData['delete'] as $data) {
         			$return = $productType->del(array('q_id' => (int)$data));

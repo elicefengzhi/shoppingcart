@@ -22,7 +22,7 @@ class AdminProductController extends BaseController
     		$forum = $this->serviceLocator->get('DbSql')->Forum()->getForumAll();
     	}
 
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
     	$viewHelper->setSourceData($productList);
     	$viewHelper->setSourceData($forum,'Forum');
         return array('viewHelper' => $viewHelper,'paging' => $paging,'pageNum' => $pageNum);
@@ -31,7 +31,7 @@ class AdminProductController extends BaseController
     public function addAction()
     {
     	$errorMessage = '';
-    	$user = $this->serviceLocator->get('FormSubmit')->dispatch('Insert');
+    	$user = $this->serviceLocator->get('FormSubmit')->Insert();
     	if($user !== false) {
     		$user->createChlidColumnsByFiles('productImage','image');
     		$logic = $this->serviceLocator->get('front/product/logic');
@@ -47,7 +47,7 @@ class AdminProductController extends BaseController
     	
     	$ad = $this->serviceLocator->get('DbSql')->Ad();
     	$adList = $ad->getAdAll();
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
     	$viewHelper->setSourceData($adList,'ad');
     	$viewHelper->setSourceData($errorMessage,'errorMessage');
     	$user !== false && $return === false && $viewHelper->setSourceData($user->getSourceData());
@@ -61,7 +61,7 @@ class AdminProductController extends BaseController
     	$errorMessage = '';
     	$productList = false;
     	
-    	$product = $this->serviceLocator->get('FormSubmit')->dispatch('Update');
+    	$product = $this->serviceLocator->get('FormSubmit')->Update();
     	if($product !== false) {
     		$product->createChlidColumnsByFiles('productImage','image');
     		$logic = $this->serviceLocator->get('front/product/logic');
@@ -88,7 +88,7 @@ class AdminProductController extends BaseController
     	$adList = $ad->getAdAll();
     	$pptList = $this->serviceLocator->get('DbSql')->ProductType()->getProductTypeByProductId((int)$pId,array('ptype_id','parent_id'),array());
     	$adProductList = $this->serviceLocator->get('DbSql')->AdProduct()->getAdProductByWhere(array('ad_id'),array('product_id' => (int)$pId));
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
     	$viewHelper->setSourceData($adList,'ad');
     	$viewHelper->setSourceData($pptList,'productTypeList');
     	$viewHelper->setSourceData($adProductList,'adProductList');

@@ -30,35 +30,46 @@ class BaseValidator
 		$this->chlidClass = $chlidClass;
 	}
 	
+	/**
+	 * 获取验证错误信息
+	 * @return array
+	 */
 	public function ErrorMessage()
 	{
 		return $this->errorMessage;
 	}
 	
+	/**
+	 * 获取是否存在异常错误
+	 * @return boolean
+	 */
 	public function IsDataError()
 	{
 		return $this->isDataError;
 	}
 	
+	/**
+	 * 写日志
+	 * @param string $message
+	 * @param string $level
+	 * @param string $fileName
+	 * @param int $line
+	 * @throws \Exception
+	 */
 	protected function setLog($message,$level,$fileName,$line)
 	{
 		return $this->events->trigger('setLog', null, array('model' => 'validator','message' => $message,'level' => $level,'fileName' => $fileName,'line' => $line));
 		throw new \Exception($message);
 	}
 	
-	protected function GalidatorString($string) {
-		$array = array(
-			'%','\'',',',';','<','>','＼','゜','∥','￠','￡','￢','Α','Β','Γ','Δ','Ε','Ζ','Η','Θ',
-			'Ι','Κ','Λ','Μ','Ν','Ξ','Ο','Π','Ρ','Σ','Τ','Υ','Φ','Χ','Ψ','Ω','γ','δ','ε','ζ','η',
-			'θ','ι','κ','λ','μ','ν','ξ','ο','π','ρ','σ','τ','υ','φ','χ','ψ','ω','А','Б','В','Г',
-			'Д','Е','Ё','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч',
-			'Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я','а','б','в','г','д','е','ё','ж','з','и','й','к','л',
-			'м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я','─',
-			'│','┌','┐','┘','└','├','┬','┤','┴','┼','━','┃','┏','┓','┛','┗','┣','┳','┫','┻','╋',
-			'┠','┯','┨','┷','┿','┝','┰','┥','┸','╂','㍉','㌔','㌢','㍍','㌘','㌧','㌃','㌶','㍑','㍗',
-			'㌍','㌦','㌣','㌫','㍊','㌻','㎜','㎝','㎞','㎎','㎏','㏄','㍻','〝','〟','㏍','℡','㊤','㊥',
-			'㊦','㊧','㊨','㍾','㍽','㍼','≒','≡','∫','∮','∑','√','⊥','∠','∟','⊿','∵','∩','∪'
-		);
+	/**
+	 * 黑名单
+	 * @param string $string
+	 * @return boolean
+	 */
+	protected function BlackString($string) {
+		//黑名单数组
+		$array = array();
 		
 		$len = mb_strlen($string,'utf-8');
 		if($len <= 0) return true; 
@@ -72,7 +83,7 @@ class BaseValidator
 	}
 	
 	/**
-	 * ASCII範囲検証
+	 * ASCII码范围验证
 	 * @param $string string
 	 * @param $asciiLimits array
 	 * array('min' => ,'max' => )
@@ -97,33 +108,35 @@ class BaseValidator
 		return false;
 	}
 	
-	protected function frilter($data,$frilter = '')
+	/**
+	 * 过滤
+	 * @param string $data 过滤数据
+	 * @param string $frilter 过滤参数<br/>
+	 * 为false时不做过滤<br/>
+	 * 为null时取默认过滤项，默认过滤项为：去两边空格，去标签，html编码单引号和双引号，去换行
+	 * @return string
+	 */
+	protected function frilter($data,$frilter = null)
 	{
 		if($frilter !== false) {
-			$frilter == '' && $frilter = $this->filter;
+			empty($frilter) && $frilter = $this->filter;
 			
 			if(is_array($frilter)) {
 				if(in_array('stringTrim',$frilter)) {
 					$StringTrim = new \Zend\Filter\StringTrim();
 					$data = $StringTrim->filter($data);
 				}
-			}
-
-			if(is_array($frilter)) {
+				
 				if(in_array('stripTags',$frilter)) {
 					$StripTags = new \Zend\Filter\StripTags();
 					$data = $StripTags->filter($data);
 				}
-			}
-			
-			if(is_array($frilter)) {
+				
 				if(in_array('htmlEntities',$frilter)) {
 					$htmlEntities = new \Zend\Filter\HtmlEntities(array('quotestyle'=>ENT_QUOTES));
 					$data = $htmlEntities->filter($data);
 				}
-			}
-			
-			if(is_array($frilter)) {
+				
 				if(in_array('stripNewLines',$frilter)) {
 					$stripNewLines = new \Zend\Filter\StripNewlines();
 					$data = $stripNewLines->filter($data);
@@ -156,7 +169,7 @@ class BaseValidator
 	    
 	 * @return string|boolean
 	 */
-	protected function NotEmety($data,$frilter = '',Array $optionArray = null)
+	protected function NotEmety($data,$frilter = null,Array $optionArray = null)
 	{
 		$option = array(\Zend\Validator\NotEmpty::STRING,\Zend\Validator\NotEmpty::SPACE,\Zend\Validator\NotEmpty::BOOLEAN);
 		if(!is_null($optionArray)) {
@@ -174,7 +187,15 @@ class BaseValidator
 		return false;
 	}
 	
-	protected function StringLength($data,$length,$frilter = '')
+	/**
+	 * 长度验证
+	 * @param string $data
+	 * @param array $length<br/>
+	 * min，max
+	 * @param string $frilter 过滤
+	 * @return string|boolean
+	 */
+	protected function StringLength($data,Array $length,$frilter = null)
 	{
 		$validator = new \Zend\Validator\StringLength($length);
 		$data = $this->frilter($data,$frilter);
@@ -197,7 +218,7 @@ class BaseValidator
 	 * max最大值(不包含极值)
 	 * @return string|boolean
 	 */
-	protected function Int($data,$frilter = '',Array $optionArray = null)
+	protected function Int($data,$frilter = null,Array $optionArray = null)
 	{
 		$validator = new \Zend\Validator\Digits();
 		$data = $this->frilter($data,$frilter);
@@ -246,12 +267,12 @@ class BaseValidator
 		}	
 	}
 	
-	protected function Between($data,$min,$max,$frilter = '')
+	protected function Between($data,$min,$max,$frilter = null)
 	{
 		$validator = new \Zend\Validator\Between(array('min' => $min,'max' => $max));
 		$data = $this->frilter($data,$frilter);
 		if ($validator->isValid($data)) {
-			return $this->GetAlabNum($data);
+			return $data;
 		}
 		return false;		
 	}
@@ -264,12 +285,12 @@ class BaseValidator
 	 * @param bool $inclusive 是否包含极值
 	 * @return bool
 	 */
-	protected function GreaterThan($data,$min,$frilter = '',$inclusive = true)
+	protected function GreaterThan($data,$min,$frilter = null,$inclusive = true)
 	{
 		$validator = new \Zend\Validator\GreaterThan(array('min' => $min,'inclusive' => $inclusive));
 		$data = $this->frilter($data,$frilter);
 		if ($validator->isValid($data)) {
-			return $this->GetAlabNum($data);
+			return $data;
 		}
 		return false;
 	}
@@ -282,12 +303,12 @@ class BaseValidator
 	 * @param bool $inclusive 是否包含极值
 	 * @return bool
 	 */
-	protected function LessThan($data,$max,$frilter = '',$inclusive = true)
+	protected function LessThan($data,$max,$frilter = null,$inclusive = true)
 	{
 		$validator = new \Zend\Validator\LessThan(array('max' => $max,'inclusive' => $inclusive));
 		$data = $this->frilter($data,$frilter);
 		if ($validator->isValid($data)) {
-			return $this->GetAlabNum($data);
+			return $data;
 		}
 		return false;
 	}
@@ -299,7 +320,7 @@ class BaseValidator
 	 * @param string $frilter 过滤
 	 * @return string|boolean
 	 */
-	protected function Date($data,$format = 'Y/m/d',$frilter = '')
+	protected function Date($data,$format = 'Y/m/d',$frilter = null)
 	{
 		$validator = new \Zend\Validator\Date(array('format'=>$format));
 		$data = $this->frilter($data,$frilter);
@@ -318,7 +339,7 @@ class BaseValidator
 	 * locale本地化
 	 * @return $data|bool
 	 */
-	protected function Alnum($data,$frilter = '',$option = '')
+	protected function Alnum($data,$frilter = null,$option = '')
 	{
 		isset($option['isAllowEmpty']) ? $isAllowEmpty = $option['isAllowEmpty'] : $isAllowEmpty = false;
 		isset($option['locale']) ? $locale = $option['locale'] : $locale = false;
@@ -352,7 +373,7 @@ class BaseValidator
 	 * locale本地化
 	 * @return $data|bool
 	 */
-	protected function Alpha($data,$frilter = '',Array $option = null)
+	protected function Alpha($data,$frilter = null,Array $option = null)
 	{
 		isset($option['isAllowEmpty']) ? $isAllowEmpty = $option['isAllowEmpty'] : $isAllowEmpty = false;
 		isset($option['locale']) ? $locale = $option['locale'] : $locale = false;
@@ -383,7 +404,7 @@ class BaseValidator
 	 * @param array $frilter 过滤
 	 * @return $data|bool
 	 */
-	protected function Digits($data,$frilter = '')
+	protected function Digits($data,$frilter = null)
 	{
 		$validator = new \Zend\Validator\Digits();
 		$data = $this->frilter($data,$frilter);
@@ -401,7 +422,7 @@ class BaseValidator
 	 * locale本地化
 	 * @return $data|bool
 	 */
-	protected function Float($data,$frilter = '',$option = '')
+	protected function Float($data,$frilter = null,$option = '')
 	{
 		isset($option['locale']) ? $locale = $option['locale'] : $locale = false;
 		$data = $this->frilter($data,$frilter);
@@ -429,7 +450,7 @@ class BaseValidator
 	 * @param array $frilter 过滤
 	 * @return $data|bool
 	 */
-	protected function Bool($data,$frilter = '')
+	protected function Bool($data,$frilter = null)
 	{
 		$returnData = $this->frilter($data,$frilter);
 		if ($returnData == 1 || $returnData == 0) {
@@ -458,7 +479,7 @@ class BaseValidator
 		return false;
 	}
 	
-	protected function Regex($data,$regString,$frilter = '',$isTrue = false)
+	protected function Regex($data,$regString,$frilter = null,$isTrue = false)
 	{
 		$validator = new \Zend\Validator\Regex(array('pattern' => $regString));
 		$data = $this->frilter($data,$frilter);
@@ -476,7 +497,7 @@ class BaseValidator
 	 * @param array $option
 	 * @return bool
 	 */
-	protected function RelevanceEmpty($nameData,$frilter='',$option='')
+	protected function RelevanceEmpty($nameData,$frilter = null,$option = '')
 	{
 		$isEmpty = true;
 		$sourceData = $this->sourceData;
@@ -649,7 +670,7 @@ class BaseValidator
 	 * @param string $frilter 过滤
 	 * @return string>|boolean
 	 */
-	protected function Email($data,$frilter = '')
+	protected function Email($data,$frilter = null)
 	{
 		$validator = new \Zend\Validator\EmailAddress();
 		$data = $this->frilter($data,$frilter);

@@ -20,7 +20,7 @@ class AdminProductTypeController extends BaseController
     		$typeList = $this->serviceLocator->get('DbSql')->ProductType()->getTypeAll($offset,$rowsperpage);
     	}
     	
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
     	$viewHelper->setSourceData($typeList);
     	return array('viewHelper' => $viewHelper,'paging' => $paging);
     }
@@ -28,7 +28,7 @@ class AdminProductTypeController extends BaseController
     public function addAction()
     {	
     	$errorMessage = '';
-    	$user = $this->serviceLocator->get('FormSubmit')->dispatch('Insert');
+    	$user = $this->serviceLocator->get('FormSubmit')->Insert();
     	if($user !== false) {
     		$return = $user->insert(false,array('name'),array('table' => 'product_type'),'AdminProductType');
     		if($return !== false) return $this->redirect()->toRoute('admin-product-type');
@@ -38,7 +38,7 @@ class AdminProductTypeController extends BaseController
     	
     	$productType = $this->serviceLocator->get('DbSql')->ProductType();
     	$typeList = $productType->getType(array('parent_id' => 0));
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
     	$viewHelper->setSourceData($typeList,'typeParentList');
 
     	return array('viewHelper' => $viewHelper,'errorMessage' => $errorMessage,'url' => $this->url()->fromRoute('admin-product-type/add'));
@@ -51,7 +51,7 @@ class AdminProductTypeController extends BaseController
     	$errorMessage = '';
     	$typeList = false;
     	
-    	$user = $this->serviceLocator->get('FormSubmit')->dispatch('Update');
+    	$user = $this->serviceLocator->get('FormSubmit')->Update();
     	if($user !== false) {
     		$return = $user->update(false,array('ptype_id' => $typeId),array('name'),array('table' => 'product_type'),'AdminProductType');
     		if($return !== false) {
@@ -66,7 +66,7 @@ class AdminProductTypeController extends BaseController
     	$typeParentList = $productType->getType(array('parent_id' => 0));
     	$typeList === false && $typeList = $productType->getType(array('ptype_id' => $typeId),true);
     	
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
     	$viewHelper->setSourceData($typeList);
     	$viewHelper->setSourceData($typeParentList,'typeParentList');
     	

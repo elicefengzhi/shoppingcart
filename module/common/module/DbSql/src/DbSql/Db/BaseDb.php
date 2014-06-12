@@ -15,6 +15,8 @@ class BaseDb extends AbstractTableGateway
 	protected $isContention;
 	protected $tableGateway;
 	
+	use \DbSql\Db\DbHelper;
+	
 	public function init($adapter)
 	{
 		$this->adapter = $adapter;
@@ -22,6 +24,10 @@ class BaseDb extends AbstractTableGateway
 		$this->isContention = $this->isContention();
 	}
 	
+	/**
+	 * 是否连接成功
+	 * @return boolean
+	 */
 	protected function isContention()
 	{
 		return $this->adapter->getDriver()->getConnection()->isConnected();

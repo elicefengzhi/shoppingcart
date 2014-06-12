@@ -9,14 +9,24 @@ namespace ViewHelper\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ViewHelper\ViewHelper\ViewHelper;
+
 
 class ViewHelperFactory implements FactoryInterface
 {
+	private $serviceManager;
+	
+	function __call($className,$args)
+	{
+		$classNamespace = "\\ViewHelper\\Logic\\$className";
+		if(class_exists($classNamespace) === false) throw new \Exception("viewhelper class $classNamespace undefined");
+		$viewHelper = new $classNamespace();
+		$viewHelper->setServiceManager($this->serviceManager);
+		return $viewHelper;
+	}
+	
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $viewHelper = new ViewHelper();
-        $viewHelper->init($serviceLocator);
-        return $viewHelper;
+        $this->serviceManager = $serviceLocator;
+        return $this;
     }
 }

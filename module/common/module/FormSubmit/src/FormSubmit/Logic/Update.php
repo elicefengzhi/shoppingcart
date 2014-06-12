@@ -1,16 +1,16 @@
 <?php
 
-namespace FormSubmit\Model;
+namespace FormSubmit\Logic;
 
-use FormSubmit\Model\BaseFormSubmit;
+use FormSubmit\FormSubmit\BaseFormSubmit;
 
 Class Update extends BaseFormSubmit
 {	
-	private $method;
+	private $params;
 	
-	function __construct($initArray,$serviceLocator,$method)
+	function __construct($initArray,$serviceLocator,$params)
 	{
-		$this->method = $method;
+		$this->params = $params;
 		parent::__construct($initArray,$serviceLocator);
 	}
 	
@@ -28,9 +28,7 @@ Class Update extends BaseFormSubmit
 	public function update($params,$updateExistsValue,$existsParams = false,$dbDispatchName,$validateDispatName = false)
 	{
 		if($params === false) {
-			$request = new \Zend\Http\PhpEnvironment\Request;
-			$this->method == 'post' && $params = $request->getPost()->toArray();
-			$this->method == 'get' && $params = $request->getQuery()->toArray();
+			$params = $this->params;
 		}
 		$this->updateExistsValue = $updateExistsValue;
 		$updateReturn = $this->formSubmit('update',$params,$existsParams,$dbDispatchName,$validateDispatName);

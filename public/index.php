@@ -3,7 +3,7 @@
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
  */
-//chdir(dirname(__DIR__));
+chdir(dirname(__DIR__));
 
 // 设置常量
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', 'local');

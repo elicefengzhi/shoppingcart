@@ -20,7 +20,7 @@ class AdminOrderController extends BaseController
     		$orderList = $this->serviceLocator->get('DbSql')->Order()->getOrderAll($offset,$rowsperpage);
     	}
     	
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
     	$viewHelper->setSourceData($orderList);
     	return array('viewHelper' => $viewHelper,'paging' => $paging,'pageNum' => $pageNum);
     }

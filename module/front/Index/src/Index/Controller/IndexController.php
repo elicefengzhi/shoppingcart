@@ -12,7 +12,7 @@ class IndexController extends BaseController
     	$ossmProductList = $this->serviceLocator->get('DbSql')->Product()->getProductToList(2,array('product_id','name','original_price','price','stock'));
     	$productType = $this->serviceLocator->get('DbSql')->ProductType()->getType(array('parent_id' => 0));
     	$news = $this->serviceLocator->get('DbSql')->News()->getNews(false,false,array('news_id','news_title','update_time'),10);
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Front');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->Front();
     	$viewHelper->setSourceData($newProductList,'newProductList');
     	$viewHelper->setSourceData($ossmProductList,'ossmProductList');
     	$viewHelper->setSourceData($productType,'productType');

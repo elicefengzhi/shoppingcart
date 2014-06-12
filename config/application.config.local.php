@@ -3,7 +3,7 @@ return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
         'Application',
-    	'ZendDeveloperTools','BjyProfiler','ThaConfigalyzer',
+    	//'ZendDeveloperTools','BjyProfiler','ThaConfigalyzer',
     	'Index','Product','ShoppingCart','User',
     	'AdminIndex','AdminProduct','AdminProductType','AdminProductImage','AdminProduct','AdminOrder','AdminPage','AdminQuery','AdminNews',
     	'ProductTypeLinkage',

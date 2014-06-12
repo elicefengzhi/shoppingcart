@@ -22,8 +22,8 @@ return array(
         	'admin/login/layout'		=> __DIR__ . '/../view/layout/admin/login.phtml',
             'error/404'           		=> __DIR__ . '/../view/error/404.phtml',
             'error/index'          		=> __DIR__ . '/../view/error/500.phtml',
-        	'admin_error/404'      		=> __DIR__ . '/../view/error/admin_404.phtml',
-        	'admin_error/index'    		=> __DIR__ . '/../view/error/admin_500.phtml',
+        	'error/admin/404'      		=> __DIR__ . '/../view/error/admin_404.phtml',
+        	'error/admin/index'    		=> __DIR__ . '/../view/error/admin_500.phtml',
         	'admin/common/paging'  		=> __DIR__ . '/../view/common/admin/paging.php',
         	'admin/common/errorMessage' => __DIR__ . '/../view/common/admin/errorMessage.php',
         	'front/common/paging'  		=> __DIR__ . '/../view/common/front/paging.php',
@@ -37,4 +37,5 @@ return array(
 			'ViewHelper' => 'ViewHelper\ViewHelper\ViewHelper',
 		)
 	),
+	'isChangeMobileViewPath' => true,
 );

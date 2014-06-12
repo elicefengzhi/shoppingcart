@@ -10,7 +10,7 @@ class ProductController extends BaseController
     {
     	$product = $this->serviceLocator->get('front/product/logic')->getProductList(1);
     	
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Front');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->Front();
     	$viewHelper->setSourceData($product['productList']);
     	
     	$viewModel = new \Zend\View\Model\ViewModel(array('viewHelper' => $viewHelper,'paging' => $product['paging']));
@@ -26,7 +26,7 @@ class ProductController extends BaseController
     	$productImage = $this->serviceLocator->get('DbSql')->ProductImage()->getImageByProductId(array('image_id','image_path'),array('product_id' => (int)$pId));
     	$pptList = $this->serviceLocator->get('DbSql')->ProductType()->getProductTypeByProductId((int)$pId,array('name'),array());
 
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Front');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->Front();
     	$viewHelper->setSourceData($productImage,'productImage');
     	$viewHelper->setSourceData($pptList,'productType');
     	$viewHelper->setSourceData($product);

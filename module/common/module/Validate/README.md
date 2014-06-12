@@ -43,16 +43,15 @@ if($this->getRequest()->isPost()){
 	$newsBody = $this->params()->fromPost('news_body');
 	$quick = array(
 		'news_title' => array(
-	    		'data' => $newsTitle,
-	    		'isEmpty' => array('value' => false,'message' => '不为空'),
-	    		'stringLength' => array('min' => 1,'max' => 5,'message' =>'过长')
+			'data' => $newsTitle,
+			'notEmpty' => array('message' => '不为空'),
+			'stringLength' => array('min' => 1,'max' => 5,'message' =>'过长')
 		),
 		'news_body' => array(
 			'data' => $newsBody,
-			'isEmpty' => array('value' => true),
-			'stringLength' => array('min' => 1,'max' => 1000,'message' =>'过长')
+			'stringLength' => array('min' => 0,'max' => 3,'message' =>'过长')
 		),
 	);
 	$validate = $this->serviceLocator->get('Validate')->QuickValidate();
-	$val = $validate->quickValidate($quick);
+	$val = $validate->validate($quick);
 }

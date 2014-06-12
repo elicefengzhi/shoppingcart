@@ -8,7 +8,7 @@ class ShoppingCartController extends BaseController
 {
     public function indexAction()
     {
-    	$viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Front');
+    	$viewHelper = $this->serviceLocator->get('ViewHelper')->Front();
     	$viewHelper->setSourceData($this->ZendCart()->cart());
     	$viewHelper->setSourceData($this->ZendCart()->total_items(),'totalItems');
     	$viewHelper->setSourceData($this->ZendCart()->total(),'total');

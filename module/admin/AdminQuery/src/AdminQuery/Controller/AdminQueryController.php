@@ -17,7 +17,7 @@ class AdminQueryController extends BaseController
         	$paging->paginate($count,10,$pageNum,2);
         	$pageList = $this->serviceLocator->get('DbSql')->Query()->getQueryAll(array('q_id','q_title','create_time'),$paging->getOffset(),$paging->getRowsPerPage());
         }
-        $viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+        $viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
         $viewHelper->setSourceData($pageList);
         return array('viewHelper' => $viewHelper,'paging' => $paging,'pageNum' => $pageNum);
     }
@@ -28,7 +28,7 @@ class AdminQueryController extends BaseController
         if($qId === false) return $this->redirect()->toRoute('admin-query');
         
         $page = $this->serviceLocator->get('DbSql')->Query()->getQuery(array('q_id' => $qId),true);
-        $viewHelper = $this->serviceLocator->get('ViewHelper')->dispatch('Admin');
+        $viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
         $viewHelper->setSourceData($page);
         return array('viewHelper' => $viewHelper);
     }

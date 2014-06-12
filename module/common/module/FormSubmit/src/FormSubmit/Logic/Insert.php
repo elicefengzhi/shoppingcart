@@ -1,16 +1,16 @@
 <?php
 
-namespace FormSubmit\Model;
+namespace FormSubmit\Logic;
 
-use FormSubmit\Model\BaseFormSubmit;
+use FormSubmit\FormSubmit\BaseFormSubmit;
 
 Class Insert extends BaseFormSubmit
 {	
-	private $method;
+	private $params;
 	
-	function __construct($initArray,$serviceLocator,$method)
+	function __construct($initArray,$serviceLocator,$params)
 	{
-		$this->method = $method;
+		$this->params = $params;
 		parent::__construct($initArray,$serviceLocator);
 	}
 	
@@ -27,9 +27,7 @@ Class Insert extends BaseFormSubmit
 	public function insert($params,$existsParams = false,$dbDispatchName,$validateDispatName = false)
 	{
 		if($params === false) {
-			$request = new \Zend\Http\PhpEnvironment\Request;
-			$this->method == 'post' && $params = $request->getPost()->toArray();
-			$this->method == 'get' && $params = $request->getQuery()->toArray();
+			$params = $this->params;
 		}
 		$insertReturn = $this->formSubmit('insert',$params,$existsParams,$dbDispatchName,$validateDispatName);
 		if($insertReturn === false) return false;

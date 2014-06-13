@@ -4,6 +4,7 @@ namespace Application;
 
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
+use Zend\ModuleManager\ModuleManager;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 
 class Module implements AutoloaderProviderInterface 
@@ -39,11 +40,18 @@ class Module implements AutoloaderProviderInterface
     	);
     }
     
+    public function init(ModuleManager $moduleManager)
+    {   
+    	//设置移动端试图层路径
+    	$mobile = new \Application\Logic\Mobile();
+		$mobile->changeMobileViewPath($moduleManager);
+    }
+    
     public function onDispatchError(MvcEvent $event){
     	//通过URI获得当前请求的模块是否是后台
     	$moduleName = strstr(ltrim($event->getRequest()->getRequestUri(),DIRECTORY_SEPARATOR),DIRECTORY_SEPARATOR,true);
     	$moduleName == '' && $moduleName = ltrim($event->getRequest()->getRequestUri(),DIRECTORY_SEPARATOR);
-    	
+
     	//根据状态码更改布局页和模板页
     	$response = $event->getResponse();
     	if ($response->getStatusCode() == 404) {

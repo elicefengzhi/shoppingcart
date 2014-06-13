@@ -4,6 +4,7 @@ return array(
     'modules' => array(
         'Application',
     	//'ZendDeveloperTools','BjyProfiler','ThaConfigalyzer',
+    	'MobileDetectModule',
     	'Index','Product','ShoppingCart','User',
     	'AdminIndex','AdminProduct','AdminProductType','AdminProductImage','AdminProduct','AdminOrder','AdminPage','AdminQuery','AdminNews',
     	'ProductTypeLinkage',

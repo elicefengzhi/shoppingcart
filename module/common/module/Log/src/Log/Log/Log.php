@@ -105,8 +105,10 @@ class Log
 	 * @param string $model 报错模块名
 	 * @param string $message 报错信息
 	 * @param string $level 报错级别(详细说明在下面)
-	 * @param string $fileName 报错文件名
-	 * @param string $line 报错行数
+	 * @param string $fileName 报错文件名<br/>
+	 * 默认：false
+	 * @param string $line 报错行数<br/>
+	 * 默认：false
 	 * @return boolean
 	 * 
 	 * 报错级别：
@@ -119,7 +121,7 @@ class Log
 		INFO    = 6;  // Informational: informational messages
 		DEBUG   = 7;  // Debug: debug messages
 	 */
-	public function write($model,$message,$level,$fileName,$line)
+	public function write($model,$message,$level,$fileName = false,$line = false)
 	{
 		if($this->init() === false) {
 			throw new \Exception("write init error");
@@ -130,8 +132,8 @@ class Log
 		$string.= 'time:'.date('Y-m-d H:i:s',time())."\n";
 		$string.= 'level:'.$level."\n";
 		$string.= 'model:'.$model."\n";
-		$string.= 'fileName:'.$fileName."\n";
-		$string.= 'line:'.$line."\n";
+		$fileName !== false && $string.= 'fileName:'.$fileName."\n";
+		$line !== false && $string.= 'line:'.$line."\n";
 		$string.= 'message:'.$message."\n";
 
 		$logger = new Logger();

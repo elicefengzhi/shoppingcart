@@ -4,6 +4,10 @@ namespace Application\Logic;
 
 class Mobile
 {
+	/**
+	 * 更改移动端试图层路径
+	 * @param object $moduleManager
+	 */
 	function changeMobileViewPath($moduleManager)
 	{
 		$sharedEvents = $moduleManager->getEventManager()->getSharedManager();

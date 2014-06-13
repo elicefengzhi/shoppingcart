@@ -1,7 +1,6 @@
 <?php
 /**
  * 全局模块配置
- * 配置全局布局页、404页、500页等信息
  * 
  * 注意：
  * display_exceptions为是否开启框架报错，因不同开发环境的考虑，这里是false。
@@ -37,5 +36,13 @@ return array(
 			'ViewHelper' => 'ViewHelper\ViewHelper\ViewHelper',
 		)
 	),
-	'isChangeMobileViewPath' => true,
+	//是否开启更改移动端试图层路径
+	'isChangeMobileViewPath' => false,
+	//自定义错误处理策略：false(不处理)，file写文件，email发邮件
+	'errorStrategy' => array(
+		'type' => 'file',
+		'email' => array(
+			'to' => '1095247806@qq.com'
+		),
+	),
 );

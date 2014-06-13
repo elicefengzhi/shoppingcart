@@ -61,6 +61,10 @@ class Module implements AutoloaderProviderInterface
     		}
     	} 
     	else if($response->getStatusCode() == 500){
+    		$errorStrategy = new \Application\Logic\ErrorStrategy();
+    		$applicationConfig = $this->getConfig();
+    		$errorStrategy->errorHandle($applicationConfig,$event->getParam('exception'),$event->getApplication()->getServiceManager());
+    		
     		if($moduleName == 'admin') {
     			$event->getViewModel()->setTemplate('admin/error/layout');
     			$event->getResult()->setTemplate('error/admin/index');

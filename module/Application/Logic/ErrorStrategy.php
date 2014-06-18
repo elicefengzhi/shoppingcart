@@ -4,6 +4,12 @@ namespace Application\Logic;
 
 class ErrorStrategy
 {
+	/**
+	 * 错误处理
+	 * @param array $applicationConfig
+	 * @param object $exception
+	 * @param object $sm
+	 */
 	public function errorHandle($applicationConfig,$exception,$sm)
 	{
 		if(isset($exception) !== false) {

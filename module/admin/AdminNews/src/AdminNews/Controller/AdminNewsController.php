@@ -27,7 +27,8 @@ class AdminNewsController extends BaseController
     	$errorMessage = '';
     	$page = $this->serviceLocator->get('FormSubmit')->Insert();
     	if($page !== false) {
-    		$return = $page->insert(false,array('news_title'),'News','AdminNews');
+    		$time = time();
+    		$return = $page->insert()->table('News')->addField(array('create_time' => $time,'update_time' => $time))->existsFields(array('news_title'))->customFilter(array('editorValue' => null,'news_body' => 0))->validate($this->serviceLocator->get('Validate')->AdminNews())->submit();
     		$return === false && $page->isVal() === false && $errorMessage = $page->getValidateErrorMessage();
     		$return === false && $page->isExists() === true && $errorMessage[][] = 'タイトルは既に登録されております';
     		if($return !== false) return $this->redirect()->toRoute('admin-news');
@@ -47,12 +48,12 @@ class AdminNewsController extends BaseController
     	 
     	$page = $this->serviceLocator->get('FormSubmit')->Update();
     	if($page !== false) {
-    		$return = $page->update(false,array('news_id' => $nId),array('news_title'),'News','AdminNews');
+    		$return = $page->update()->table('News')->addField(array('update_time' => time()))->where(array('news_id' => $nId))->existsFields(array('news_title'))->customFilter(array('editorValue' => null,'news_body' => 0))->validate($this->serviceLocator->get('Validate')->AdminNews())->submit();
     		if($return !== false) {
     			return $this->redirect()->toRoute('admin-news');
     		}
     		$page->isVal() === false && $errorMessage = $page->getValidateErrorMessage();
-    		$page->isExists() === true && $errorMessage = 'タイトルは既に登録されております';
+    		$page->isExists() === true && $errorMessage[][] = 'タイトルは既に登録されております';
     		$pageList = $page->getSourceData();
     	}
     	 
@@ -61,8 +62,9 @@ class AdminNewsController extends BaseController
     	 
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
     	$viewHelper->setSourceData($pageList);
+    	$viewHelper->setSourceData($errorMessage,'errorMessage');
     	 
-    	$viewModel = new \Zend\View\Model\ViewModel(array('viewHelper' => $viewHelper,'errorMessage' => $errorMessage,'url' => $this->url()->fromRoute('admin-news/edit',array('nId' => $nId))));
+    	$viewModel = new \Zend\View\Model\ViewModel(array('viewHelper' => $viewHelper,'url' => $this->url()->fromRoute('admin-news/edit',array('nId' => $nId))));
     	$viewModel->setTemplate('admin-news/admin-news/add');
     	return $viewModel;
     }

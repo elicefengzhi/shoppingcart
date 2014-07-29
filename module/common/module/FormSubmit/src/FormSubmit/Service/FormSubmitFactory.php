@@ -9,8 +9,6 @@ namespace FormSubmit\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-//use FormSubmit\FormSubmit\FormSubmit;
-
 
 class FormSubmitFactory implements FactoryInterface
 {
@@ -25,15 +23,19 @@ class FormSubmitFactory implements FactoryInterface
 		
 		//获得提交参数
 		$request = new \Zend\Http\PhpEnvironment\Request;
-		$this->requestType === 'post' && $params = $request->getPost()->toArray();
-		$this->requestType === 'get' && $params = $request->getQuery()->toArray();
+		$this->requestType === 'post' && $requestData = $request->getPost()->toArray();
+		$this->requestType === 'get' && $requestData = $request->getQuery()->toArray();
 		//如果没有数据提交返回false
-		if(count($params) <= 0) return false; 
-		
-		$formSubmit = new $classNamespace($this->initArray,$this->serviceLocator,$params);
+		if(count($requestData) <= 0) return false; 
+
+		$formSubmit = new $classNamespace($requestData,$this->initArray,$this->serviceLocator);
 		return $formSubmit;
 	}
 	
+	/**
+	 * 设置request类型
+	 * @param string $type post或get
+	 */
 	public function setRequestType($type) {
 		$type === 'post' ? $this->requestType = 'post' : $this->requestType = 'get';
 	}
@@ -44,7 +46,6 @@ class FormSubmitFactory implements FactoryInterface
     	isset($init['FormSubmit/init']) ? $initArray = $init['FormSubmit/init'] : $initArray = false;
     	$this->serviceLocator = $serviceLocator;
     	$this->initArray = $initArray;
-        //return new FormSubmit($initArray,$serviceLocator);
         return $this;
     }
 }

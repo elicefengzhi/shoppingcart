@@ -124,34 +124,34 @@ class AdminProduct extends BaseValidator
 		}
 	}
 	
-	public function productImage()
-	{
-		$request = new \Zend\Http\PhpEnvironment\Request;
-		$file = $request->getFiles()->toArray();
-		$uploadImage = array();
-		if(isset($file['image'])) {
-			foreach($file['image'] as $key => $image) {
-				$uploadImage['image'.$key] = $image;
-				$ValidData = $this->Upload($file['image'],$key);
-				if($ValidData !== false) {
-					$this->uploadImage['image'.$key] = $image;
-				}
-			}
-		}
-	}
+// 	public function productImage()
+// 	{
+// 		$request = new \Zend\Http\PhpEnvironment\Request;
+// 		$file = $request->getFiles()->toArray();
+// 		$uploadImage = array();
+// 		if(isset($file['image'])) {
+// 			foreach($file['image'] as $key => $image) {
+// 				$uploadImage['image'.$key] = $image;
+// 				$ValidData = $this->Upload($file['image'],$key);
+// 				if($ValidData !== false) {
+// 					$this->uploadImage['image'.$key] = $image;
+// 				}
+// 			}
+// 		}
+// 	}
 	
-	public function chlidColumns($data)
-	{
-		$dataName = $data;
-		if(isset($this->sourceData[$data])) {
-			$data = $this->sourceData[$data];
-			if(is_array($data) && count($data) > 0) {
-				foreach($data as $key => $d) {
-					$this->data[$dataName.$key] = (int)$d;
-				}
-			}
-		}
-	}
+// 	public function chlidColumns($data)
+// 	{
+// 		$dataName = $data;
+// 		if(isset($this->sourceData[$data])) {
+// 			$data = $this->sourceData[$data];
+// 			if(is_array($data) && count($data) > 0) {
+// 				foreach($data as $key => $d) {
+// 					$this->data[$dataName.$key] = (int)$d;
+// 				}
+// 			}
+// 		}
+// 	}
 	
 	public function vailidAll($data)
 	{	
@@ -165,9 +165,9 @@ class AdminProduct extends BaseValidator
 				'point' => 'point',
 				'isAdd' => 'is_add',
 				'description' => 'description',
-				'productImage' => null,
-				'chlidColumns' => 'ad',
-				'chlidColumns' => 'ptypeId'
+				//'productImage' => null,
+				//'chlidColumns' => 'ad',
+				//'chlidColumns' => 'ptypeId'
 			),
 			array('name' => null,'original_price' => null,'price' => null,'stock' => 0,'point' => 0,'description' => null,'is_add' => 0)
 		);

@@ -8,6 +8,7 @@ class AdminIndexController extends BaseController
 {	
     public function indexAction()
     {
+    	//echo $this->getServiceLocator()->get('translator')->translate('a');exit;
 		return array();
     }
     

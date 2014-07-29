@@ -36,11 +36,26 @@ return array(
 			'ViewHelper' => 'ViewHelper\ViewHelper\ViewHelper',
 		)
 	),
+	'service_manager' => array(
+		'factories' => array(
+			'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
+		),
+	),
+	'translator' => array(
+		'locale' => 'en_US',
+		'translation_file_patterns' => array(
+			array(
+				'type'     => 'gettext',
+				'base_dir' => __DIR__ . '/../language',
+				'pattern'  => '%s.mo',
+			),
+		),
+	),
 	//是否开启更改移动端试图层路径
 	'isChangeMobileViewPath' => false,
 	//自定义错误处理策略：false(不处理)，file写文件，email发邮件
 	'errorStrategy' => array(
-		'type' => 'file',
+		'type' => false,
 		'email' => array(
 			'to' => '1095247806@qq.com'
 		),

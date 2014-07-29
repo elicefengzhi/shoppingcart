@@ -33,7 +33,7 @@ class Module implements AutoloaderProviderInterface
     		'factories' => array(
     			'viewHelper' => function($sm) {
     				$config = $sm->getServiceLocator()->get('config');
-    				isset($config['viewHelper/dispatch']) ? $viewHelper = '\ViewHelper\Model\\'.$config['viewHelper/dispatch'] : $viewHelper = false;
+    				isset($config['viewHelper/dispatch']) ? $viewHelper = '\ViewHelper\Logic\\'.$config['viewHelper/dispatch'] : $viewHelper = false;
     				return $viewHelper === false ? false : new $viewHelper();
     			},
     		),
@@ -74,6 +74,16 @@ class Module implements AutoloaderProviderInterface
     
     public function onBootstrap (EventInterface $event)
     {
+
+//     	$viewHelperManager = $event->getApplication()->getServiceManager()->get('viewHelperManager');
+//     	$translateHelper   = $viewHelperManager->get('Translate');	
+//     	$translator = $translateHelper->getTranslator();
+//     	$translator->setLocale('zh_CN');
+    	
+//     	$sm =  $event->getApplication()->getServiceManager();
+//     	$translator = $sm->get('translator');
+//     	$translator->setLocale('zh_CN');
+    	
     	$eventManager = $event->getParam('application')->getEventManager();
     	
     	$eventManager->getSharedManager()->attach('*', MvcEvent::EVENT_DISPATCH, array($this,'onDispatchError'), -100);

@@ -2,34 +2,30 @@
 
 namespace FormSubmit\Logic;
 
-use FormSubmit\FormSubmit\BaseFormSubmit;
+use FormSubmit\Logic\Base;
 
-Class Insert extends BaseFormSubmit
+Class Insert extends Base
 {	
-	private $params;
-	
-	function __construct($initArray,$serviceLocator,$params)
+	function __construct($requestData,$initArray,$serviceLocator)
 	{
-		$this->params = $params;
-		parent::__construct($initArray,$serviceLocator);
+		$this->requestData = $requestData;
+		$this->initArray = $initArray;
+		$this->serviceLocator = $serviceLocator;
 	}
 	
 	/**
-	 * 插入数据库
-	 * @param array $params 插入参数
-	 * @param array $existsParams 数据是否存在验证项
-	 * @param string $dbDispatchName 数据库操作模块分发名
-	 * @param string $validateDispatName 验证模块分发名
+	 * 执行添加表单提交
+	 * @throws \Exception
 	 * @return boolean
-	 * 
-	 * $existsParams为false时，不验证数据是否存在
 	 */
-	public function insert($params,$existsParams = false,$dbDispatchName,$validateDispatName = false)
+	public function submit()
 	{
-		if($params === false) {
-			$params = $this->params;
+		try {
+			return $this->formSubmit('insert');
 		}
-		$insertReturn = $this->formSubmit('insert',$params,$existsParams,$dbDispatchName,$validateDispatName);
-		if($insertReturn === false) return false;
+		catch(\FormSubmit\Exception\FormSubmitException $e)
+		{
+			throw new \FormSubmit\Exception\FormSubmitException($e->getMessage());
+		}
 	}
 }

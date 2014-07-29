@@ -33,13 +33,14 @@ class AdminProductController extends BaseController
     	$errorMessage = '';
     	$user = $this->serviceLocator->get('FormSubmit')->Insert();
     	if($user !== false) {
-    		$user->createChlidColumnsByFiles('productImage','image');
-    		$logic = $this->serviceLocator->get('front/product/logic');
+    		$logic = $this->serviceLocator->get('admin/product/logic');
     		$logic->setTimeData();
     		$logic->insertProductImageAndAd();
-    		$logic->createChlidColumns('AdProduct','ad');
-    		$logic->createChlidColumns('TypeProduct','ptypeId');
-    		$return = $user->insert(false,array('name'),'Product','AdminProduct');
+    		$return = $user->insert()->table('Product')->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->AdminProduct())
+    		->helper('ValidateAfter','ChildColumns','input','AdProduct','ad')
+    		->helper('ValidateAfter','ChildColumns','input','TypeProduct','ptypeId')
+    		->mediaUpload(false,false)->customFilter(array('editorValue' => null))->submit();
+    		
     		$return === false && $user->isVal() === false && $errorMessage = $user->getValidateErrorMessage();
     		$return === false && $user->isExists() === true && $errorMessage[][] = '商品名は既に登録されております';
     		if($return !== false) return $this->redirect()->toRoute('admin-product');

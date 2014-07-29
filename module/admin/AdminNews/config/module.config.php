@@ -22,9 +22,9 @@ return array(
                 	'index' => array(
                 		'type'    => 'Segment',
                 		'options' => array(
-                			'route'    => '[index][/:pageNum][/]',
+                			'route'    => '[:pageNum][/]',
                 			'constraints' => array(
-                				'pageNum' => '\d+'
+                				'pageNum' => '\d*'
                 			),
                 			'defaults' => array(
                 				'action' => 'index',
@@ -45,7 +45,7 @@ return array(
                 		'options' => array(
             				'route'    => 'edit/[:nId[/]]',
             				'constraints' => array(
-            					'pId' => '\d*'
+            					'nId' => '\d*'
             				),
             				'defaults' => array(
             					'action' => 'edit',
@@ -57,7 +57,7 @@ return array(
                 		'options' => array(
             				'route'    => 'show/[:nId[/]]',
             				'constraints' => array(
-            					'pId' => '\d*'
+            					'nId' => '\d*'
             				),
             				'defaults' => array(
             					'action' => 'show',

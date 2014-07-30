@@ -1,0 +1,100 @@
+<p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin/index'); ?>"></a>--<a lang="product" href="<?php echo $this->url('admin/product'); ?>"></a>--<span lang="productSubAdd"></span></p>
+<?php echo $this->partial('admin/common/errorMessage',array('viewHelper' => $this->viewHelper,'loopName' => 'errorMessage')); ?>
+<form id="product-form" action="<?php echo $this->url; ?>" method="post" enctype="multipart/form-data">
+    <table class="admin-table">
+        <tr>
+            <td lang="productName" class="trTitle"></td><td><input name="name" type="text" value="<?php echo $this->viewHelper->string('name'); ?>" /></td>
+        </tr>
+        <tr>
+            <td lang="productType" class="trTitle"></td><td><div id="product-type"></div></td>
+        </tr>
+        <tr>
+            <td lang="productOriPrice" class="trTitle"></td><td><input name="original_price" type="text" value="<?php echo $this->viewHelper->string('original_price'); ?>" /></td>
+        </tr>
+        <tr>
+            <td lang="productPrice" class="trTitle"></td><td><input name="price" type="text" value="<?php echo $this->viewHelper->string('price'); ?>" /></td>
+        </tr>
+        <tr>
+            <td lang="productStock" class="trTitle"></td><td><input name="stock" type="text" value="<?php echo $this->viewHelper->string('stock'); ?>" /></td>
+        </tr>
+        <tr>
+            <td lang="point" class="trTitle"></td><td><input name="point" type="text" value="<?php echo $this->viewHelper->string('point'); ?>" /></td>
+        </tr>
+        <tr>
+            <td lang="insertAd" class="trTitle"></td>
+            <td>
+                <?php if($this->viewHelper->isLoop('ad')): ?>
+                <?php foreach($this->viewHelper->getSourceData('ad') as $data): ?>
+				<input name="ad[]" type="checkbox" <?php echo $this->viewHelper->adCheck($this->viewHelper->getSourceData('adProductList'),'ad_id',$data); ?> value="<?php echo $this->viewHelper->string('ad_id',$data); ?>" />&nbsp;<?php echo $this->viewHelper->string('ad_name',$data); ?>
+			    <?php endforeach; ?>
+			    <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
+            <td lang="productIsAdd" class="trTitle"></td>
+            <td>
+                <select name="is_add">
+    				<option lang="statusTrue" <?php echo $this->viewHelper->select('is_add',1); ?> value="1"></option>
+    				<option lang="statusFalse" <?php echo $this->viewHelper->select('is_add',0); ?> value="0"></option>
+		        </select>
+            </td>
+        </tr>
+        <tr>
+            <td lang="productImg" class="trTitle"></td>
+            <td>
+                <div id="product-image">
+				<p><input type="file" name="image[]" />&nbsp;(<span lang="adSelectImg"></span>)&nbsp;<a lang="add" class="product-image-add" href="javascript:;"></a></p>
+    			</div>
+    			<?php if($this->viewHelper->isLoop('ProductImage')): ?>
+    			<?php foreach($this->viewHelper->getSourceData('ProductImage') as $image): ?>
+    			<p><a lang="delete" href="javascript:;" class="image-delete" data-imageId="<?php echo $this->viewHelper->string('image_id',$image); ?>"></a></p>
+    			<?php echo $this->viewHelper->img('image_path',$image,false,array('id' => 'product-image-'.$this->viewHelper->string('image_id',$image),'width' => '400px','style' => 'margin-top:10px;')); ?><br/>
+    			<?php endforeach; ?>
+    			<?php endif; ?>
+            </td>
+        </tr>
+        <tr>
+            <td lang="productDes" class="trTitle"></td>
+            <td>
+                <script id="editor" type="text/plain" style="width:820px;height:500px;">
+				<?php echo $this->viewHelper->string('description'); ?>
+		        </script>
+            </td>
+        </tr>
+    </table>
+	<input id="product-submit" type="button" value="" />
+</form>
+<script type="text/javascript" charset="utf-8" src="/js/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/js/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="/js/admin/product_add.js"></script>
+<script type="text/javascript">
+UE.getEditor('editor');
+$(document).ready(function(){
+	$('#product-type').load('<?php echo $this->url('product-type-linkage'); ?>',function(){
+		$('#product-type').append('<a class="product-type-add" href="javascript:;">'+productTypeAddString+'</a>');
+		$('#product-type').wrap('<p></p>');
+		<?php if($this->viewHelper->isLoop('productTypeList')): ?>
+		<?php foreach($this->viewHelper->getSourceData('productTypeList') as $type): ?>
+			<?php if($this->viewHelper->string('parent_id',$type) == 0): ?>
+			$('.product-type-linkage').eq(0).clone().appendTo('#product-type').wrap('<p></p>').after('&nbsp;<a class="product-type-del" href="javascript:;">'+deleteString+'</a>').removeAttr('id').val('<?php echo $this->viewHelper->string('ptype_id',$type) ?>');
+			<?php else: ?>
+			$('.product-type-linkage').eq(0).clone().appendTo('#product-type').wrap('<p></p>').after('&nbsp;<a class="product-type-del" href="javascript:;">'+deleteString+'</a>').removeAttr('id').val('<?php echo $this->viewHelper->string('parent_id',$type) ?>').change();
+			<?php endif; ?>
+		<?php endforeach; ?>
+		<?php endif; ?>
+	});
+	$('.image-delete').on('click',function(){
+		if(confirm(deleteKaku)){
+			var imageId = $(this).attr('data-imageId');
+			$.ajax({ url: '<?php echo $this->url('admin/product-image/delete'); ?>'+imageId, success: function(data){
+		        if(data == 'true') {
+			        $(this).parent().remove();
+			        $('#product-image-'+imageId).remove();
+			    }
+		      }
+			});
+		}
+	});
+});
+</script>

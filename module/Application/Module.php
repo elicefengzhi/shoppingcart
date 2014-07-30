@@ -49,40 +49,44 @@ class Module implements AutoloaderProviderInterface
     
     public function onDispatchError(MvcEvent $event){
     	//通过URI获得当前请求的模块是否是后台
-    	$moduleName = strstr(ltrim($event->getRequest()->getRequestUri(),DIRECTORY_SEPARATOR),DIRECTORY_SEPARATOR,true);
-    	$moduleName == '' && $moduleName = ltrim($event->getRequest()->getRequestUri(),DIRECTORY_SEPARATOR);
+    	//$moduleName = strstr(ltrim($event->getRequest()->getRequestUri(),DIRECTORY_SEPARATOR),DIRECTORY_SEPARATOR,true);
+    	//$moduleName == '' && $moduleName = ltrim($event->getRequest()->getRequestUri(),DIRECTORY_SEPARATOR);
 
     	//根据状态码更改布局页和模板页
     	$response = $event->getResponse();
-    	if ($response->getStatusCode() == 404) {
-    		if($moduleName == 'admin') {
-    			$event->getViewModel()->setTemplate('admin/error/layout');
-    			$event->getResult()->setTemplate('error/admin/404');
-    		}
-    	} 
-    	else if($response->getStatusCode() == 500){
+    	if($response->getStatusCode() == 500){
     		$errorStrategy = new \Application\Logic\ErrorStrategy();
     		$applicationConfig = $this->getConfig();
     		$errorStrategy->errorHandle($applicationConfig,$event->getParam('exception'),$event->getApplication()->getServiceManager());
-    		
-    		if($moduleName == 'admin') {
-    			$event->getViewModel()->setTemplate('admin/error/layout');
-    			$event->getResult()->setTemplate('error/admin/index');
-    		}
     	}
+//     	if ($response->getStatusCode() == 404) {
+//     		if($moduleName == 'admin') {
+//     			$event->getViewModel()->setTemplate('admin/error/layout');
+//     			$event->getResult()->setTemplate('error/admin/404');
+//     		}
+//     	} 
+//     	else if($response->getStatusCode() == 500){
+//     		$errorStrategy = new \Application\Logic\ErrorStrategy();
+//     		$applicationConfig = $this->getConfig();
+//     		$errorStrategy->errorHandle($applicationConfig,$event->getParam('exception'),$event->getApplication()->getServiceManager());
+    		
+//     		if($moduleName == 'admin') {
+//     			$event->getViewModel()->setTemplate('admin/error/layout');
+//     			$event->getResult()->setTemplate('error/admin/index');
+//     		}
+//     	}
     }
     
     public function onBootstrap (EventInterface $event)
     {
-
-//     	$viewHelperManager = $event->getApplication()->getServiceManager()->get('viewHelperManager');
-//     	$translateHelper   = $viewHelperManager->get('Translate');	
-//     	$translator = $translateHelper->getTranslator();
-//     	$translator->setLocale('zh_CN');
+    	$viewHelperManager = $event->getApplication()->getServiceManager()->get('viewHelperManager');
+    	$translateHelper   = $viewHelperManager->get('Translate');	
+    	$translator = $translateHelper->getTranslator();
+    	$translator->setLocale('en_US');
     	
-//     	$sm =  $event->getApplication()->getServiceManager();
-//     	$translator = $sm->get('translator');
-//     	$translator->setLocale('zh_CN');
+    	$sm =  $event->getApplication()->getServiceManager();
+    	$translator = $sm->get('translator');
+    	$translator->setLocale('en_US');
     	
     	$eventManager = $event->getParam('application')->getEventManager();
     	

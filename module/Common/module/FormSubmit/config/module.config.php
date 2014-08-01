@@ -23,7 +23,7 @@ return array(
 		),
 		'validate' => array(
 			'validateFunction'	    => 'vailidAll',//验证方法名
-			'errorMessageFunction'	=> 'ErrorMessage',//快速验证方法名
+			'errorMessageFunction'	=> 'ErrorMessage',//错误信息方法名
 		),
 		'media' => array(
 			'uploadPath'       => BASEPATH.'public/upload/',//上传目录

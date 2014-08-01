@@ -10,7 +10,7 @@ class MediaUpload
 	private $maxSize;
 	private $minSize;
 	private $mimeType;
-	private $uploadErrorMessage;
+	private $validateErrorMessage = array();
 	private $realFileArray = array();
 
 	function __construct($init)
@@ -25,13 +25,18 @@ class MediaUpload
 			throw new \FormSubmit\Exception\FormSubmitException('mediaUpload init params error');
 		}
 	}
+	
+	public function getValidateErrorMessage()
+	{
+		return $this->validateErrorMessage;	
+	}
 
 	/**
 	 * 递归建立目录
 	 * @param string $dir
 	 * @return boolean
 	 */
-	function mkdirs($dir)
+	private function mkdirs($dir)
 	{
 		if(!is_dir($dir))
 		{
@@ -64,32 +69,34 @@ class MediaUpload
 	 * @param array $file
 	 * @return boolean
 	 */
-	private function validate($file)
+	private function validate($file,$inputName)
 	{
 		$returnFileSize = true;
 		$returnMimeType = true;
 		$errorMessage = array();
-		$fileSize  = new \Zend\Validator\File\Size(array('min' => $this->minSize,'max' => $this->maxSize));
-		$mimeType = new \Zend\Validator\File\MimeType($this->mimeType);
 
-		if($fileSize->isValid($file['tmp_name']) === false) {
+		$uploadFile = new \Zend\Validator\File\UploadFile();
+		$minSize = new \Zend\Validator\File\Size(array('min' => $this->minSize));
+		$maxSize = new \Zend\Validator\File\Size(array('max' => $this->maxSize));
+		$mimeType = new \Zend\Validator\File\MimeType($this->mimeType);
+		$sourceErrorMessage = include __DIR__.'/../ErrorMessage/ErrorMessage.php';
+
+		if($uploadFile->isValid($file) === false) {
+			return null;
+		}
+		if($minSize->isValid($file['tmp_name']) === false) {
 			$returnFileSize = false;
-			$maxSize = $this->maxSize;
-			//$sizeErrorMessage = $this->sizeErrorMessage;
-			//trim((string)$sizeErrorMessage) != '' && $this->errormessage[] = sprintf($sizeErrorMessage,$maxSize);
+			$this->validateErrorMessage[$inputName]['minSize'] = sprintf($sourceErrorMessage['minSizeError'],$this->minSize);
+		}
+		if($maxSize->isValid($file['tmp_name']) === false) {
+			$returnFileSize = false;
+			$this->validateErrorMessage[$inputName]['maxSize'] = sprintf($sourceErrorMessage['maxSizeError'],$this->maxSize);
 		}
 		if($returnFileSize === true) {
 			if($mimeType->isValid($file['tmp_name']) === false) {
 				$returnMimeType = false;
 				$mimeType = $this->mimeType;
-// 				$typeErrorMessage = $this->typeErrorMessage;
-// 				$string = '';
-// 				if(is_array($mimeType) && count($mimeType) > 0) {
-// 					foreach($mimeType as $m) {
-// 						$string .= str_replace('image/','',$m).'、';
-// 					}
-// 				}
-// 				trim((string)$typeErrorMessage) != '' && $this->errormessage[] = sprintf($typeErrorMessage,rtrim($string,'、'));
+				$this->validateErrorMessage[$inputName]['mimeTypeError'] = $sourceErrorMessage['mimeTypeError'];
 			}
 		}
 
@@ -103,9 +110,10 @@ class MediaUpload
 	 * @param string $path
 	 * @return boolean|string
 	 */
-	private function fileUpload($http,$file,$path)
+	private function fileUpload($http,$file,$path,$inputName)
 	{
-		if($this->validate($file) === true) {
+		$isVal= $this->validate($file,$inputName);
+		if($isVal === true) {
 			$newName = $this->changeFileName($file['name']);
 			$uploadPath = $this->uploadPath;
 			$mkdirs_ok = $this->mkdirs($uploadPath);
@@ -116,10 +124,12 @@ class MediaUpload
 
 			$newFilePath = $uploadPath.$newName;
 			$http->addFilter('File\Rename',
-					array('target'    => $newFilePath,
-					  'overwrite' => true,
-					  'source'    => $file['tmp_name'],
-					));
+				array(
+					'target'    => $newFilePath,
+					'overwrite' => true,
+					'source'    => $file['tmp_name'],
+				)
+			);
 			try {
 				if ($http->receive($file['name'])) {
 					$fileExists = new \Zend\Validator\File\Exists();
@@ -127,16 +137,19 @@ class MediaUpload
 						return $newFilePath;
 					}
 					else {
-						$this->uploadErrorMessage = $file['name'].' receive is ok,but file exists is false';
+						throw new \FormSubmit\Exception\FormSubmitException($file['name'].' receive is ok,but file exists is false');
 					}
 				}
 				else {
-					$this->uploadErrorMessage = $file['name'].' receive is warn';
+					throw new \FormSubmit\Exception\FormSubmitException($file['name'].' receive is warn');
 				}
 			}
 			catch (\Exception $e){
-				$this->uploadErrorMessage = $e->getMessage();
+				throw new \FormSubmit\Exception\FormSubmitException($e->getMessage());
 			}
+		}
+		else if(is_null($isVal)) {
+			return null;
 		}
 
 		return false;
@@ -157,28 +170,13 @@ class MediaUpload
 	
 	private function peelFileArray(Array $fileArray)
 	{
-		global $nowKey;
-		$isFoundKey = false;
 		foreach($fileArray as $key => $file) {
-			if(is_array($file)) {
-				foreach($file as $f) {
-					if(array_key_exists('tmp_name',$f)) {
-						$isFoundKey = true;
-						break;
-					}
-				}
-				if($isFoundKey === false) {
-					$this->peelFileArray($file);
-				}
-				else {
-					$nowKey = (int)$nowKey++;
-					$this->realFileArray[$nowKey] = $file;
-				}
+			if(isset($file['tmp_name']) && !is_array($file['tmp_name'])) {
+				$this->realFileArray[$key] = $file;
 			}
 			else {
-				if(array_key_exists('tmp_name',$file)) {
-					$nowKey = (int)$nowKey++;
-					$this->realFileArray[$nowKey] = $file;
+				foreach($file as $childKey => $childFie) {
+					$this->realFileArray[$key.$childKey] = $childFie;
 				}
 			}
 		}
@@ -201,19 +199,22 @@ class MediaUpload
 	public function upload($file,$path = false)
 	{
 		if(trim((string)$this->uploadPath) == '' || !is_array($this->mimeType) || count($this->mimeType) <= 0 || !is_array($file) || count($file) <= 0) return false;
-
 		$this->peelFileArray($file);
 		$originalKey = key($file);
-		$file = $this->realFileArray[0];
+		$file = $this->realFileArray;
 		$completeFiles = array();
 		$http = new Http();
 		$uploadReturn = false;
 		if(is_array(current($file))) {
 			foreach($file as $key => $f) {
-				$return = $this->fileUpload($http,$f,$path);
+				$return = $this->fileUpload($http,$f,$path,$key);
 				if($return !== false) {
-					$completeFiles[$originalKey.$key] = $this->getUploadedImagePath($return);
+					$completeFiles[$key] = $this->getUploadedImagePath($return);
 					$uploadReturn = true;
+				}
+				else if(is_null($return)) {
+					$uploadReturn = null;
+					break;
 				}
 				else {
 					$this->rollBackFiles($completeFiles);
@@ -227,14 +228,23 @@ class MediaUpload
 			if($return === false) {
 				$uploadReturn = false;
 			}
+			else if(is_null($return)) {
+				$uploadReturn = null;
+			}
 			else {
 				$uploadReturn = true;
-				$completeFiles[$originalKey] = $this->getUploadedImagePath($return);
+				$completeFiles[key($file)] = $this->getUploadedImagePath($return);
 			}
 		}
 
-		if($uploadReturn === false) throw new \FormSubmit\Exception\FormSubmitException($this->uploadErrorMessage);
+		//if($uploadReturn === false) throw new \FormSubmit\Exception\FormSubmitException($this->uploadErrorMessage);
 		is_array($completeFiles) && count($completeFiles) <= 0 && $completeFiles = false;
+		if(is_array($completeFiles) && count($completeFiles) <= 0) {
+			$completeFiles = false;
+		}
+		else if(is_null($completeFiles)) {
+			$completeFiles = null;
+		}
 
 		return $completeFiles;
 	}

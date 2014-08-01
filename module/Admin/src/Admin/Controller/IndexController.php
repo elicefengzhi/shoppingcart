@@ -8,7 +8,6 @@ class IndexController extends BaseController
 {	
     public function indexAction()
     {
-    	//echo $this->getServiceLocator()->get('translator')->translate('a');
 		return array();
     }
     

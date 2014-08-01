@@ -179,7 +179,7 @@ Class FormSubmit
 			if($validation === false) {
 				$this->isVal = false;
 				$validateErrorMessageFunction = $this->validateErrorMessageFunction;
-				if(!method_exists($this->validateClass,validateErrorMessageFunction)) {
+				if(!method_exists($this->validateClass,$validateErrorMessageFunction)) {
 					throw new \FormSubmit\Exception\FormSubmitException('validate errorMessage function is undefined');
 				}
 				else {
@@ -207,9 +207,18 @@ Class FormSubmit
 			$request = new \Zend\Http\PhpEnvironment\Request();
 			$files = $request->getFiles()->toArray();
 			if(count($files) > 0) {
-				$this->uploadedPath = $this->mediaUpload->upload($files);
-				//如果mdediaIsMerge为ture，则合并上传后的媒体地址进入validatedData
-				$this->mediaIsMerge === true && $this->validatedData = array_merge($this->validatedData,$this->uploadedPath);
+				$uploadReturn = $this->mediaUpload->upload($files);
+				if(!is_null($uploadReturn)) {
+					$this->uploadedPath = $uploadReturn;
+					$mediaErrorMessage = $this->mediaUpload->getValidateErrorMessage();
+					if(count($mediaErrorMessage) > 0) {
+						$this->isVal = false;
+						is_array($this->validateErrorMessage) ? $this->validateErrorMessage = array_merge($this->validateErrorMessage,$mediaErrorMessage) : $this->validateErrorMessage = $mediaErrorMessage;
+						return false;
+					}
+					//如果mdediaIsMerge为ture，则合并上传后的媒体地址进入validatedData
+					$this->mediaIsMerge === true && $this->validatedData = array_merge($this->validatedData,$this->uploadedPath);
+				}
 			}
 		}
 		
@@ -241,7 +250,15 @@ Class FormSubmit
 			else {
 			    $exists = $this->customExists($existsField,$existsWhere);
 			}
-			$this->isExists = $exists;
+
+			if($exists === true) {
+				$existsErrorMessage = array();
+				$sourceErrorMessage = include __DIR__.'/../ErrorMessage/ErrorMessage.php';
+				foreach($existsParams as $param) {
+					$existsErrorMessage[$param]['existsError'] = sprintf($sourceErrorMessage['existsError'],$param);
+				}
+				is_array($this->validateErrorMessage) ? $this->validateErrorMessage = array_merge($this->validateErrorMessage,$existsErrorMessage) : $this->validateErrorMessage = $existsErrorMessage;
+			}
 			//触发数据存在验证后事件
 			$this->events->trigger('FormSubmit/ExistsAfter',$this,array());
 		}

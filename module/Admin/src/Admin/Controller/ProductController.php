@@ -41,8 +41,11 @@ class ProductController extends BaseController
     		->helper('ValidateAfter','ChildColumns','input','TypeProduct','ptypeId')
     		->mediaUpload(false,false)->customFilter(array('editorValue' => null))->submit();
     		
-    		$return === false && $user->isVal() === false && $errorMessage = $user->getValidateErrorMessage();
-    		$return === false && $user->isExists() === true && $errorMessage[][] = '商品名は既に登録されております';
+    		//$return === false && $user->isVal() === false && $errorMessage = $user->getValidateErrorMessage();
+    		//$return === false && $user->isExists() === true && $errorMessage[][] = '商品名は既に登録されております';
+    		if($return === false && ($user->isVal() === false || $user->isExists() === false)) {
+    			$errorMessage = $user->getValidateErrorMessage();
+    		}
     		if($return !== false) return $this->redirect()->toRoute('admin/product');
     	}
     	

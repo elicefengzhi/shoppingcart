@@ -20,6 +20,7 @@ Class FormSubmit
 	
 	protected $validateClass;//验证对象
 	protected $validateErrorMessage;//验证错误信息
+	protected $sourceValidateErrorMessage;//原始验证错误信息
 	protected $validateErrorMessageFunction;//验证错误信息方法名
 	
 	protected $isFilter;//是否过滤request参数
@@ -253,9 +254,9 @@ Class FormSubmit
 
 			if($exists === true) {
 				$existsErrorMessage = array();
-				$sourceErrorMessage = include __DIR__.'/../ErrorMessage/ErrorMessage.php';
+				$this->sourceValidateErrorMessage === false ? $sourceErrorMessage = include __DIR__.'/../ErrorMessage/ErrorMessage.php' : $sourceErrorMessage = $this->sourceValidateErrorMessage;
 				foreach($existsParams as $param) {
-					$existsErrorMessage[$param]['existsError'] = sprintf($sourceErrorMessage['existsError'],$param);
+					$existsErrorMessage[$param]['existsError'] = $sourceErrorMessage['existsError'];
 				}
 				is_array($this->validateErrorMessage) ? $this->validateErrorMessage = array_merge($this->validateErrorMessage,$existsErrorMessage) : $this->validateErrorMessage = $existsErrorMessage;
 			}
@@ -403,6 +404,15 @@ Class FormSubmit
 	public function setValidatedData($data)
 	{
 		$this->validatedData = $data;
+	}
+	
+	/**
+	 * 设置原始验证错误提示信息
+	 * @param array $sourceValidateErrorMessage
+	 */
+	public function setSourceValidateErrorMessage(Array $sourceValidateErrorMessage)
+	{
+		$this->sourceValidateErrorMessage = $sourceValidateErrorMessage;
 	}
 	
 	/**

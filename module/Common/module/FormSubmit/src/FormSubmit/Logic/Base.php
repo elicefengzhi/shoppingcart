@@ -21,6 +21,7 @@ Class Base
 	protected $isInsertExists = true;//默认进行添加数据重复验证
 	protected $isUpdateExists = true;//默认进行更新数据重复验证
 	protected $validateClass = false;//默认不验证
+	protected $validateErrorMessage = false;//默认使用自带的错误提示语句
 	protected $mediaIsMerge;//媒体上传后的地址是否合并入validatedData
 	
 	protected $isFilter = true;//默认过滤request参数
@@ -212,6 +213,7 @@ Class Base
 			array_key_exists('mimeType',$media) && $init['mimeType'] = $media['mimeType'];
 		}
 		$mediaUpload = new MediaUpload($init);
+		$mediaUpload->setSourceValidateErrorMessage($this->validateErrorMessage);
 		$this->media = $mediaUpload;
 		$this->mediaIsMerge = $isMergeValidatedData;
 		
@@ -271,6 +273,21 @@ Class Base
 	}
 	
 	/**
+	 * 设置验证错误提示信息
+	 * 
+	 * 数组键名：
+	 * 'maxSizeError' 媒体上传最大容量
+	 * 'minSizeError' 媒体上传最小容量
+	 * 'mimeTypeError' 媒体上传mime类型
+	 * 'existsError' 数据存在
+	 * @param array $validateErrorMessage
+	 */
+	public function setValidateErrorMessage(Array $validateErrorMessage)
+	{
+		$this->validateErrorMessage = $validateErrorMessage;
+	}
+	
+	/**
 	 * 执行表单提交主程序
 	 * @param int $requestType
 	 * @throws \Exception
@@ -297,6 +314,8 @@ Class Base
 		$formSubmit->setAddField($this->addField);
 		//设置媒体上传后的地址是否合并入validatedData
 		$formSubmit->setMediaUpload($this->media,$this->mediaIsMerge);
+		//设置验证错误提示信息
+		$formSubmit->setSourceValidateErrorMessage($this->validateErrorMessage);
 	
 		$insertReturn = $formSubmit->formSubmit($requestType,$this->requestData,$this->table,$this->where,$this->existsFields,$this->existsWhere,$this->validateClass);
 		return $insertReturn;

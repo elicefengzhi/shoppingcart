@@ -11,6 +11,7 @@ class MediaUpload
 	private $minSize;
 	private $mimeType;
 	private $validateErrorMessage = array();
+	private $sourceValidateErrorMessage;
 	private $realFileArray = array();
 
 	function __construct($init)
@@ -26,6 +27,19 @@ class MediaUpload
 		}
 	}
 	
+	/**
+	 * 设置原始验证错误提示信息
+	 * @param array $sourceValidateErrorMessage
+	 */
+	public function setSourceValidateErrorMessage($sourceValidateErrorMessage)
+	{
+		$this->sourceValidateErrorMessage = $sourceValidateErrorMessage;
+	}
+	
+	/**
+	 * 获得错误信息
+	 * @return multitype:
+	 */
 	public function getValidateErrorMessage()
 	{
 		return $this->validateErrorMessage;	
@@ -79,7 +93,7 @@ class MediaUpload
 		$minSize = new \Zend\Validator\File\Size(array('min' => $this->minSize));
 		$maxSize = new \Zend\Validator\File\Size(array('max' => $this->maxSize));
 		$mimeType = new \Zend\Validator\File\MimeType($this->mimeType);
-		$sourceErrorMessage = include __DIR__.'/../ErrorMessage/ErrorMessage.php';
+		$this->sourceValidateErrorMessage === false ? $sourceErrorMessage = include __DIR__.'/../ErrorMessage/ErrorMessage.php' : $sourceErrorMessage = $this->sourceValidateErrorMessage;
 
 		if($uploadFile->isValid($file) === false) {
 			return null;
@@ -144,7 +158,7 @@ class MediaUpload
 					throw new \FormSubmit\Exception\FormSubmitException($file['name'].' receive is warn');
 				}
 			}
-			catch (\Exception $e){
+			catch (\FormSubmit\Exception\FormSubmitException $e){
 				throw new \FormSubmit\Exception\FormSubmitException($e->getMessage());
 			}
 		}
@@ -200,7 +214,6 @@ class MediaUpload
 	{
 		if(trim((string)$this->uploadPath) == '' || !is_array($this->mimeType) || count($this->mimeType) <= 0 || !is_array($file) || count($file) <= 0) return false;
 		$this->peelFileArray($file);
-		$originalKey = key($file);
 		$file = $this->realFileArray;
 		$completeFiles = array();
 		$http = new Http();
@@ -238,7 +251,7 @@ class MediaUpload
 		}
 
 		//if($uploadReturn === false) throw new \FormSubmit\Exception\FormSubmitException($this->uploadErrorMessage);
-		is_array($completeFiles) && count($completeFiles) <= 0 && $completeFiles = false;
+		//is_array($completeFiles) && count($completeFiles) <= 0 && $completeFiles = false;
 		if(is_array($completeFiles) && count($completeFiles) <= 0) {
 			$completeFiles = false;
 		}

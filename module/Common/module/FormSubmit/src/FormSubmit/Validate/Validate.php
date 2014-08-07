@@ -2,7 +2,6 @@
 
 namespace FormSubmit\Validate;
 
-use Zend\Db\Sql\Ddl\Column\Varchar;
 class Validate
 {
 	private $requestType;

@@ -1,0 +1,20 @@
+<?php if ($this->pageCount): ?>
+<div style="margin-top:10px;" id="paging-div">
+  <?php if (isset($this->previous)): ?>
+    <a lang="firstPage" href="<?php echo $this->url($this->route, array('pageNum' => $this->first)); ?>">
+  <?php endif; ?>
+  <?php foreach ($this->pagesInRange as $page): ?>
+    <?php if ($page != $this->current): ?>
+        <a href="<?php echo $this->url($this->route, array('pageNum' => $page)); ?>">
+          <?php echo $page; ?>
+        </a>
+    <?php else: ?>
+      <?php echo $page; ?>
+    <?php endif; ?>
+  <?php endforeach; ?>
+  <?php if (isset($this->next)): ?>
+	<a lang="lastpage" href="<?php echo $this->url($this->route, array('pageNum' => $this->last)); ?>"></a>
+  <?php endif; ?>
+  <span lang="pageCount"></span>&nbsp;<?php echo $this->pageCount; ?>
+</div>
+<?php endif; ?>

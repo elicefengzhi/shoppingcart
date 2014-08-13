@@ -1,0 +1,135 @@
+<p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin/index'); ?>"></a>--<span lang="product"></span></p>
+<div id="page_contents_main">
+	<?php if (count($this->paginator)): ?>
+	<table cellspacing="0" id="table_for_opration">
+	<tr>
+		<td valign="middle"><input type="checkbox" id="cba" /></td>
+		<td lang="productName" valign="middle"></td>
+		<td lang="productType" valign="middle"></td>
+		<td lang="ad" valign="middle"></td>
+		<td lang="forumInsert" valign="middle"></td>
+		<td lang="productOriPrice" valign="middle"></td>
+		<td lang="productPrice" valign="middle"></td>
+		<td lang="productStock" valign="middle"></td>
+		<td lang="point" valign="middle"></td>
+		<td lang="productIsAdd" valign="middle"></td>
+		<td lang="createTime" valign="middle"></td>
+		<td lang="updateTime" valign="middle"></td>
+		<td valign="middle"></td>
+	</tr>
+	<?php foreach($this->paginator as $data): ?>
+	<tr>
+	<td valign="middle"><input class="table-checkbox" type="checkbox" value="<?php echo $viewHelper->string('product_id',$data); ?>"/></td>
+	<td valign="middle"><?php echo $viewHelper->string('name',$data); ?></td>
+	<?php $viewHelper->setSourceData($viewHelper->getProductTypeById($viewHelper->string('product_id',$data)),'productType'); ?>
+	<td valign="middle">
+		<?php if($viewHelper->isLoop('productType')) : ?>
+		<?php foreach($viewHelper->getSourceData('productType') as $type) : ?>
+		<span style="margin:0 5px 0 5px;"><?php echo $viewHelper->string('name',$type); ?></span>
+		<?php endforeach; ?>
+		<?php endif; ?>
+	</td>
+	<?php $viewHelper->setSourceData($viewHelper->getAdByProductId($viewHelper->string('product_id',$data)),'productAd'); ?>
+	<td valign="middle">
+		<?php if($viewHelper->isLoop('productAd')) : ?>
+		<?php foreach($viewHelper->getSourceData('productAd') as $ad) : ?>
+		<span style="margin:0 5px 0 5px;"><?php echo $viewHelper->string('ad_name',$ad); ?></span>
+		<?php endforeach; ?>
+		<?php endif; ?>
+	</td>
+	<?php $viewHelper->setSourceData($viewHelper->getForumByProductId($viewHelper->string('product_id',$data)),'productForum'); ?>
+	<td valign="middle">
+		<?php if($viewHelper->isLoop('productForum')) : ?>
+		<?php foreach($viewHelper->getSourceData('productForum') as $forum) : ?>
+		<span style="margin:0 5px 0 5px;"><?php echo $viewHelper->string('forum_name',$forum); ?></span>
+		<?php endforeach; ?>
+		<?php endif; ?>
+	</td>
+	<td valign="middle"><?php echo $viewHelper->string('original_price',$data); ?></td>
+	<td valign="middle"><?php echo $viewHelper->string('price',$data); ?></td>
+	<td valign="middle"><?php echo $viewHelper->string('stock',$data); ?></td>
+	<td valign="middle"><?php echo $viewHelper->string('point',$data); ?></td>
+	<td valign="middle"><?php $viewHelper->string('is_add',$data) == 1 ? print '有効' : print '無効'; ?></td>
+	<td valign="middle"><?php echo $viewHelper->dataFormatter('creat_time','Y-m-d H:i:s',$data); ?></td>
+	<td valign="middle"><?php echo $viewHelper->dataFormatter('update_time','Y-m-d H:i:s',$data); ?></td>
+	<td valign="middle">
+		<a lang="image" href="<?php echo $this->url('admin/product-image/index',array('pId' => $viewHelper->string('product_id',$data))); ?>"></a>&nbsp;
+		<a lang="edit" href="<?php echo $this->url('admin/product/edit',array('pId' => $viewHelper->string('product_id',$data))); ?>"></a>&nbsp;
+		<a lang="delete" class="product-delete" data-pId="<?php echo $viewHelper->string('product_id',$data); ?>" href="javascript:;"></a>
+	</td>
+	</tr>
+	<?php endforeach; ?>
+	</table>
+	<form style="float:left;" id="product-delete-form" action="<?php echo $this->url('admin/product/delete'); ?>" method="post">
+		<input style="margin-top:10px;" id="product-delete" type="submit" />
+	</form>
+	<form style="float:left;" id="product-forum-form" action="<?php echo $this->url('admin/product/forum'); ?>" method="post">
+		<?php if($viewHelper->isLoop('Forum')) : ?>
+		<?php foreach($viewHelper->getSourceData('Forum') as $forum) : ?>
+		<select data-formId="<?php echo $viewHelper->string('forum_id',$forum); ?>" class="product-forum-select" style="margin-top:10px;">
+			<option value="-1"><?php echo $viewHelper->string('forum_name',$forum); ?></option>
+			<option lang="add" value="1"></option>
+			<option lang="delete" value="0"></option>
+		</select>
+		<?php endforeach; ?>
+		<?php endif; ?>
+	</form>
+	<div style="clear:both;" ></div>
+	<?php endif; ?>
+	<?php echo $this->paginationControl($this->paginator,'Elastic','admin/common/pagination',array('route' => 'admin/product/index')); ?>
+</div>
+
+<script type="text/javascript" language="JavaScript">
+function ChangeStringByLang()
+{
+	$('#product-delete').val(eval('message.'+lang+'.delete'));
+	deleteKaku = eval('message.'+lang+'.deleteKaku');
+	forumSubmit = eval('message.'+lang+'.forumSubmit');
+}
+$(document).ready(function (){
+	$(".rick #page_contents_main #table_for_opration tr:gt(0) td").css({'color':'#666'});
+	check_box_bind($(":checkbox[id=\"cba\"]"),$(":checkbox[id!=\"cba\"]"));
+	$('.product-delete').on('click',function(){
+		var _this = $(this);
+		if(confirm(deleteKaku)){
+			var pId = $(this).attr('data-pId');
+			$.ajax({ url: '<?php echo $this->url('admin/product/delete'); ?>'+pId, success: function(data){
+		        if(data == 'true') {
+		        	_this.parent().parent().remove();
+			    }
+		      }
+			});
+		}
+	});
+	$('#product-delete').on('click',function(){
+		if(confirm(deleteKaku)){
+			$('.table-checkbox').each(function(){
+				if(this.checked == true) {
+					$('#product-delete-form').append('<input name="delete[]" type="hidden" value="'+$(this).val()+'" />');
+				}
+			});	
+			$('#product-delete-form').submit();
+		}
+	});
+	$('.product-forum-select').on('change',function(){
+		var selectValue = $(this).val();
+		var forumId = $(this).attr('data-formId');
+		if(selectValue != '-1') {
+			if(confirm(forumSubmit)){
+				$('.table-checkbox').each(function(){
+					if(this.checked == true) {
+						$('#product-forum-form').append('<input name="product[]" type="hidden" value="'+$(this).val()+'" />');
+					}
+				});
+				$('#product-forum-form').append('<input name="forumSelect" type="hidden" value="'+selectValue+'" />');
+				$('#product-forum-form').append('<input name="pageNum" type="hidden" value="'+<?php echo $pageNum; ?>+'" />');
+				$('#product-forum-form').append('<input name="formId" type="hidden" value="'+forumId+'" />');
+				$('#product-forum-form').submit();	
+			}
+			else {
+				$(this).val('-1');
+			}	
+		}	
+	});
+});
+</script>

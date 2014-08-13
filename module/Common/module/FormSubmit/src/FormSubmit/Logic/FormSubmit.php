@@ -225,7 +225,6 @@ Class FormSubmit
 		
 		//数据是否存在
 		$exists = false;
-		$this->isExists = false;
 		if($existsParams !== false) {
 			if(!is_array($existsParams) || count($existsParams) <= 0) {
 				throw new \FormSubmit\Exception\FormSubmitException('exists params is not array or array is empty');
@@ -245,7 +244,7 @@ Class FormSubmit
 			    $this->tableName === false ? $tableName = $this->dbModel->getTableName() : $tableName = $this->tableName;
 			    $existsValidate = new Validate();
 			    $existsValidate->setRequestType($requestType);
-			    $existsValidate->setAdapter($this->serviceLocator->get('adapter'));
+			    $existsValidate->setAdapter($this->serviceLocator->get('FormSubmit/adapter'));
 			    $exists = $existsValidate->existsValidate($tableName,$where,$existsField,$existsWhere);
 			}
 			else {
@@ -263,6 +262,7 @@ Class FormSubmit
 			//触发数据存在验证后事件
 			$this->events->trigger('FormSubmit/ExistsAfter',$this,array());
 		}
+		$this->isExists = $exists;
 
 		//数据库操作
 		if($exists === false) {
@@ -279,7 +279,7 @@ Class FormSubmit
 				$function = $this->dbInsertFunction;
 				if($this->tableName !== false) {
 				    //如果是程序自动插入，则调用函数执行插入
-					$sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('adapter'),$this->tableName);
+					$sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('FormSubmit/adapter'),$this->tableName);
 					$dbReturn = $sql->insert($validatedData);
 					if($dbReturn !== false) {
 						$this->lastInsertId = $dbReturn;
@@ -299,7 +299,7 @@ Class FormSubmit
 				$function = $this->dbUpdateFunction;
 				if($this->tableName !== false) {
 				    //如果是程序自动更新，则调用函数执行更新
-				    $sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('adapter'),$this->tableName);
+				    $sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('FormSubmit/adapter'),$this->tableName);
 				    $dbReturn = $sql->update($validatedData,$where);
 				}
 				else {
@@ -408,9 +408,9 @@ Class FormSubmit
 	
 	/**
 	 * 设置原始验证错误提示信息
-	 * @param array $sourceValidateErrorMessage
+	 * @param array|boolean $sourceValidateErrorMessage
 	 */
-	public function setSourceValidateErrorMessage(Array $sourceValidateErrorMessage)
+	public function setSourceValidateErrorMessage($sourceValidateErrorMessage)
 	{
 		$this->sourceValidateErrorMessage = $sourceValidateErrorMessage;
 	}

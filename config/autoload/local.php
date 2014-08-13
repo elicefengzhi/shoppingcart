@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 $dbParams = array(
 	'database'  => 'shoppingcart',
 	'username'  => 'root',
@@ -24,6 +25,13 @@ return array(
 		'hostname'       => $dbParams['hostname'],
 		'driver_options' => $dbParams['driver_options'],
     ),
+
+// 	'service_manager' => array(
+// 		'factories' => array(
+// 			'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
+// 		),
+// 	),
+		
 	'service_manager' => array(
 		'factories' => array(
 			'Zend\Db\Adapter\Adapter' => function ($sm) use ($dbParams) {

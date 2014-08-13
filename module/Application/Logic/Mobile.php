@@ -26,13 +26,24 @@ class Mobile
 					//获得当前请求路由参数
 					$routeMatch = $event->getRouteMatch()->getParams();
 					//获得当前请求模块名
-					$controllerName = $routeMatch['__CONTROLLER__'];
+					$controllerName = $routeMatch['module'];
 					//获得当前请求模块原来模板地址真实路径
-					$nowModuleTemplatePath = realpath($templatePath[$controllerName]);
+					$nowModuleTemplatePath = realpath($templatePath[$controllerName].'../');
 				
 					$templatePathResolver = $serviceManager->get('Zend\View\Resolver\TemplatePathStack');
 					//设置移动端模板路径
 					$templatePathResolver->setPaths(array($nowModuleTemplatePath . '/mobile'));
+					
+					
+					$templateMap = $allConfig['view_manager']['template_map'];
+					$nowModuleTemplateMap = realpath($templatePath[$controllerName]);
+					foreach($templateMap as $key => $map) {
+						if(strpos($map,$nowModuleTemplateMap) === 0) {
+							$templateMap[$key] = str_replace($nowModuleTemplateMap,$nowModuleTemplatePath . '/mobile',$map);
+						}
+					}
+					$templateMapResolver = $serviceManager->get('Zend\View\Resolver\TemplateMapResolver');
+					$templateMapResolver->setMap($templateMap);
 				}	
 			}
 		}, 100);

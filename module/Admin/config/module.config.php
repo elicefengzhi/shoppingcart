@@ -19,6 +19,7 @@ return array(
                 'options' => array(
                     'route'    => '/admin[/]',
                     'defaults' => array(
+                    	'module'     => 'Admin',
                         'controller' => 'Admin\Controller\Index',
                         'action'     => 'index',
                     ),
@@ -30,6 +31,7 @@ return array(
                 		'options' => array(
                 			'route'    => '[index][/]',
                 			'defaults' => array(
+                				'module'     => 'Admin',
                 				'controller' => 'Admin\Controller\Index',
                 				'action'     => 'index',
                 			),
@@ -41,6 +43,7 @@ return array(
                 				'options' => array(
                 					'route'    => 'login[/]',
                 					'defaults' => array(
+                						'module'     => 'Admin',
                 						'controller' => 'Admin\Controller\Index',
                 						'action'     => 'login',
                 					),
@@ -51,6 +54,7 @@ return array(
                 				'options' => array(
                 					'route'    => 'logout[/]',
                 					'defaults' => array(
+                						'module'     => 'Admin',
                 						'controller' => 'Admin\Controller\Index',
                 						'action'     => 'logout',
                 					),
@@ -63,6 +67,7 @@ return array(
                 		'options' => array(
                 			'route'    => 'news[/]',
                 			'defaults' => array(
+                				'module'     => 'Admin',
                 				'controller' => 'Admin\Controller\News',
                 				'action'     => 'index',
                 			),
@@ -72,11 +77,12 @@ return array(
                 			'index' => array(
                 				'type'    => 'Segment',
                 				'options' => array(
-                					'route'    => '[:pageNum][/]',
+                					'route'    => '[:pageNum[/]]',
                 					'constraints' => array(
-                						'pageNum' => '\d*'
+                						'pageNum' => '\d+'
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'index',
                 					),
                 				),
@@ -86,6 +92,7 @@ return array(
                 				'options' => array(
                 					'route'    => 'add[/]',
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'add',
                 					),
                 				),
@@ -98,6 +105,7 @@ return array(
                 						'nId' => '\d*'
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'edit',
                 					),
                 				),
@@ -110,6 +118,7 @@ return array(
                 						'nId' => '\d*'
                 				    ),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'show',
                 					),
                 				),
@@ -119,6 +128,7 @@ return array(
                 				'options' => array(
                 					'route'    => 'delete[/]',
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'delete',
                 					),
                 				),
@@ -130,6 +140,7 @@ return array(
                 		'options' => array(
                 			'route'    => 'order[/]',
                 			'defaults' => array(
+                				'module'        => 'Admin',
                 				'controller'    => 'Admin\Controller\Order',
                 				'action'        => 'index',
                 			),
@@ -144,6 +155,7 @@ return array(
                 						'controller' => '\d+',
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'index',
                 					),
                 				),
@@ -156,6 +168,7 @@ return array(
                 						'controller' => '\d+',
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'statusDelete',
                 					),
                 				),
@@ -167,6 +180,7 @@ return array(
                 		'options' => array(
                 			'route'    => 'page[/]',
                 			'defaults' => array(
+                				'module'        => 'Admin',
                 				'controller'    => 'Admin\Controller\Page',
                 				'action'        => 'index',
                 			),
@@ -176,11 +190,12 @@ return array(
                 			'index' => array(
                 				'type'    => 'Segment',
                 				'options' => array(
-                					'route'    => '[index][/:pageNum][/]',
+                					'route'    => '[:pageNum][/]',
                 					'constraints' => array(
                 						'pageNum' => '\d+'
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'index',
                 					),
                 				),
@@ -190,6 +205,7 @@ return array(
                 				'options' => array(
                 					'route'    => 'add[/]',
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'add',
                 					),
                 				),
@@ -202,6 +218,7 @@ return array(
                 						'pId' => '\d*'
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'edit',
                 					),
                 				),
@@ -214,6 +231,7 @@ return array(
                 						'pId' => '\d*'
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'show',
                 					),
                 				),
@@ -223,6 +241,7 @@ return array(
                 				'options' => array(
                 					'route'    => 'delete[/]',
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'delete',
                 					),
                 				),
@@ -234,6 +253,7 @@ return array(
                 		'options' => array(
                 			'route'    => 'product[/]',
                 			'defaults' => array(
+                				'module' => 'Admin',
                 				'controller'    => 'Admin\Controller\Product',
                 				'action'        => 'index',
                 			),
@@ -243,11 +263,12 @@ return array(
                 			'index' => array(
                 				'type'    => 'Segment',
                 				'options' => array(
-                					'route'    => '[index][/:pageNum][/]',
+                					'route'    => '[:pageNum][/]',
                 					'constraints' => array(
                 						'pageNum' => '\d+'
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'index',
                 					),
                 				),
@@ -257,6 +278,7 @@ return array(
                 				'options' => array(
                 					'route'    => 'add[/]',
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'add',
                 					),
                 				),
@@ -269,6 +291,7 @@ return array(
                 						'pId' => '\d*'
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'edit',
                 					),
                 				),
@@ -281,6 +304,7 @@ return array(
                 						'pId' => '\d*'
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'delete',
                 					),
                 				),
@@ -290,6 +314,7 @@ return array(
                 				'options' => array(
                 					'route'    => 'forum[/]',
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'forum',
                 					),
                 				),
@@ -301,6 +326,7 @@ return array(
                 		'options' => array(
                 			'route'    => 'productImage[/]',
                 			'defaults' => array(
+                				'module' => 'Admin',
                 				'controller'    => 'Admin\Controller\ProductImage',
                 				'action'        => 'index',
                 			),
@@ -315,6 +341,7 @@ return array(
                 						'pId' => '\d+',
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'index',
                 					),
                 				),
@@ -327,6 +354,7 @@ return array(
 	                					'imageId' => '\d+',
 	                				),
 	                				'defaults' => array(
+	                					'module' => 'Admin',
                 						'action' => 'delete',
                 					),
                 				),
@@ -338,6 +366,7 @@ return array(
                 		'options' => array(
                 			'route'    => 'productType[/]',
                 			'defaults' => array(
+                				'module' => 'Admin',
                 				'controller'    => 'Admin\Controller\ProductType',
                 				'action'        => 'index',
                 			),
@@ -347,11 +376,12 @@ return array(
 	                		'index' => array(
 	                			'type'    => 'Segment',
 	                			'options' => array(
-	                				'route'    => '[index][/:pageNum][/]',
+	                				'route'    => '[:pageNum][/]',
 	                				'constraints' => array(
 	                					'pageNum' => '\d+'
 	                				),
 	                				'defaults' => array(
+	                					'module' => 'Admin',
 	                					'action' => 'index',
 	                				),
 	                			),
@@ -361,6 +391,7 @@ return array(
 	                			'options' => array(
 	                				'route'    => 'add[/]',
 	                				'defaults' => array(
+	                					'module' => 'Admin',
 	                					'action' => 'add',
 	                				),
 	                			),
@@ -373,6 +404,7 @@ return array(
 	                					'typeId' => '\d+'
 	                				),
 	                				'defaults' => array(
+	                					'module' => 'Admin',
 	                					'action' => 'edit',
 	                				),
 	                			),
@@ -385,6 +417,7 @@ return array(
                 						'typeId' => '\d+'
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action' => 'delete',
                 					),
                 				),
@@ -396,6 +429,7 @@ return array(
                 		'options' => array(
                 			'route'    => 'query[/]',
                 			'defaults' => array(
+                				'module' => 'Admin',
                 				'controller'    => 'Admin\Controller\Query',
                 				'action'        => 'index',
                 			),
@@ -410,6 +444,7 @@ return array(
                 						'qId' => '\d+'
                 					),
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action'        => 'show',
                 					),
                 				),
@@ -419,6 +454,7 @@ return array(
                 				'options' => array(
                 					'route'    => 'delete[/]',
                 					'defaults' => array(
+                						'module' => 'Admin',
                 						'action'  => 'delete',
                 					),
                 				),
@@ -434,16 +470,16 @@ return array(
     	'not_found_template'       => 'error/admin/404',
     	'exception_template'       => 'error/admin/index',
     	'template_map' => array(
-    		'admin/layout'         		=> __DIR__ . '/../view/pc/layout/main.phtml',
-    		'admin/error/layout'		=> __DIR__ . '/../view/pc/layout/error.phtml',
-    		'admin/login/layout'		=> __DIR__ . '/../view/pc/layout/login.phtml',
-    		'error/admin/404'      		=> __DIR__ . '/../view/pc/error/404.phtml',
-    		'error/admin/index'    		=> __DIR__ . '/../view/pc/error/500.phtml',
-    		'admin/common/paging'  		=> __DIR__ . '/../view/pc/common/paging.php',
-    		'admin/common/errorMessage' => __DIR__ . '/../view/pc/common/errorMessage.php',
+    		'admin/layout'         		=> BASEPATH . 'theme/default/admin/pc/layout/main.phtml',
+    		'admin/error/layout'		=> BASEPATH . 'theme/default/admin/pc/layout/error.phtml',
+    		'admin/login/layout'		=> BASEPATH . 'theme/default/admin/pc/layout/login.phtml',
+    		'error/admin/404'      		=> BASEPATH . 'theme/default/admin/pc/error/404.phtml',
+    		'error/admin/index'    		=> BASEPATH . 'theme/default/admin/pc/error/500.phtml',
+    		'admin/common/pagination'  	=> BASEPATH . 'theme/default/admin/pc/common/pagination.phtml',
+    		'admin/common/errorMessage' => BASEPATH . 'theme/default/admin/pc/common/errorMessage.php',
     	),
         'template_path_stack' => array(
-            'Admin' => __DIR__ . '/../view/pc/',
+            'Admin' => BASEPATH . 'theme/default/admin/pc/',
         ),
     ),
 	'viewHelper/dispatch' => 'Admin',

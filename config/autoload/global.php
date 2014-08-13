@@ -33,7 +33,7 @@ return array(
 		'translation_file_patterns' => array(
 			array(
 				'type'     => 'gettext',
-				'base_dir' => __DIR__ . '/../../Application/language',
+				'base_dir' => __DIR__ . '/../../module/Application/language',
 				'pattern'  => '%s.mo',
 			),
 		),

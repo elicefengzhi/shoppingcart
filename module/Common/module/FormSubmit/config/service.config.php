@@ -4,7 +4,7 @@
 return array(
     'factories' => array(
         'FormSubmit' => 'FormSubmit\Service\FormSubmitFactory',
-    	'adapter' =>  function($sm) {
+    	'FormSubmit/adapter' =>  function($sm) {
     		$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     		return $dbAdapter;
     	},

@@ -1,0 +1,40 @@
+<?php echo $this->doctype(); ?>
+<html>
+<head>
+<?php echo $this->headTitle(); ?>
+<?php echo $this->headMeta()->setCharset('UTF-8')->setName('keywords','')->setName('description','')->setName('author','elicefengzhi'); ?>
+<?php echo $this->headLink()->prependStylesheet($this->basePath().'/css/c1.css'); ?>
+<script type="text/javascript" src="<?php echo $this->basePath('js/jsq/jquery-1.10.2.min.js'); ?>" language="JavaScript"></script>
+<script type="text/javascript" src="/js/pt/png_ie6_fix.js" language="JavaScript"></script>
+<script type="text/javascript" src="/js/glb.js" language="JavaScript"></script>
+<script type="text/javascript" src="/js/lang/message.js" language="JavaScript"></script>
+<script type="text/javascript" src="/js/lang/lang.js" language="JavaScript"></script>
+</head><body><div class="rick"><div id="center">
+<!-------------------------------------------------------------------tag_contents_start-->
+
+<!--header_start-->
+<div id="header">
+<div id="log"><a href="/admin"><img /></a></div>
+<div id="opration_box_header">
+<div class="line0">
+<span lang="loginTitle" class="zp10" id="top_back"></span>
+<span lang="logoutTitle" class="zp10" id="logout"></span>
+<span class="zp10"><select id="ad_lang">
+<option value="0" selected="selected">日本語版</option>
+<option value="1">中文版</option>
+</select></span>
+</div>
+</div><br clear="all" />
+</div>
+
+<!--main_start-->
+<?php echo $this->content; ?>
+
+<!--foot_start-->
+<div id="foot_box">
+<div id="foot">
+copyright&nbsp;(c)&nbsp;2008&nbsp;-&nbsp;2014&nbsp;<a href="/admin" target="index">http://cn.81hp.net</a>&nbsp;All&nbsp;rights&nbsp;reserved&nbsp;/
+created&nbsp;by&nbsp;<span lang="footerTitle" id="foot_company_name"></span>
+</div>
+</div>
+</div></div></body></html>

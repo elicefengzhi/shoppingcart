@@ -9,17 +9,10 @@ class NewsController extends BaseController
     public function indexAction()
     {
         $pageNum = $this->params('pageNum',1);
-        $newsList = false;
-        $count = $this->serviceLocator->get('DbSql')->News()->getNewsAllCount();
-        $paging = false;
-        if($count > 0) {
-        	$paging = $this->serviceLocator->get('Paging');
-        	$paging->paginate($count,10,$pageNum,2);
-        	$newsList = $this->serviceLocator->get('DbSql')->News()->getNewsAll($paging->getOffset(),$paging->getRowsPerPage());
-        }
+        $paginator = $this->serviceLocator->get('DbSql')->News()->getPaginator($pageNum,10);
         $viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
-        $viewHelper->setSourceData($newsList);
-        return array('viewHelper' => $viewHelper,'paging' => $paging,'pageNum' => $pageNum);
+
+        return array('viewHelper' => $viewHelper,'paginator' => $paginator,'pageNum' => $pageNum);
     }
     
     public function addAction()
@@ -28,7 +21,7 @@ class NewsController extends BaseController
     	$page = $this->serviceLocator->get('FormSubmit')->Insert();
     	if($page !== false) {
     		$time = time();
-    		$return = $page->insert()->table('news')->addField(array('create_time' => $time,'update_time' => $time))->existsFields(array('news_title'))->customFilter(array('editorValue' => null,'news_body' => 0))->validate($this->serviceLocator->get('Validate')->AdminNews())->submit();
+    		$return = $page->insert()->table('news')->addField(array('create_time' => $time,'update_time' => $time))->existsFields(array('news_title'))->existsWhere(array('delete_flg' => 1))->customFilter(array('editorValue' => null,'news_body' => 0))->validate($this->serviceLocator->get('Validate')->AdminNews())->submit();
     		$return === false && $page->isVal() === false && $errorMessage = $page->getValidateErrorMessage();
     		$return === false && $page->isExists() === true && $errorMessage[][] = 'タイトルは既に登録されております';
     		if($return !== false) return $this->redirect()->toRoute('admin/news');
@@ -48,7 +41,7 @@ class NewsController extends BaseController
     	 
     	$page = $this->serviceLocator->get('FormSubmit')->Update();
     	if($page !== false) {
-    		$return = $page->update()->table('news')->addField(array('update_time' => time()))->where(array('news_id' => $nId))->existsFields(array('news_title'))->customFilter(array('editorValue' => null,'news_body' => 0))->validate($this->serviceLocator->get('Validate')->AdminNews())->submit();
+    		$return = $page->update()->table('news')->addField(array('update_time' => time()))->where(array('news_id' => $nId))->existsFields(array('news_title'))->existsWhere(array('delete_flg' => 1))->customFilter(array('editorValue' => null,'news_body' => 0))->validate($this->serviceLocator->get('Validate')->AdminNews())->submit();
     		if($return !== false) {
     			return $this->redirect()->toRoute('admin/news');
     		}

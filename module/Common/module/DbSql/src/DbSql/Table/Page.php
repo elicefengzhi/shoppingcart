@@ -80,4 +80,12 @@ class Page extends BaseDb
     
     	return false;
     }
+    
+    public function getPaginator($currentPageNumber,$itemCountPerPage)
+    {
+    	$select = $this->tableGateway->getSql()->select();
+    	$select->order('update_time desc');
+    
+    	return $this->paginator($select,$currentPageNumber,$itemCountPerPage);
+    }
 }

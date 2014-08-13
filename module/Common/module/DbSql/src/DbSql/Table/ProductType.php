@@ -87,4 +87,13 @@ class ProductType extends BaseDb
     
     	return false;
     }
+    
+    public function getPaginator($currentPageNumber,$itemCountPerPage)
+    {
+    	$select = $this->tableGateway->getSql()->select();
+    	$select->join(array('pt' => 'product_type'),'product_type.parent_id = pt.ptype_id',array('parent_name' => 'name'),$select::JOIN_LEFT);
+    	$select->order('product_type.parent_id asc');
+    
+    	return $this->paginator($select,$currentPageNumber,$itemCountPerPage);
+    }
 }

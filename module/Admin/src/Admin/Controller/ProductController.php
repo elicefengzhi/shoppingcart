@@ -9,23 +9,13 @@ class ProductController extends BaseController
     public function indexAction()
     {
     	$pageNum = $this->params('pageNum',1);
-    	$count = $this->serviceLocator->get('DbSql')->Product()->getProductAllCount();
-    	$productList = false;
     	$forum = false;
-    	$paging = false;
-    	if($count > 0) {
-    		$paging = $this->serviceLocator->get('Paging');
-    		$paging->paginate($count,10,$pageNum,2);
-    		$offset = $paging->getOffset();
-    		$rowsperpage = $paging->getRowsPerPage();
-    		$productList = $this->serviceLocator->get('DbSql')->Product()->getProductAll($offset,$rowsperpage);
-    		$forum = $this->serviceLocator->get('DbSql')->Forum()->getForumAll();
-    	}
+    	$paginator = $this->serviceLocator->get('DbSql')->Product()->getPaginator($pageNum,10);
+    	$paginator->count() && $forum = $this->serviceLocator->get('DbSql')->Forum()->getForumAll();
 
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
-    	$viewHelper->setSourceData($productList);
     	$viewHelper->setSourceData($forum,'Forum');
-        return array('viewHelper' => $viewHelper,'paging' => $paging,'pageNum' => $pageNum);
+        return array('viewHelper' => $viewHelper,'paginator' => $paginator,'pageNum' => $pageNum);
     }
     
     public function addAction()
@@ -36,7 +26,7 @@ class ProductController extends BaseController
     		$logic = $this->serviceLocator->get('admin/product/logic');
     		$logic->setTimeData();
     		$logic->insertProductImageAndAd();
-    		$return = $user->insert()->table('product')->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->AdminProduct())
+    		$return = $user->insert()->table('product')->existsFields(array('name'))->existsWhere(array('delete_flg' => 1))->validate($this->serviceLocator->get('Validate')->AdminProduct())
     		->helper('ValidateAfter','ChildColumns','input','AdProduct','ad')
     		->helper('ValidateAfter','ChildColumns','input','TypeProduct','ptypeId')
     		->mediaUpload(false,false)->customFilter(array('editorValue' => null))->submit();
@@ -70,14 +60,17 @@ class ProductController extends BaseController
     		$logic = $this->serviceLocator->get('admin/product/logic');
     		$logic->insertProductImageAndAd($pId,'update');
     		$logic->setTimeData(true);
-    		$return = $product->update()->table('product')->where(array('product_id' => $pId))->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->AdminProduct())
+    		$return = $product->update()->table('product')->where(array('product_id' => $pId))->existsFields(array('name'))->existsWhere(array('delete_flg' => 1))->validate($this->serviceLocator->get('Validate')->AdminProduct())
     		->helper('ValidateAfter','ChildColumns','input','AdProduct','ad')
     		->helper('ValidateAfter','ChildColumns','input','TypeProduct','ptypeId')
     		->mediaUpload(false,false)->customFilter(array('editorValue' => null))->submit();
     		
     		if($return === false) {
-    			$product->isVal() === false && $errorMessage = $return->getValidateErrorMessage();
-    			$product->isExists() === true && $errorMessage = '商品名は既に登録されております';
+    			//$product->isVal() === false && $errorMessage = $return->getValidateErrorMessage();
+    			//$product->isExists() === true && $errorMessage = '商品名は既に登録されております';
+    			if($product->isVal() === false || $product->isExists() === false) {
+    				$errorMessage = $product->getValidateErrorMessage();
+    			}
     			$productList = $product->getSourceData();
     		}
     		else {

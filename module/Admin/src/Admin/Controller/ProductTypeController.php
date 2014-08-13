@@ -9,20 +9,10 @@ class ProductTypeController extends BaseController
     public function indexAction()
     {
     	$pageNum = $this->params('pageNum',1);
-    	$count = $this->serviceLocator->get('DbSql')->ProductType()->getAllCount();
-    	$typeList = false;
-    	$paging = false;
-    	if($count > 0) {
-    		$paging = $this->serviceLocator->get('Paging');
-    		$paging->paginate($count,10,$pageNum,2);
-    		$offset = $paging->getOffset();
-    		$rowsperpage = $paging->getRowsPerPage();
-    		$typeList = $this->serviceLocator->get('DbSql')->ProductType()->getTypeAll($offset,$rowsperpage);
-    	}
+        $paginator = $this->serviceLocator->get('DbSql')->ProductType()->getPaginator($pageNum,10);
     	
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
-    	$viewHelper->setSourceData($typeList);
-    	return array('viewHelper' => $viewHelper,'paging' => $paging);
+    	return array('viewHelper' => $viewHelper,'paginator' => $paginator);
     }
 
     public function addAction()

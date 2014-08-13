@@ -9,17 +9,10 @@ class QueryController extends BaseController
     public function indexAction()
     {
         $pageNum = $this->params('pageNum',1);
-        $pageList = false;
-        $count = $this->serviceLocator->get('DbSql')->Query()->getQueryAllCount();
-        $paging = false;
-        if($count > 0) {
-        	$paging = $this->serviceLocator->get('Paging');
-        	$paging->paginate($count,10,$pageNum,2);
-        	$pageList = $this->serviceLocator->get('DbSql')->Query()->getQueryAll(array('q_id','q_title','create_time'),$paging->getOffset(),$paging->getRowsPerPage());
-        }
+        $paginator = $this->serviceLocator->get('DbSql')->Query()->getPaginator($pageNum,10);
         $viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
-        $viewHelper->setSourceData($pageList);
-        return array('viewHelper' => $viewHelper,'paging' => $paging,'pageNum' => $pageNum);
+        
+        return array('viewHelper' => $viewHelper,'paginator' => $paginator,'pageNum' => $pageNum);
     }
     
     public function showAction()

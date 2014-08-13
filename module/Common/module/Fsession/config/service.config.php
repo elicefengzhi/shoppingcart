@@ -4,7 +4,7 @@
 return array(
     'factories' => array(
         'Fsession' => 'Fsession\Service\FsessionFactory',
-    	'adapter' =>  function($sm) {
+    	'Fsession/adapter' =>  function($sm) {
     		$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     		return $dbAdapter;
     	},

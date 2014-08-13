@@ -116,14 +116,14 @@ return array(
     		'not_found_template'       => 'error/404',
     		'exception_template'       => 'error/index',
     		'template_map' => array(
-    			'front/layout'        => __DIR__ . '/../view/pc/layout/main.phtml',
-    			'error/404'           => __DIR__ . '/../view/pc/error/404.phtml',
-    			'error/index'         => __DIR__ . '/../view/pc/error/500.phtml',
-    			'front/common/paging' => __DIR__ . '/../view/pc/common/paging.php',
+    			'front/layout'        => BASEPATH . 'theme/default/front/pc/layout/main.phtml',
+    			'error/404'           => BASEPATH . 'theme/default/front/pc/error/404.phtml',
+    			'error/index'         => BASEPATH . 'theme/default/front/pc/error/500.phtml',
+    			'front/common/paging' => BASEPATH . 'theme/default/front/pc/common/paging.php',
     		),
     	),
         'template_path_stack' => array(
-            'Front' => __DIR__ . '/../view/pc/',
+            'Front' => BASEPATH . 'theme/default/front/pc/',
         ),
     ),
 );

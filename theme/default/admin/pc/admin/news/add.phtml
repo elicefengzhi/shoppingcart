@@ -1,0 +1,23 @@
+<p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin/index'); ?>"></a>--<a lang="news" href="<?php echo $this->url('admin/news'); ?>"></a>--<span lang="newsAdd"></span></p>
+<?php echo $this->partial('admin/common/errorMessage',array('viewHelper' => $this->viewHelper,'loopName' => 'errorMessage')); ?>
+<form id="news-form" action="<?php echo $this->url; ?>" method="post">
+	<table class="news-table">
+		<tr>
+			<td lang="title"></td>
+			<td><input name="news_title" value="<?php echo $this->viewHelper->string('news_title'); ?>" /></td>
+		</tr>
+		<tr>
+			<td lang="body"></td>
+			<td>
+				<script id="editor" type="text/plain" style="width:820px;height:500px;">
+				<?php echo $this->viewHelper->string('news_body'); ?>
+     			</script>
+			</td>
+		</tr>
+	</table>
+	<input id="news-submit" type="button" />
+</form>
+<script type="text/javascript" charset="utf-8" src="/js/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/js/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="/js/admin/news_add.js"></script>

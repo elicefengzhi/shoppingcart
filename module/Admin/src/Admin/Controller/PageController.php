@@ -9,17 +9,9 @@ class PageController extends BaseController
     public function indexAction()
     {
         $pageNum = $this->params('pageNum',1);
-        $pageList = false;
-        $count = $this->serviceLocator->get('DbSql')->Page()->getPageAllCount();
-        $paging = false;
-        if($count > 0) {
-        	$paging = $this->serviceLocator->get('Paging');
-        	$paging->paginate($count,10,$pageNum,2);
-        	$pageList = $this->serviceLocator->get('DbSql')->Page()->getPageAll($paging->getOffset(),$paging->getRowsPerPage());
-        }
+        $paginator = $this->serviceLocator->get('DbSql')->Page()->getPaginator($pageNum,10);
         $viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
-        $viewHelper->setSourceData($pageList);
-        return array('viewHelper' => $viewHelper,'paging' => $paging,'pageNum' => $pageNum);
+        return array('viewHelper' => $viewHelper,'paginator' => $paginator,'pageNum' => $pageNum);
     }
     
     public function addAction()

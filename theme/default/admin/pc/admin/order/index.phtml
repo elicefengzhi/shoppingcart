@@ -1,0 +1,48 @@
+<p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin/index'); ?>"></a>--<span lang="order"></span></p>
+<div id="page_contents_main">
+	<table cellspacing="0" id="table_for_opration">
+	<tr>
+	<td valign="middle"><input type="checkbox" id="cba" /></td>
+	<td lang="orderId" valign="middle"></td>
+	<td lang="userName" valign="middle"></td>
+	<td lang="product" valign="middle"></td>
+	<td lang="ordertal" valign="middle"></td>
+	<td lang="point" valign="middle"></td>
+	<td lang="status" valign="middle"></td>
+	<td lang="createTime" valign="middle"></td>
+	<td lang="updateTime" valign="middle"></td>
+	<?php if (count($this->paginator)):  ?>
+	<?php foreach($this->paginator as $data):?>
+	<tr>
+	<td valign="middle"><input class="table-checkbox" type="checkbox" value="<?php echo $this->viewHelper->string('order_id',$data); ?>"/></td>
+	<td valign="middle"><span class="order-id"><?php echo $this->viewHelper->string('order_id',$data); ?></span></td>
+	<td valign="middle"><?php echo $this->viewHelper->string('user_name',$data); ?></td>
+	<?php $this->viewHelper->setSourceData($this->viewHelper->getProductTypeByOrderId($this->viewHelper->string('order_id',$data)),'product'); ?>
+	<td valign="middle">
+		<?php if($this->viewHelper->isLoop('product')) : ?>
+		<?php foreach($this->viewHelper->getSourceData('product') as $product) : ?>
+		<?php echo $this->viewHelper->string('name',$product); ?>
+		<?php echo $this->viewHelper->string('product_count',$product,false,array('before' => '(','after' => '件)<br/>')); ?>
+		<?php endforeach; ?>
+		<?php endif; ?>
+	</td>
+	<td valign="middle"><?php echo $this->viewHelper->string('total',$data); ?></td>
+	<td valign="middle"><?php echo $this->viewHelper->string('point',$data); ?></td>
+	<td valign="middle"><?php echo $this->viewHelper->orderStatus($this->viewHelper->string('status',$data)); ?></td>
+	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('creat_time','Y-m-d H:i:s',$data); ?></td>
+	<td valign="middle"><?php echo $this->viewHelper->dataFormatter('update_time','Y-m-d H:i:s',$data); ?></td>
+	</tr>
+	<?php endforeach; ?>
+	<?php endif; ?>
+	</table>
+	<form id="order-form" action="<?php echo $this->url('admin/order/statusDelete',array('pageNum' => $pageNum)); ?>" method="post">
+		<select id="order-select" name="statusDelete" style="margin-top:10px;">
+			<option lang="select" value="-1"></option>
+			<option lang="paid" value="1"></option>
+			<option lang="unpaid" value="2"></option>
+			<option lang="delete" value="3"></option>
+		</select>
+	</form>
+<?php echo $this->paginationControl($this->paginator,'Elastic','admin/common/pagination', array('route' => 'admin/order/index')); ?>
+</div>
+<script type="text/javascript" src="/js/admin/order_index.js"></script>

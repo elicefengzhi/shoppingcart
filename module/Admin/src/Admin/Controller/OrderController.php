@@ -9,20 +9,10 @@ class OrderController extends BaseController
     public function indexAction()
     {
     	$pageNum = $this->params('pageNum',1);
-    	$count = $this->serviceLocator->get('DbSql')->Order()->getOrderAllCount();
-    	$orderList = false;
-    	$paging = false;
-    	if($count > 0) {
-    		$paging = $this->serviceLocator->get('Paging');
-    		$paging->paginate($count,10,$pageNum,2);
-    		$offset = $paging->getOffset();
-    		$rowsperpage = $paging->getRowsPerPage();
-    		$orderList = $this->serviceLocator->get('DbSql')->Order()->getOrderAll($offset,$rowsperpage);
-    	}
+		$paginator = $this->serviceLocator->get('DbSql')->Order()->getPaginator($pageNum,10);
     	
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
-    	$viewHelper->setSourceData($orderList);
-    	return array('viewHelper' => $viewHelper,'paging' => $paging,'pageNum' => $pageNum);
+    	return array('viewHelper' => $viewHelper,'paginator' => $paginator,'pageNum' => $pageNum);
     }
     
     public function statusDeleteAction()

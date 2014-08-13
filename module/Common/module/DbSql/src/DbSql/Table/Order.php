@@ -54,4 +54,15 @@ class Order extends BaseDb
     	
     	return false;
     }
+    
+    public function getPaginator($currentPageNumber,$itemCountPerPage)
+    {
+    	$select = $this->tableGateway->getSql()->select();
+    	$select->columns(array('order_id','total','point','status','creat_time','update_time'));
+    	$select->join('user','user.user_id = order.user_id',array('user_id','user_name'),$select::JOIN_LEFT);
+    	$select->order('order.update_time desc');
+    	$select->where(array('delete_flg' => 0));
+    
+    	return $this->paginator($select,$currentPageNumber,$itemCountPerPage);
+    }
 }

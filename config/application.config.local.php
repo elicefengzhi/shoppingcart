@@ -3,8 +3,8 @@ return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
         'Application',
-    	'ZendDeveloperTools','BjyProfiler','ThaConfigalyzer',
-    	//'MobileDetectModule',
+    	'ZendDeveloperTools','BjyProfiler',
+    	'MobileDetectModule','AssetManager',
     	'Admin','Front',
     	'ProductTypeLinkage',
     	'DbSql','Log','ImageUpload','SendMail','ViewHelper','Validate','Paging','Fsession','FormSubmit','ZendCart','Image',
@@ -24,7 +24,6 @@ return array(
         	'./module/Common/module',
         	'./module/Common/commonPage',
             './vendor',
-        	'./vendor/module',
         ),
 
         // An array of paths from which to glob configuration files after

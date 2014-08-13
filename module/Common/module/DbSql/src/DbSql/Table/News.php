@@ -12,13 +12,7 @@ class News extends BaseDb
 	{
 		$data['create_time'] = time();
 		$data['update_time'] = $data['create_time'];
-		$return = $this->insert($data);
-		if($return == 1) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return $this->addData($data);
 	}
 	
 	public function edit($data,$where)
@@ -32,6 +26,15 @@ class News extends BaseDb
 		catch (\Exception $e) {
 			return false;
 		}
+	}
+	
+	public function getPaginator($currentPageNumber,$itemCountPerPage)
+	{
+		$select = $this->tableGateway->getSql()->select();
+		$select->where(array('delete_flg' => 0));
+		$select->order('update_time desc');
+		
+		return $this->paginator($select,$currentPageNumber,$itemCountPerPage);
 	}
 	
 	public function getNewsAllCount()

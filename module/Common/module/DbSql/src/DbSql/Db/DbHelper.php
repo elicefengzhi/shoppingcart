@@ -2,13 +2,15 @@
 
 namespace DbSql\Db;
 
+use Zend\Db\Sql\Select;
+
 trait DbHelper{
 	/**
 	 * 添加数据
 	 * @param array $data 添加数据
 	 * @return boolean
 	 */
-	protected function add($data)
+	function addData($data)
 	{
 		$return = $this->insert($data);
 		return $return > 0 ? true : false;
@@ -19,7 +21,7 @@ trait DbHelper{
 	 * @param array|string $where 删除条件
 	 * @return boolean
 	 */
-	protected function del($where)
+	function delData($where)
 	{
 		$return = $this->delete($where);
 		return $return > 0 ? true : false;
@@ -31,7 +33,7 @@ trait DbHelper{
 	 * @param array|string $where 更新条件
 	 * @return boolean
 	 */
-	protected function edit($data,$where)
+	function editData($data,$where)
 	{
 		try {
 			$return = $this->update($data,$where);
@@ -49,7 +51,7 @@ trait DbHelper{
 	 * @param array|string $where 查询条件<br/>
 	 * @return int
 	 */
-	protected function getCount($where = false)
+	function getCount($where = false)
 	{
 		$select = $this->tableGateway->getSql()->select();
 		$select->columns(array('count' => new \Zend\Db\Sql\Expression('COUNT(*)')));
@@ -73,7 +75,7 @@ trait DbHelper{
 	 * 默认：false
 	 * @return array|boolean
 	 */
-	protected function getTableByWhere($columns,$where,$limit = false,$isOne = false)
+	function getTableByWhere($columns,$where,$limit = false,$isOne = false)
 	{
 		$select = $this->tableGateway->getSql()->select();
 		$select->columns($columns);
@@ -89,5 +91,15 @@ trait DbHelper{
 		}
 		 
 		return false;
+	}
+	
+	function paginator(Select $select,$currentPageNumber,$itemCountPerPage)
+	{
+    	$iteratorAdapter = new \Zend\Paginator\Adapter\DbSelect($select,$this->adapter);
+    	$paginator = new \Zend\Paginator\Paginator($iteratorAdapter);
+    	$paginator->setCurrentPageNumber($currentPageNumber)
+    			  ->setItemCountPerPage($itemCountPerPage);
+    	
+    	return $paginator;
 	}
 }

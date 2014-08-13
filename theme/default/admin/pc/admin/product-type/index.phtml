@@ -1,0 +1,26 @@
+<p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin/index'); ?>"></a>--<span lang="productType"></span></p>
+<div id="page_contents_main">
+	<?php if (count($this->paginator)): ?>
+	<table cellspacing="0" id="table_for_opration">
+	<tr>
+	<td valign="middle"><input type="checkbox" id="cba" /></td>
+	<td lang="productType" valign="middle"></td>
+	<td lang="productTypeParent" valign="middle"></td>
+	<td valign="middle"></td>
+	</tr>
+	<?php foreach($this->paginator as $data): ?>
+	<tr>
+	<td valign="middle"><input class="table-checkbox" type="checkbox" value="<?php echo $this->viewHelper->string('ptype_id',$data); ?>"/></td>
+	<td valign="middle"><?php echo $this->viewHelper->string('name',$data); ?></td>
+	<td valign="middle"><?php echo $this->viewHelper->string('parent_name',$data,false,array('replaceValue' => '无')); ?></td>
+	<td valign="middle"><a lang="edit" href="<?php echo $this->url('admin/product-type/edit',array('typeId' => $this->viewHelper->string('ptype_id',$data))); ?>"></a></td>
+	</tr>
+	<?php endforeach; ?>
+	</table>
+	<form id="delete-form" action="<?php echo $this->url('admin/product-type/delete') ?>" method="post">
+		<input id="delete-button" style="margin-top:10px;" type="button" />
+	</form>
+	<?php endif; ?>
+	<?php echo $this->paginationControl($this->paginator,'Elastic','admin/common/pagination',array('route' => 'admin/product-type/index')); ?>
+</div>
+<script type="text/javascript" src="/js/admin/product_type_index.js"></script>

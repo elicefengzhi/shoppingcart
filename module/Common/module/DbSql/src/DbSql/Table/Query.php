@@ -55,4 +55,13 @@ class Query extends BaseDb
     
     	return false;
     }
+    
+    public function getPaginator($currentPageNumber,$itemCountPerPage)
+    {
+    	$select = $this->tableGateway->getSql()->select();
+    	$select->columns(array('q_id','q_title','create_time'));
+    	$select->order('create_time desc');
+    
+    	return $this->paginator($select,$currentPageNumber,$itemCountPerPage);
+    }
 }

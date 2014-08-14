@@ -13,7 +13,6 @@
 	    "nikolaposa/mobile-detect-module": "dev-master",
 	    "rwoverdijk/assetmanager": "dev-master",
 	    "zendframework/zend-developer-tools": "dev-master",
-	    "bjyoungblood/bjy-profiler": "dev-master",
-	    "thadafinser/tha-configalyzer": "dev-master"
+	    "bjyoungblood/bjy-profiler": "dev-master"
     }
 }

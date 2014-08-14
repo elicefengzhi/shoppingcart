@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "86b76c187af0ad94392fbbe10a06f9ba",
+    "hash": "7b68bed6cdd2e7937e87a6c2df8f47dd",
     "packages": [
         {
             "name": "bjyoungblood/bjy-profiler",
@@ -345,51 +345,6 @@
             "time": "2014-08-05 09:00:40"
         },
         {
-            "name": "thadafinser/tha-configalyzer",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ThaDafinser/ThaConfigalyzer.git",
-                "reference": "f0a58af8138deee366d935fea70767646c3069f9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ThaDafinser/ThaConfigalyzer/zipball/f0a58af8138deee366d935fea70767646c3069f9",
-                "reference": "f0a58af8138deee366d935fea70767646c3069f9",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "zendframework/zend-developer-tools": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "ThaConfigalyzer": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "WTFPL"
-            ],
-            "authors": [
-                {
-                    "name": "Martin Keckeis",
-                    "email": "martin.keckeis1@gmail.com"
-                }
-            ],
-            "description": "Zend Framework 2 Module that checks configuration for performance optimizations",
-            "keywords": [
-                "developer tool",
-                "module",
-                "performance",
-                "zf2"
-            ],
-            "time": "2014-01-20 08:29:47"
-        },
-        {
             "name": "zendframework/zend-developer-tools",
             "version": "dev-master",
             "source": {
@@ -626,8 +581,7 @@
         "nikolaposa/mobile-detect-module": 20,
         "rwoverdijk/assetmanager": 20,
         "zendframework/zend-developer-tools": 20,
-        "bjyoungblood/bjy-profiler": 20,
-        "thadafinser/tha-configalyzer": 20
+        "bjyoungblood/bjy-profiler": 20
     },
     "prefer-stable": false,
     "platform": {

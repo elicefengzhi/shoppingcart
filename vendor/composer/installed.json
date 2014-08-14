@@ -578,52 +578,5 @@
             "zdt",
             "zf2"
         ]
-    },
-    {
-        "name": "thadafinser/tha-configalyzer",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/ThaDafinser/ThaConfigalyzer.git",
-            "reference": "f0a58af8138deee366d935fea70767646c3069f9"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/ThaDafinser/ThaConfigalyzer/zipball/f0a58af8138deee366d935fea70767646c3069f9",
-            "reference": "f0a58af8138deee366d935fea70767646c3069f9",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "require-dev": {
-            "zendframework/zend-developer-tools": "dev-master"
-        },
-        "time": "2014-01-20 08:29:47",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "ThaConfigalyzer": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "WTFPL"
-        ],
-        "authors": [
-            {
-                "name": "Martin Keckeis",
-                "email": "martin.keckeis1@gmail.com"
-            }
-        ],
-        "description": "Zend Framework 2 Module that checks configuration for performance optimizations",
-        "keywords": [
-            "developer tool",
-            "module",
-            "performance",
-            "zf2"
-        ]
     }
 ]

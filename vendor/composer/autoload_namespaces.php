@@ -9,7 +9,6 @@ return array(
     'Zend\\' => array($vendorDir . '/zendframework/zendframework/library'),
     'ZendXml' => array($vendorDir . '/zendframework/zendxml/library'),
     'ZendDeveloperTools' => array($vendorDir . '/zendframework/zend-developer-tools/src'),
-    'ThaConfigalyzer' => array($vendorDir . '/thadafinser/tha-configalyzer/src'),
     'Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'MobileDetectModuleTest' => array($vendorDir . '/nikolaposa/mobile-detect-module/test'),
     'MobileDetectModule' => array($vendorDir . '/nikolaposa/mobile-detect-module/src'),

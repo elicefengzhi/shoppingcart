@@ -69,6 +69,231 @@ Class FormSubmit
 	}
 	
 	/**
+	 * 设置参数
+	 * @param string $requestType
+	 * @param array $requestData
+	 * @param array $initArray
+	 * @param string|object $table
+	 * @param object $validateClass
+	 * @param array $existsParams
+	 */
+	private function setParams($requestType,$requestData,$initArray,$table,$validateClass,$existsParams)
+	{
+		//设置request的类型(post,get)
+		$this->requestType = $requestType;
+		//设置原始request数据
+		$this->sourceData = $requestData;
+		//如果table参数是对象，对dbModel赋值，程序将使用此对象进行数据库操作，否则把此参数视作需要操作的表名
+		is_object($table) ? $this->dbModel = $table : $this->tableName = trim((string)$table);
+	
+		$this->validateClass = $validateClass;
+		$this->dbInsertFunction = $initArray['db']['dbInsertFunction'];
+		//如果existsParams为false，则不执行添加存在验证
+		$existsParams === false ? $this->insertExistsFunction = false : $this->insertExistsFunction = $initArray['db']['insertExistsFunction'];
+		$this->dbUpdateFunction = $initArray['db']['dbUpdateFunction'];
+		//如果existsParams为false，则不执行更新存在验证
+		$existsParams === false ? $this->updateExistsFunction = false : $this->updateExistsFunction = $initArray['db']['updateExistsFunction'];
+		$this->validateFunction = $initArray['validate']['validateFunction'];
+		$this->validateErrorMessageFunction = $initArray['validate']['errorMessageFunction'];
+	}
+	
+	/**
+	 * 主程序执行数据验证
+	 * @param boolean|object $validateClass
+	 * @param array $requestData
+	 * @throws \FormSubmit\Exception\FormSubmitException
+	 * @return boolean
+	 */
+	private function formSubmitValidate($validateClass,$requestData)
+	{
+		//触发验证前事件
+		$this->events->trigger('FormSubmit/ValidateBefore',$this,array());
+		if($validateClass !== false) {
+			//验证输入参数
+			$validateFunction = $this->validateFunction;
+			if(!method_exists($this->validateClass,$validateFunction)) {
+				throw new \FormSubmit\Exception\FormSubmitException('validate function is undefined');
+				return false;
+			}
+			$validation = $this->validateClass->$validateFunction($requestData);
+			$this->isVal = true;
+			if($validation === false) {
+				$this->isVal = false;
+				$validateErrorMessageFunction = $this->validateErrorMessageFunction;
+				if(!method_exists($this->validateClass,$validateErrorMessageFunction)) {
+					throw new \FormSubmit\Exception\FormSubmitException('validate errorMessage function is undefined');
+				}
+				else {
+					$this->validateErrorMessage = $this->validateClass->$validateErrorMessageFunction();
+				}
+				return false;
+			}
+			//验证通过后根据isFilter过滤参数
+			if($this->isFilter) {
+				$filter = new Filter();
+				$this->validatedData = $filter->filterData($requestData,$this->customFilter);
+			}
+			else {
+				$this->validatedData = $requestData;
+			}
+			if(!is_array($this->validatedData) || count($this->validatedData) <= 0) {
+				throw new \FormSubmit\Exception\FormSubmitException('validate return data is empty');
+				return false;
+			}
+		}
+		//触发验证后事件
+		$this->events->trigger('FormSubmit/ValidateAfter',$this,array());
+	}
+	
+	/**
+	 * 主程序媒体上传
+	 * @return boolean
+	 */
+	private function formSubmitMediaUpload()
+	{
+		if(is_object($this->mediaUpload)) {
+			$request = new \Zend\Http\PhpEnvironment\Request();
+			$files = $request->getFiles()->toArray();
+			if(count($files) > 0) {
+				$uploadReturn = $this->mediaUpload->upload($files);
+				if(!is_null($uploadReturn)) {
+					$this->uploadedPath = $uploadReturn;
+					$mediaErrorMessage = $this->mediaUpload->getValidateErrorMessage();
+					if(count($mediaErrorMessage) > 0) {
+						$this->isVal = false;
+						is_array($this->validateErrorMessage) ? $this->validateErrorMessage = array_merge($this->validateErrorMessage,$mediaErrorMessage) : $this->validateErrorMessage = $mediaErrorMessage;
+						return false;
+					}
+					//如果mdediaIsMerge为ture，则合并上传后的媒体地址进入validatedData
+					$this->mediaIsMerge === true && $this->validatedData = array_merge($this->validatedData,$this->uploadedPath);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 主程序数据存在验证
+	 * @param string $requestType
+	 * @param string|object $table
+	 * @param array|object $where
+	 * @param array $existsParams
+	 * @param array|object $existsWhere
+	 * @throws \FormSubmit\Exception\FormSubmitException
+	 * @return boolean
+	 */
+	private function formSubmitExists($requestType,$table,$where,$existsParams,$existsWhere)
+	{
+		$exists = false;
+		if($existsParams !== false) {
+			if(!is_array($existsParams) || count($existsParams) <= 0) {
+				throw new \FormSubmit\Exception\FormSubmitException('exists params is not array or array is empty');
+				return false;
+			}
+			//触发数据存在验证前事件
+			$this->events->trigger('FormSubmit/ExistsBefore',$this,array());
+			//获得需验证字段信息
+			$existsField = $this->getExistsField($this->validatedData,$existsParams);
+			if($existsField === false) {
+				throw new \FormSubmit\Exception\FormSubmitException('exists params undefined in validatedData');
+				return false;
+			}
+			//判断是否执行用户自定义数据存在验证方法
+			if($this->isCustomExists === false) {
+				//如果没有提供数据操作表名，通过调用DbSql基础类“getTableName”函数取得表名
+				$this->tableName === false ? $tableName = $this->dbModel->getTableName() : $tableName = $this->tableName;
+				$existsValidate = new Validate();
+				$existsValidate->setRequestType($requestType);
+				$existsValidate->setAdapter($this->serviceLocator->get('FormSubmit/adapter'));
+				$exists = $existsValidate->existsValidate($tableName,$where,$existsField,$existsWhere);
+			}
+			else {
+				$exists = $this->customExists($existsField,$existsWhere);
+			}
+		
+			if($exists === true) {
+				$existsErrorMessage = array();
+				$this->sourceValidateErrorMessage === false ? $sourceErrorMessage = include __DIR__.'/../ErrorMessage/ErrorMessage.php' : $sourceErrorMessage = $this->sourceValidateErrorMessage;
+				foreach($existsParams as $param) {
+					$existsErrorMessage[$param]['existsError'] = $sourceErrorMessage['existsError'];
+				}
+				is_array($this->validateErrorMessage) ? $this->validateErrorMessage = array_merge($this->validateErrorMessage,$existsErrorMessage) : $this->validateErrorMessage = $existsErrorMessage;
+			}
+			//触发数据存在验证后事件
+			$this->events->trigger('FormSubmit/ExistsAfter',$this,array());
+		}
+		$this->isExists = $exists;
+	}
+	
+    /**
+     * 主函数数据库操作
+     * @param string $requestType
+     * @param string|object $where
+     * @throws \FormSubmit\Exception\FormSubmitException
+     * @return boolean|unknown
+     */
+	private function forSubmitDataBase($requestType,$where)
+	{
+		if($this->isExists === false) {
+			//触发数据库操作前事件
+			$this->events->trigger('FormSubmit/DbBefore',$this,array());
+			$validatedData = $this->validatedData;
+		
+			//是否开启事务
+			$this->isTransaction === true && $this->dbModel->beginTransaction();
+			//与附加字段合并
+			$this->addField !== false && $validatedData = array_merge($validatedData,$this->addField);
+			//执行插入或更新
+			if($requestType == 'insert') {
+				$function = $this->dbInsertFunction;
+				if($this->tableName !== false) {
+					//如果是程序自动插入，则调用函数执行插入
+					$sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('FormSubmit/adapter'),$this->tableName);
+					$dbReturn = $sql->insert($validatedData);
+					if($dbReturn !== false) {
+						$this->lastInsertId = $dbReturn;
+						$dbReturn = true;
+					}
+				}
+				else {
+					if(!method_exists($this->dbModel,$function)) {
+						throw new \FormSubmit\Exception\FormSubmitException('insert function is undefined');
+						return false;
+					}
+					$dbReturn = $this->dbModel->$function($validatedData);
+					$this->lastInsertId = $this->dbModel->lastInsertId();
+				}
+			}
+			else {
+				$function = $this->dbUpdateFunction;
+				if($this->tableName !== false) {
+					//如果是程序自动更新，则调用函数执行更新
+					$sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('FormSubmit/adapter'),$this->tableName);
+					$dbReturn = $sql->update($validatedData,$where);
+				}
+				else {
+					if(!method_exists($this->dbModel,$function)) {
+						throw new \FormSubmit\Exception\FormSubmitException('update function is undefined');
+						return false;
+					}
+					$dbReturn= $this->dbModel->$function($validatedData,$where);
+				}
+			}
+			//触发数据库操作后事件
+			$this->events->trigger('FormSubmit/DbAfter',$this,array());
+			if($dbReturn === true) {
+				$this->isTransaction === true && $this->dbModel->commit();
+			}
+			else if($this->isTransaction === true || $this->isRollBack === true) {
+				$this->dbModel->rollback() && $this->rollBackUpload($requestType);
+			}
+		
+			return $dbReturn;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * 验证数据存在数据查询参数
 	 * @param array $data
 	 * @param array $existsParams
@@ -113,41 +338,15 @@ Class FormSubmit
 	}
 	
 	/**
-	 * 设置参数
+	 * 表单提交模块主函数
 	 * @param string $requestType
 	 * @param array $requestData
-	 * @param array $initArray
 	 * @param string|object $table
-	 * @param object $validateClass
+	 * @param array|object $where
 	 * @param array $existsParams
-	 */
-	private function setParams($requestType,$requestData,$initArray,$table,$validateClass,$existsParams)
-	{
-		//设置request的类型(post,get)
-		$this->requestType = $requestType;
-		//设置原始request数据
-		$this->sourceData = $requestData;
-		//如果table参数是对象，对dbModel赋值，程序将使用此对象进行数据库操作，否则把此参数视作需要操作的表名
-		is_object($table) ? $this->dbModel = $table : $this->tableName = trim((string)$table);
-		
-		$this->validateClass = $validateClass;
-		$this->dbInsertFunction = $initArray['db']['dbInsertFunction'];
-		//如果existsParams为false，则不执行添加存在验证
-		$existsParams === false ? $this->insertExistsFunction = false : $this->insertExistsFunction = $initArray['db']['insertExistsFunction'];
-		$this->dbUpdateFunction = $initArray['db']['dbUpdateFunction'];
-		//如果existsParams为false，则不执行更新存在验证
-		$existsParams === false ? $this->updateExistsFunction = false : $this->updateExistsFunction = $initArray['db']['updateExistsFunction'];
-		$this->validateFunction = $initArray['validate']['validateFunction'];
-		$this->validateErrorMessageFunction = $initArray['validate']['errorMessageFunction'];
-	}
-	
-	/**
-	 * 表单提交模块主函数
-	 * @param string $type
-	 * @param array $params
-	 * @param array $existsParams
-	 * @param string $dbDispatchName
-	 * @param string $validateDispatName
+	 * @param array|object $existsWhere
+	 * @param boolean|object $validateClass
+	 * @throws \FormSubmit\Exception\FormSubmitException
 	 * @return boolean
 	 */
 	public function formSubmit($requestType,$requestData,$table,$where,$existsParams,$existsWhere,$validateClass)
@@ -166,163 +365,171 @@ Class FormSubmit
 		//设置参数初始值
 		$this->setParams($requestType,$requestData,$initArray,$table,$validateClass,$existsParams);
 
-		//触发验证前事件
-		$this->events->trigger('FormSubmit/ValidateBefore',$this,array());
-		if($validateClass !== false) {
-			//验证输入参数
-			$validateFunction = $this->validateFunction;
-			if(!method_exists($this->validateClass,$validateFunction)) {
-				throw new \FormSubmit\Exception\FormSubmitException('validate function is undefined');
-				return false;
-			}
-			$validation = $this->validateClass->$validateFunction($requestData);
-			$this->isVal = true;
-			if($validation === false) {
-				$this->isVal = false;
-				$validateErrorMessageFunction = $this->validateErrorMessageFunction;
-				if(!method_exists($this->validateClass,$validateErrorMessageFunction)) {
-					throw new \FormSubmit\Exception\FormSubmitException('validate errorMessage function is undefined');
-				}
-				else {
-					$this->validateErrorMessage = $this->validateClass->$validateErrorMessageFunction();
-				}
-				return false;
-			}
-			//验证通过后根据isFilter过滤参数
-			if($this->isFilter) {
-				$filter = new Filter();
-				$this->validatedData = $filter->filterData($requestData,$this->customFilter);
-			} 
-			else {
-				$this->validatedData = $requestData;
-			}
-			if(!is_array($this->validatedData) || count($this->validatedData) <= 0) {
-				throw new \FormSubmit\Exception\FormSubmitException('validate return data is empty');
-				return false;
-			}
-		}
-		//触发验证后事件
-		$this->events->trigger('FormSubmit/ValidateAfter',$this,array());
+		//Request参数验证
+		if($this->formSubmitValidate($validateClass,$requestData) === false) return false;
+		
+// 		//触发验证前事件
+// 		$this->events->trigger('FormSubmit/ValidateBefore',$this,array());
+// 		if($validateClass !== false) {
+// 			//验证输入参数
+// 			$validateFunction = $this->validateFunction;
+// 			if(!method_exists($this->validateClass,$validateFunction)) {
+// 				throw new \FormSubmit\Exception\FormSubmitException('validate function is undefined');
+// 				return false;
+// 			}
+// 			$validation = $this->validateClass->$validateFunction($requestData);
+// 			$this->isVal = true;
+// 			if($validation === false) {
+// 				$this->isVal = false;
+// 				$validateErrorMessageFunction = $this->validateErrorMessageFunction;
+// 				if(!method_exists($this->validateClass,$validateErrorMessageFunction)) {
+// 					throw new \FormSubmit\Exception\FormSubmitException('validate errorMessage function is undefined');
+// 				}
+// 				else {
+// 					$this->validateErrorMessage = $this->validateClass->$validateErrorMessageFunction();
+// 				}
+// 				return false;
+// 			}
+// 			//验证通过后根据isFilter过滤参数
+// 			if($this->isFilter) {
+// 				$filter = new Filter();
+// 				$this->validatedData = $filter->filterData($requestData,$this->customFilter);
+// 			} 
+// 			else {
+// 				$this->validatedData = $requestData;
+// 			}
+// 			if(!is_array($this->validatedData) || count($this->validatedData) <= 0) {
+// 				throw new \FormSubmit\Exception\FormSubmitException('validate return data is empty');
+// 				return false;
+// 			}
+// 		}
+// 		//触发验证后事件
+// 		$this->events->trigger('FormSubmit/ValidateAfter',$this,array());
 
-		if(is_object($this->mediaUpload)) {
-			$request = new \Zend\Http\PhpEnvironment\Request();
-			$files = $request->getFiles()->toArray();
-			if(count($files) > 0) {
-				$uploadReturn = $this->mediaUpload->upload($files);
-				if(!is_null($uploadReturn)) {
-					$this->uploadedPath = $uploadReturn;
-					$mediaErrorMessage = $this->mediaUpload->getValidateErrorMessage();
-					if(count($mediaErrorMessage) > 0) {
-						$this->isVal = false;
-						is_array($this->validateErrorMessage) ? $this->validateErrorMessage = array_merge($this->validateErrorMessage,$mediaErrorMessage) : $this->validateErrorMessage = $mediaErrorMessage;
-						return false;
-					}
-					//如果mdediaIsMerge为ture，则合并上传后的媒体地址进入validatedData
-					$this->mediaIsMerge === true && $this->validatedData = array_merge($this->validatedData,$this->uploadedPath);
-				}
-			}
-		}
+		//媒体上传
+		if($this->formSubmitMediaUpload() === false) return false;
+
+// 		if(is_object($this->mediaUpload)) {
+// 			$request = new \Zend\Http\PhpEnvironment\Request();
+// 			$files = $request->getFiles()->toArray();
+// 			if(count($files) > 0) {
+// 				$uploadReturn = $this->mediaUpload->upload($files);
+// 				if(!is_null($uploadReturn)) {
+// 					$this->uploadedPath = $uploadReturn;
+// 					$mediaErrorMessage = $this->mediaUpload->getValidateErrorMessage();
+// 					if(count($mediaErrorMessage) > 0) {
+// 						$this->isVal = false;
+// 						is_array($this->validateErrorMessage) ? $this->validateErrorMessage = array_merge($this->validateErrorMessage,$mediaErrorMessage) : $this->validateErrorMessage = $mediaErrorMessage;
+// 						return false;
+// 					}
+// 					//如果mdediaIsMerge为ture，则合并上传后的媒体地址进入validatedData
+// 					$this->mediaIsMerge === true && $this->validatedData = array_merge($this->validatedData,$this->uploadedPath);
+// 				}
+// 			}
+// 		}
 		
 		//数据是否存在
-		$exists = false;
-		if($existsParams !== false) {
-			if(!is_array($existsParams) || count($existsParams) <= 0) {
-				throw new \FormSubmit\Exception\FormSubmitException('exists params is not array or array is empty');
-				return false;
-			}
-			//触发数据存在验证前事件
-			$this->events->trigger('FormSubmit/ExistsBefore',$this,array());
-			//获得需验证字段信息
-			$existsField = $this->getExistsField($this->validatedData,$existsParams);
-			if($existsField === false) {
-				throw new \FormSubmit\Exception\FormSubmitException('exists params undefined in validatedData');
-				return false;
-			}
-			//判断是否执行用户自定义数据存在验证方法
-			if($this->isCustomExists === false) {
-			    //如果没有提供数据操作表名，通过调用DbSql基础类“getTableName”函数取得表名
-			    $this->tableName === false ? $tableName = $this->dbModel->getTableName() : $tableName = $this->tableName;
-			    $existsValidate = new Validate();
-			    $existsValidate->setRequestType($requestType);
-			    $existsValidate->setAdapter($this->serviceLocator->get('FormSubmit/adapter'));
-			    $exists = $existsValidate->existsValidate($tableName,$where,$existsField,$existsWhere);
-			}
-			else {
-			    $exists = $this->customExists($existsField,$existsWhere);
-			}
+		if($this->formSubmitExists($requestType,$table,$where,$existsParams,$existsWhere) === false) return false;
+// 		$exists = false;
+// 		if($existsParams !== false) {
+// 			if(!is_array($existsParams) || count($existsParams) <= 0) {
+// 				throw new \FormSubmit\Exception\FormSubmitException('exists params is not array or array is empty');
+// 				return false;
+// 			}
+// 			//触发数据存在验证前事件
+// 			$this->events->trigger('FormSubmit/ExistsBefore',$this,array());
+// 			//获得需验证字段信息
+// 			$existsField = $this->getExistsField($this->validatedData,$existsParams);
+// 			if($existsField === false) {
+// 				throw new \FormSubmit\Exception\FormSubmitException('exists params undefined in validatedData');
+// 				return false;
+// 			}
+// 			//判断是否执行用户自定义数据存在验证方法
+// 			if($this->isCustomExists === false) {
+// 			    //如果没有提供数据操作表名，通过调用DbSql基础类“getTableName”函数取得表名
+// 			    $this->tableName === false ? $tableName = $this->dbModel->getTableName() : $tableName = $this->tableName;
+// 			    $existsValidate = new Validate();
+// 			    $existsValidate->setRequestType($requestType);
+// 			    $existsValidate->setAdapter($this->serviceLocator->get('FormSubmit/adapter'));
+// 			    $exists = $existsValidate->existsValidate($tableName,$where,$existsField,$existsWhere);
+// 			}
+// 			else {
+// 			    $exists = $this->customExists($existsField,$existsWhere);
+// 			}
 
-			if($exists === true) {
-				$existsErrorMessage = array();
-				$this->sourceValidateErrorMessage === false ? $sourceErrorMessage = include __DIR__.'/../ErrorMessage/ErrorMessage.php' : $sourceErrorMessage = $this->sourceValidateErrorMessage;
-				foreach($existsParams as $param) {
-					$existsErrorMessage[$param]['existsError'] = $sourceErrorMessage['existsError'];
-				}
-				is_array($this->validateErrorMessage) ? $this->validateErrorMessage = array_merge($this->validateErrorMessage,$existsErrorMessage) : $this->validateErrorMessage = $existsErrorMessage;
-			}
-			//触发数据存在验证后事件
-			$this->events->trigger('FormSubmit/ExistsAfter',$this,array());
-		}
-		$this->isExists = $exists;
+// 			if($exists === true) {
+// 				$existsErrorMessage = array();
+// 				$this->sourceValidateErrorMessage === false ? $sourceErrorMessage = include __DIR__.'/../ErrorMessage/ErrorMessage.php' : $sourceErrorMessage = $this->sourceValidateErrorMessage;
+// 				foreach($existsParams as $param) {
+// 					$existsErrorMessage[$param]['existsError'] = $sourceErrorMessage['existsError'];
+// 				}
+// 				is_array($this->validateErrorMessage) ? $this->validateErrorMessage = array_merge($this->validateErrorMessage,$existsErrorMessage) : $this->validateErrorMessage = $existsErrorMessage;
+// 			}
+// 			//触发数据存在验证后事件
+// 			$this->events->trigger('FormSubmit/ExistsAfter',$this,array());
+// 		}
+// 		$this->isExists = $exists;
 
 		//数据库操作
-		if($exists === false) {
-			//触发数据库操作前事件
-			$this->events->trigger('FormSubmit/DbBefore',$this,array());
-			$validatedData = $this->validatedData;
+		return $this->forSubmitDataBase($requestType,$where);
+// 		if($this->isExists === false) {
+// 			//触发数据库操作前事件
+// 			$this->events->trigger('FormSubmit/DbBefore',$this,array());
+// 			$validatedData = $this->validatedData;
 
-			//是否开启事务
-			$this->isTransaction === true && $this->dbModel->beginTransaction();
-			//与附加字段合并
-			$this->addField !== false && $validatedData = array_merge($validatedData,$this->addField);
-			//执行插入或更新
-			if($requestType == 'insert') {
-				$function = $this->dbInsertFunction;
-				if($this->tableName !== false) {
-				    //如果是程序自动插入，则调用函数执行插入
-					$sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('FormSubmit/adapter'),$this->tableName);
-					$dbReturn = $sql->insert($validatedData);
-					if($dbReturn !== false) {
-						$this->lastInsertId = $dbReturn;
-						$dbReturn = true;
-					}
-				}
-				else {
-				    if(!method_exists($this->dbModel,$function)) {
-				    	throw new \FormSubmit\Exception\FormSubmitException('insert function is undefined');
-				    	return false;
-				    }
-				    $dbReturn = $this->dbModel->$function($validatedData);
-				    $this->lastInsertId = $this->dbModel->lastInsertId();
-				}	
-			}
-			else {
-				$function = $this->dbUpdateFunction;
-				if($this->tableName !== false) {
-				    //如果是程序自动更新，则调用函数执行更新
-				    $sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('FormSubmit/adapter'),$this->tableName);
-				    $dbReturn = $sql->update($validatedData,$where);
-				}
-				else {
-				    if(!method_exists($this->dbModel,$function)) {
-				    	throw new \FormSubmit\Exception\FormSubmitException('update function is undefined');
-				    	return false;
-				    }
-				    $dbReturn= $this->dbModel->$function($validatedData,$where);
-				}
-			}
-			//触发数据库操作后事件
-			$this->events->trigger('FormSubmit/DbAfter',$this,array());
-			if($dbReturn === true) {
-				$this->isTransaction === true && $this->dbModel->commit();
-			}
-			else if($this->isTransaction === true || $this->isRollBack === true) {
-				$this->dbModel->rollback() && $this->rollBackUpload($requestType);
-			}
+// 			//是否开启事务
+// 			$this->isTransaction === true && $this->dbModel->beginTransaction();
+// 			//与附加字段合并
+// 			$this->addField !== false && $validatedData = array_merge($validatedData,$this->addField);
+// 			//执行插入或更新
+// 			if($requestType == 'insert') {
+// 				$function = $this->dbInsertFunction;
+// 				if($this->tableName !== false) {
+// 				    //如果是程序自动插入，则调用函数执行插入
+// 					$sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('FormSubmit/adapter'),$this->tableName);
+// 					$dbReturn = $sql->insert($validatedData);
+// 					if($dbReturn !== false) {
+// 						$this->lastInsertId = $dbReturn;
+// 						$dbReturn = true;
+// 					}
+// 				}
+// 				else {
+// 				    if(!method_exists($this->dbModel,$function)) {
+// 				    	throw new \FormSubmit\Exception\FormSubmitException('insert function is undefined');
+// 				    	return false;
+// 				    }
+// 				    $dbReturn = $this->dbModel->$function($validatedData);
+// 				    $this->lastInsertId = $this->dbModel->lastInsertId();
+// 				}	
+// 			}
+// 			else {
+// 				$function = $this->dbUpdateFunction;
+// 				if($this->tableName !== false) {
+// 				    //如果是程序自动更新，则调用函数执行更新
+// 				    $sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('FormSubmit/adapter'),$this->tableName);
+// 				    $dbReturn = $sql->update($validatedData,$where);
+// 				}
+// 				else {
+// 				    if(!method_exists($this->dbModel,$function)) {
+// 				    	throw new \FormSubmit\Exception\FormSubmitException('update function is undefined');
+// 				    	return false;
+// 				    }
+// 				    $dbReturn= $this->dbModel->$function($validatedData,$where);
+// 				}
+// 			}
+// 			//触发数据库操作后事件
+// 			$this->events->trigger('FormSubmit/DbAfter',$this,array());
+// 			if($dbReturn === true) {
+// 				$this->isTransaction === true && $this->dbModel->commit();
+// 			}
+// 			else if($this->isTransaction === true || $this->isRollBack === true) {
+// 				$this->dbModel->rollback() && $this->rollBackUpload($requestType);
+// 			}
 
-			return $dbReturn;
-		}
+// 			return $dbReturn;
+// 		}
 		
-		return false;
+// 		return false;
 	}
 	
 	/**

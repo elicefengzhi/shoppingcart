@@ -197,7 +197,7 @@ Class Base
 	{
 		$init = array();
 		$initArray = $this->initArray;
-		$init['uploadPath'] = $initArray['media']['uploadPath'];
+		$init['uploadPath'] = $GLOBALS['UPLOADPATH'];
 		$init['minSize'] = $initArray['media']['minSize'];
 		$init['maxSize'] = $initArray['media']['maxSize'];
 		$init['mimeType'] = $initArray['media']['mimeType'];

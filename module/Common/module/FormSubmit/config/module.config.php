@@ -26,7 +26,6 @@ return array(
 			'errorMessageFunction'	=> 'ErrorMessage',//错误信息方法名
 		),
 		'media' => array(
-			'uploadPath'       => BASEPATH.'public/upload/',//上传目录
 			'minSize'          => 1,//最小容量
 			'maxSize'          => '5MB',//最大容量
 			'mimeType'         => array('image/jpg','image/jpeg','image/png','image/gif'),

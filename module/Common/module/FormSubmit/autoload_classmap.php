@@ -13,6 +13,6 @@ return array(
 	'FormSubmit\Logic\Update'      		         => __DIR__ . '/src/FormSubmit/Logic/Update.php',
 	'FormSubmit\Media\MediaUpload'      	     => __DIR__ . '/src/FormSubmit/Media/MediaUpload.php',
 	'FormSubmit\Service\FormSubmitFactory'       => __DIR__ . '/src/FormSubmit/Service/FormSubmitFactory.php',
-	'FormSubmit\Validate\OriginalParamsValidate' => __DIR__ . '/src/FormSubmit/Validate/OriginalParamsValidate',
-	'FormSubmit\Validate\Validate'               => __DIR__ . '/src/FormSubmit/Validate/Validate',
+	'FormSubmit\Validate\OriginalParamsValidate' => __DIR__ . '/src/FormSubmit/Validate/OriginalParamsValidate.php',
+	'FormSubmit\Validate\Validate'               => __DIR__ . '/src/FormSubmit/Validate/Validate.php',
 );

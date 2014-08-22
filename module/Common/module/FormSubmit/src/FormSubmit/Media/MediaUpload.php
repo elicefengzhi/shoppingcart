@@ -95,18 +95,22 @@ class MediaUpload
 		$mimeType = new \Zend\Validator\File\MimeType($this->mimeType);
 		$this->sourceValidateErrorMessage === false ? $sourceErrorMessage = include __DIR__.'/../ErrorMessage/ErrorMessage.php' : $sourceErrorMessage = $this->sourceValidateErrorMessage;
 
+		//是否是一个文件
 		if($uploadFile->isValid($file) === false) {
 			return null;
 		}
+		//最小验证
 		if($minSize->isValid($file['tmp_name']) === false) {
 			$returnFileSize = false;
 			$this->validateErrorMessage[$inputName]['minSize'] = sprintf($sourceErrorMessage['minSizeError'],$this->minSize);
 		}
+		//最大验证
 		if($maxSize->isValid($file['tmp_name']) === false) {
 			$returnFileSize = false;
 			$this->validateErrorMessage[$inputName]['maxSize'] = sprintf($sourceErrorMessage['maxSizeError'],$this->maxSize);
 		}
 		if($returnFileSize === true) {
+			//mimeType验证
 			if($mimeType->isValid($file['tmp_name']) === false) {
 				$returnMimeType = false;
 				$mimeType = $this->mimeType;
@@ -127,6 +131,7 @@ class MediaUpload
 	private function fileUpload($http,$file,$path,$inputName)
 	{
 		$isVal= $this->validate($file,$inputName);
+		//验证通过
 		if($isVal === true) {
 			$newName = $this->changeFileName($file['name']);
 			$uploadPath = $this->uploadPath;
@@ -162,6 +167,7 @@ class MediaUpload
 				throw new \FormSubmit\Exception\FormSubmitException($e->getMessage());
 			}
 		}
+		//空的FILE
 		else if(is_null($isVal)) {
 			return null;
 		}
@@ -221,13 +227,13 @@ class MediaUpload
 		if(is_array(current($file))) {
 			foreach($file as $key => $f) {
 				$return = $this->fileUpload($http,$f,$path,$key);
-				if($return !== false) {
-					$completeFiles[$key] = $this->getUploadedImagePath($return);
-					$uploadReturn = true;
-				}
-				else if(is_null($return)) {
+				if(is_null($return)) {
 					$uploadReturn = null;
 					break;
+				}
+				else if($return !== false) {
+					$completeFiles[$key] = $this->getUploadedImagePath($return);
+					$uploadReturn = true;
 				}
 				else {
 					$this->rollBackFiles($completeFiles);
@@ -250,8 +256,6 @@ class MediaUpload
 			}
 		}
 
-		//if($uploadReturn === false) throw new \FormSubmit\Exception\FormSubmitException($this->uploadErrorMessage);
-		//is_array($completeFiles) && count($completeFiles) <= 0 && $completeFiles = false;
 		if(is_array($completeFiles) && count($completeFiles) <= 0) {
 			$completeFiles = false;
 		}

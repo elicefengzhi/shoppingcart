@@ -5,10 +5,19 @@ namespace Application;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\ModuleManager;
+use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Application\Logic;
 
 class Module implements AutoloaderProviderInterface 
 {
+	private function assetManager($allConfig)
+	{
+		if(isset($allConfig['asset_manager'])) {
+			$assetManager = new Logic\AssetManager();
+		}
+	}
+	
 	public function getAutoloaderConfig()
 	{
 		return array(
@@ -41,9 +50,11 @@ class Module implements AutoloaderProviderInterface
     }
     
     public function init(ModuleManager $moduleManager)
-    {   
+    {
+    	//初始化设置
+    	$defaultSetting = new Logic\DefaultSetting();
     	//设置移动端试图层路径
-    	$mobile = new \Application\Logic\Mobile();
+    	$mobile = new Logic\Mobile();
 		$mobile->changeMobileViewPath($moduleManager);
     }
     
@@ -51,16 +62,27 @@ class Module implements AutoloaderProviderInterface
     	//自定义错误处理
     	$response = $event->getResponse();
     	if($response->getStatusCode() == 500){
-    		$errorStrategy = new \Application\Logic\ErrorStrategy();
+    		$errorStrategy = new Logic\ErrorStrategy();
     		$applicationConfig = $this->getConfig();
     		$errorStrategy->errorHandle($applicationConfig,$event->getParam('exception'),$event->getApplication()->getServiceManager());
     	}
     }
     
+    public function ss(ModuleEvent $event)
+    {
+    	echo '232';exit;
+    }
+    
     public function onBootstrap (EventInterface $event)
     {
-    	$language = new \Application\Logic\Language($event->getApplication()->getServiceManager()->get('viewHelperManager'),$event->getApplication()->getServiceManager());
+    	//设置多语言
+    	$language = new Logic\Language($event->getApplication()->getServiceManager()->get('viewHelperManager'),$event->getApplication()->getServiceManager());
     	
+    	//设置资源
+    	$allConfig = $event->getApplication()->getServiceManager()->get('config');
+    	$this->assetManager($allConfig);
+    	
+    	//错误处理
     	$eventManager = $event->getParam('application')->getEventManager();
     	$eventManager->getSharedManager()->attach('*', MvcEvent::EVENT_DISPATCH, array($this,'onDispatchError'), -100);
     	$eventManager->getSharedManager()->attach('*', MvcEvent::EVENT_DISPATCH_ERROR, array($this,'onDispatchError'), -100);

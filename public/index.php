@@ -5,14 +5,16 @@
  */
 chdir(dirname(__DIR__));
 
+// Setup autoloading
+require 'init_autoloader.php';
+
 // 设置常量
-defined('APPLICATION_ENV') || define('APPLICATION_ENV', 'local');
 defined('BASEPATH') || define('BASEPATH', realpath(__DIR__.'/../').'/');
 defined('APPLICATIONPATH') || define('APPLICATIONPATH', BASEPATH.'module/Application/');
 defined('BASEURL') || define('BASEURL', '/');
 
-// Setup autoloading
-require 'init_autoloader.php';
+$GLOBALS['UPLOADPATH'] = BASEPATH.'public/upload/';
+$applicationEnv = 'local';
 
 // Run the application!
-Zend\Mvc\Application::init(require 'config/application.config.'.APPLICATION_ENV.'.php')->run();
+Zend\Mvc\Application::init(require 'config/application.config.'.$applicationEnv.'.php')->run();

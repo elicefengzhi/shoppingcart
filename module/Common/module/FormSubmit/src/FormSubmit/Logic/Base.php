@@ -197,7 +197,7 @@ Class Base
 	{
 		$init = array();
 		$initArray = $this->initArray;
-		$init['uploadPath'] = $GLOBALS['UPLOADPATH'];
+		$init['uploadPath'] = $initArray['media']['uploadPath'];
 		$init['minSize'] = $initArray['media']['minSize'];
 		$init['maxSize'] = $initArray['media']['maxSize'];
 		$init['mimeType'] = $initArray['media']['mimeType'];
@@ -239,7 +239,7 @@ Class Base
 		$events->attach('*','FormSubmit/'.$eventType,function($event) use($args) {
 			$helperType = $args[1];
 			$initParams = $args;
-			//去除第一个和第二个参数，以便把其余参数传入init方法中
+			//去除"事件名"和"helper类名"参数，以便把其余参数传入init方法中
 			unset($initParams[0]);
 			unset($initParams[1]);
 			//获得formSubmit对象
@@ -247,7 +247,7 @@ Class Base
 			$classNamespace = "\\FormSubmit\\Helper\\$helperType";
 			//如果给定的类存在执行相应操作
 			if(class_exists($classNamespace) === true) {
-				//如果给定类名在之前应该生成过，则使用之前生成的对象，否则新生成
+				//如果给定类名已经在formSubmit中注册过，则使用此对象，否则新生成
 				$isExists = $target->helperObjectArrayisExistsByKey($helperType);
 				if($isExists === true) {
 					$formHelper = $target->getHelperObjectArrayByKey($helperType);
@@ -255,13 +255,13 @@ Class Base
 				}
 				else {
 					$formHelper = new $classNamespace();
+					//把formSubmit对象传入helper
+					$formHelper->setFormSubmit($target);
+					//设置当前helper类名
+					$formHelper->setClassName($helperType);
+					//设置当前helper类
+					$formHelper->setClassObject($formHelper);
 				}
-				//把formSubmit对象传入helper
-				$formHelper->setFormSubmit($target);
-				//设置当前helper类名
-				$formHelper->setClassName($helperType);
-				//设置当前helper类
-				$formHelper->setClassObject($formHelper);
 				//执行相应helper类init方法
 				call_user_func_array(array($formHelper,'init'),$initParams);
 				//执行相应helper类action方法

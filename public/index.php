@@ -13,7 +13,6 @@ defined('BASEPATH') || define('BASEPATH', realpath(__DIR__.'/../').'/');
 defined('APPLICATIONPATH') || define('APPLICATIONPATH', BASEPATH.'module/Application/');
 defined('BASEURL') || define('BASEURL', '/');
 
-$GLOBALS['UPLOADPATH'] = BASEPATH.'public/upload/';
 $applicationEnv = 'local';
 
 // Run the application!

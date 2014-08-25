@@ -5,19 +5,11 @@ namespace Application;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\ModuleManager;
-use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Application\Logic;
 
 class Module implements AutoloaderProviderInterface 
-{
-	private function assetManager($allConfig)
-	{
-		if(isset($allConfig['asset_manager'])) {
-			$assetManager = new Logic\AssetManager();
-		}
-	}
-	
+{	
 	public function getAutoloaderConfig()
 	{
 		return array(
@@ -49,10 +41,18 @@ class Module implements AutoloaderProviderInterface
     	);
     }
     
-    public function init(ModuleManager $moduleManager)
+    public function assetManager($event)
     {
-    	//初始化设置
-    	$defaultSetting = new Logic\DefaultSetting();
+		$config = $this->getConfig();
+		isset($config['asset_manager']) ? $GLOBALS['UPLOADPATH'] = $config['asset_manager']['resolver_configs']['paths'][0].'/upload/'
+		: $GLOBALS['UPLOADPATH'] = BASEPATH.'public/upload/';
+    }
+    
+    public function init(ModuleManager $moduleManager)
+    { 
+    	//资产相关设置
+    	$moduleManager->getEventManager()->attach('loadModule',array($this,'assetManager'));
+    	
     	//设置移动端试图层路径
     	$mobile = new Logic\Mobile();
 		$mobile->changeMobileViewPath($moduleManager);
@@ -68,19 +68,10 @@ class Module implements AutoloaderProviderInterface
     	}
     }
     
-    public function ss(ModuleEvent $event)
-    {
-    	echo '232';exit;
-    }
-    
     public function onBootstrap (EventInterface $event)
     {
     	//设置多语言
     	$language = new Logic\Language($event->getApplication()->getServiceManager()->get('viewHelperManager'),$event->getApplication()->getServiceManager());
-    	
-    	//设置资源
-    	$allConfig = $event->getApplication()->getServiceManager()->get('config');
-    	$this->assetManager($allConfig);
     	
     	//错误处理
     	$eventManager = $event->getParam('application')->getEventManager();

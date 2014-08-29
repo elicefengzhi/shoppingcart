@@ -10,10 +10,49 @@ return array(
 			'to' => '1095247806@qq.com'
 		),
 	),
+	//资产管理配置
 	'asset_manager' => array(
 		'resolver_configs' => array(
+			'collections' => array(
+				'js/main.min.js' => array(
+					'js/jsq/jquery-1.10.2.min.js',
+					'js/pt/png_ie6_fix.js',
+					'js/glb.js',
+					'js/lang/message.js',
+					'js/lang/lang.js',
+				),
+				'css/main.min.css' => array(
+					'css/c1.css',
+				),
+			),
 			'paths' => array(
 				BASEPATH.'theme/default',
+			),
+		),
+		'caching' => array(
+			'js/main.min.js' => array(
+				'cache'   => 'Assetic\\Cache\\FilesystemCache',
+				'options' => array(
+					'dir' => 'data/cache/js',
+				),
+			),
+			'css/main.min.css' => array(
+				'cache'   => 'Assetic\\Cache\\FilesystemCache',
+				'options' => array(
+					'dir' => 'data/cache/css',
+				),
+			),
+		),
+		'filters' => array(
+			'js/main.min.js' => array(
+				array(
+					'filter' => 'JSMin', 
+				),
+			),
+			'css/main.min.css' => array(
+				array(
+					'filter' => 'CssMin',
+				),
 			),
 		),
 	),

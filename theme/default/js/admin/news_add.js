@@ -1,6 +1,7 @@
 function ChangeStringByLang()
 {
-	$('#news-submit').val(eval('message.'+lang+'.insert'));
+	//$('#news-submit').val(eval('message.'+lang+'.insert'));
+	$('#news-submit').text(eval('message.'+lang+'.insert'));
 }
 UE.getEditor('editor');
 $(document).ready(function(){

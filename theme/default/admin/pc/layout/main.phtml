@@ -3,12 +3,8 @@
 <head>
 <?php echo $this->headTitle(); ?>
 <?php echo $this->headMeta()->setCharset('UTF-8')->setName('keywords','')->setName('description','')->setName('author','elicefengzhi'); ?>
-<?php echo $this->headLink()->prependStylesheet($this->basePath().'/css/c1.css'); ?>
-<script type="text/javascript" src="<?php echo $this->basePath('js/jsq/jquery-1.10.2.min.js'); ?>" language="JavaScript"></script>
-<script type="text/javascript" src="/js/pt/png_ie6_fix.js" language="JavaScript"></script>
-<script type="text/javascript" src="/js/glb.js" language="JavaScript"></script>
-<script type="text/javascript" src="/js/lang/message.js" language="JavaScript"></script>
-<script type="text/javascript" src="/js/lang/lang.js" language="JavaScript"></script>
+<?php echo $this->headLink()->prependStylesheet($this->basePath('css/main.min.css')); ?>
+<?php echo $this->headscript()->appendFile($this->basePath('js/main.min.js'),'text/javascript');?>
 </head><body><div class="rick"><div id="center">
 <!-------------------------------------------------------------------tag_contents_start-->
 

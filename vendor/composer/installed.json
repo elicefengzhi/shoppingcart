@@ -107,60 +107,6 @@
         ]
     },
     {
-        "name": "mobiledetect/mobiledetectlib",
-        "version": "2.8.3",
-        "version_normalized": "2.8.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/serbanghita/Mobile-Detect.git",
-            "reference": "f5753e4b90daffe50c902e99df5ce3c58fca3fee"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/f5753e4b90daffe50c902e99df5ce3c58fca3fee",
-            "reference": "f5753e4b90daffe50c902e99df5ce3c58fca3fee",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.0.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "*"
-        },
-        "time": "2014-07-10 20:00:25",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "Mobile_Detect.php"
-            ],
-            "psr-0": {
-                "Detection": "namespaced/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Serban Ghita",
-                "email": "serbanghita@gmail.com",
-                "homepage": "http://ghita.org",
-                "role": "Developer"
-            }
-        ],
-        "description": "Mobile_Detect is a lightweight PHP class for detecting mobile devices. It uses the User-Agent string combined with specific HTTP headers to detect the mobile environment.",
-        "homepage": "https://github.com/serbanghita/Mobile-Detect",
-        "keywords": [
-            "detect mobile devices",
-            "mobile",
-            "mobile detect",
-            "mobile detector",
-            "php mobile detect"
-        ]
-    },
-    {
         "name": "zendframework/zendframework",
         "version": "2.3.2",
         "version_normalized": "2.3.2.0",
@@ -277,6 +223,173 @@
         "homepage": "http://framework.zend.com/",
         "keywords": [
             "framework",
+            "zf2"
+        ]
+    },
+    {
+        "name": "bjyoungblood/bjy-profiler",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bjyoungblood/BjyProfiler.git",
+            "reference": "890d8b522d00c7b5e62210e39812d83a6d99bdfb"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/bjyoungblood/BjyProfiler/zipball/890d8b522d00c7b5e62210e39812d83a6d99bdfb",
+            "reference": "890d8b522d00c7b5e62210e39812d83a6d99bdfb",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3",
+            "zendframework/zend-db": ">=2.1.0"
+        },
+        "time": "2014-08-05 14:38:59",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "BjyProfiler": "src/"
+            },
+            "classmap": [
+                "./Module.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Ben Youngblood",
+                "email": "bx.youngblood@gmail.com",
+                "homepage": "http://bjyoungblood.com/"
+            }
+        ],
+        "description": "Database profiler for Zend\\Db (also plugin for ZendDeveloperTools)",
+        "homepage": "https://github.com/bjyoungblood/BjyProfiler",
+        "keywords": [
+            "db",
+            "profiler",
+            "zdt",
+            "zf2"
+        ]
+    },
+    {
+        "name": "mobiledetect/mobiledetectlib",
+        "version": "2.8.4",
+        "version_normalized": "2.8.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/serbanghita/Mobile-Detect.git",
+            "reference": "58754ad5562d730e9ff64654494165a3dafe10cb"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/58754ad5562d730e9ff64654494165a3dafe10cb",
+            "reference": "58754ad5562d730e9ff64654494165a3dafe10cb",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.0.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "*"
+        },
+        "time": "2014-08-25 07:57:48",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "Mobile_Detect.php"
+            ],
+            "psr-0": {
+                "Detection": "namespaced/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Serban Ghita",
+                "email": "serbanghita@gmail.com",
+                "homepage": "http://mobiledetect.net",
+                "role": "Developer"
+            }
+        ],
+        "description": "Mobile_Detect is a lightweight PHP class for detecting mobile devices. It uses the User-Agent string combined with specific HTTP headers to detect the mobile environment.",
+        "homepage": "https://github.com/serbanghita/Mobile-Detect",
+        "keywords": [
+            "detect mobile devices",
+            "mobile",
+            "mobile detect",
+            "mobile detector",
+            "php mobile detect"
+        ]
+    },
+    {
+        "name": "zendframework/zend-developer-tools",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/zendframework/ZendDeveloperTools.git",
+            "reference": "6468ed1c58a65ad797f04ebe794ca85fef0ff142"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/zendframework/ZendDeveloperTools/zipball/6468ed1c58a65ad797f04ebe794ca85fef0ff142",
+            "reference": "6468ed1c58a65ad797f04ebe794ca85fef0ff142",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "zendframework/zend-debug": "2.*",
+            "zendframework/zend-eventmanager": "2.*",
+            "zendframework/zend-mvc": "2.*",
+            "zendframework/zend-servicemanager": "2.*",
+            "zendframework/zend-stdlib": "2.*",
+            "zendframework/zend-version": "2.*"
+        },
+        "suggest": {
+            "bjyoungblood/bjy-profiler": "Version: dev-master, allows the usage of the (Zend) Db collector.",
+            "ocramius/ocra-service-manager": "OcraServiceManager can help you track dependencies within your application."
+        },
+        "time": "2014-08-13 19:03:31",
+        "type": "zf-module",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "ZendDeveloperTools": "src/"
+            },
+            "classmap": [
+                "./Module.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Evan Coury",
+                "email": "me@evancoury.com",
+                "homepage": "http://blog.evan.pro/"
+            },
+            {
+                "name": "Eric Boh",
+                "email": "cossish@gmail.com"
+            }
+        ],
+        "description": "Module for developer and debug tools for working with the ZF2 MVC layer.",
+        "homepage": "https://github.com/zendframework/ZendDeveloperTools",
+        "keywords": [
+            "debug",
+            "developer",
+            "module",
             "zf2"
         ]
     },
@@ -463,119 +576,6 @@
             "asset",
             "asset manager",
             "zend framework 2",
-            "zf2"
-        ]
-    },
-    {
-        "name": "zendframework/zend-developer-tools",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/zendframework/ZendDeveloperTools.git",
-            "reference": "a9244b9cc17861eb36a7c899d450119575d16d41"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/ZendDeveloperTools/zipball/a9244b9cc17861eb36a7c899d450119575d16d41",
-            "reference": "a9244b9cc17861eb36a7c899d450119575d16d41",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "zendframework/zend-debug": "2.*",
-            "zendframework/zend-eventmanager": "2.*",
-            "zendframework/zend-mvc": "2.*",
-            "zendframework/zend-servicemanager": "2.*",
-            "zendframework/zend-stdlib": "2.*",
-            "zendframework/zend-version": "2.*"
-        },
-        "suggest": {
-            "bjyoungblood/bjy-profiler": "Version: dev-master, allows the usage of the (Zend) Db collector.",
-            "ocramius/ocra-service-manager": "OcraServiceManager can help you track dependencies within your application."
-        },
-        "time": "2014-07-11 19:51:50",
-        "type": "zf-module",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "ZendDeveloperTools": "src/"
-            },
-            "classmap": [
-                "./Module.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Evan Coury",
-                "email": "me@evancoury.com",
-                "homepage": "http://blog.evan.pro/"
-            },
-            {
-                "name": "Eric Boh",
-                "email": "cossish@gmail.com"
-            }
-        ],
-        "description": "Module for developer and debug tools for working with the ZF2 MVC layer.",
-        "homepage": "https://github.com/zendframework/ZendDeveloperTools",
-        "keywords": [
-            "debug",
-            "developer",
-            "module",
-            "zf2"
-        ]
-    },
-    {
-        "name": "bjyoungblood/bjy-profiler",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/bjyoungblood/BjyProfiler.git",
-            "reference": "890d8b522d00c7b5e62210e39812d83a6d99bdfb"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/bjyoungblood/BjyProfiler/zipball/890d8b522d00c7b5e62210e39812d83a6d99bdfb",
-            "reference": "890d8b522d00c7b5e62210e39812d83a6d99bdfb",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3",
-            "zendframework/zend-db": ">=2.1.0"
-        },
-        "time": "2014-08-05 14:38:59",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "BjyProfiler": "src/"
-            },
-            "classmap": [
-                "./Module.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Ben Youngblood",
-                "email": "bx.youngblood@gmail.com",
-                "homepage": "http://bjyoungblood.com/"
-            }
-        ],
-        "description": "Database profiler for Zend\\Db (also plugin for ZendDeveloperTools)",
-        "homepage": "https://github.com/bjyoungblood/BjyProfiler",
-        "keywords": [
-            "db",
-            "profiler",
-            "zdt",
             "zf2"
         ]
     }

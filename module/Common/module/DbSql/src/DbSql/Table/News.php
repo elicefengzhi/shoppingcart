@@ -10,8 +10,8 @@ class News extends BaseDb
 	
 	public function add($data)
 	{
-		$data['create_time'] = time();
-		$data['update_time'] = $data['create_time'];
+		//$data['create_time'] = time();
+		//$data['update_time'] = $data['create_time'];
 		return $this->addData($data);
 	}
 	
@@ -75,11 +75,12 @@ class News extends BaseDb
 		$select->where($where);
 		$limit === true && $select->limit($limit);
 		$resultSet = $this->tableGateway->selectWith($select);
-		$current = $resultSet->toArray();
-		if(count($current) > 0) {
-			return $isOne === false ? $current : $current[0];
-		}
+		return $resultSet->current();
+// 		$current = $resultSet->toArray();
+// 		if(count($current) > 0) {
+// 			return $isOne === false ? $current : $current[0];
+// 		}
 	
-		return false;
+// 		return false;
 	}
 }

@@ -2832,3 +2832,5 @@ message:mkdirs error
 2014-08-29T17:56:38+08:00 DEBUG (7): Query finished {"elapsed":0.0008089542388916}
 2014-08-29T17:56:38+08:00 DEBUG (7): Query started {"sql":"SELECT `news`.* FROM `news` WHERE `delete_flg` = :where1 ORDER BY `update_time` DESC LIMIT :limit OFFSET :offset","parameters":"{\"where1\":0,\"limit\":10,\"offset\":0}"}
 2014-08-29T17:56:38+08:00 DEBUG (7): Query finished {"elapsed":0.00041103363037109}
+2014-09-03T15:58:02+08:00 DEBUG (7): Query started {"sql":"SELECT `admin`.`id` AS `id`, `admin`.`leve` AS `leve` FROM `admin` WHERE `uname` = :where1 AND `pwd` = :where2 AND `delete_flg` = :where3","parameters":"{\"where1\":\"admin\",\"where2\":\"4297f44b13955235245b2497399d7a93\",\"where3\":0}"}
+2014-09-03T15:58:02+08:00 DEBUG (7): Query finished {"elapsed":0.22859787940979}

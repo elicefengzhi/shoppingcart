@@ -7,7 +7,7 @@ return array(
     	'MobileDetectModule','AssetManager',
     	'Admin','Front',
     	'ProductTypeLinkage',
-    	'DbSql','Log','ImageUpload','SendMail','ViewHelper','Validate','Paging','Fsession','FormSubmit','ZendCart','Image',
+    	'DbSql','Log','ImageUpload','SendMail','ViewHelper','Validate','Paging','Fsession','FormSubmit','ZendCart','Image','MinLib',
     ),
 
     // These are various options for the listeners attached to the ModuleManager

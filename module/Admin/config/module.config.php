@@ -465,18 +465,20 @@ return array(
             ),
         ),
     ),
+	
     'view_manager' => array(
     	'layout' => 'admin/layout',
     	'not_found_template'       => 'error/admin/404',
     	'exception_template'       => 'error/admin/index',
     	'template_map' => array(
-    		'admin/layout'         		=> BASEPATH . 'theme/default/admin/pc/layout/main.phtml',
-    		'admin/error/layout'		=> BASEPATH . 'theme/default/admin/pc/layout/error.phtml',
-    		'admin/login/layout'		=> BASEPATH . 'theme/default/admin/pc/layout/login.phtml',
-    		'error/admin/404'      		=> BASEPATH . 'theme/default/admin/pc/error/404.phtml',
-    		'error/admin/index'    		=> BASEPATH . 'theme/default/admin/pc/error/500.phtml',
-    		'admin/common/pagination'  	=> BASEPATH . 'theme/default/admin/pc/common/pagination.phtml',
-    		'admin/common/errorMessage' => BASEPATH . 'theme/default/admin/pc/common/errorMessage.php',
+    		'admin/layout'         		    => BASEPATH . 'theme/default/admin/pc/layout/main.phtml',
+    		'admin/error/layout'		    => BASEPATH . 'theme/default/admin/pc/layout/error.phtml',
+    		'admin/login/layout'		    => BASEPATH . 'theme/default/admin/pc/layout/login.phtml',
+    		'error/admin/404'      		    => BASEPATH . 'theme/default/admin/pc/error/404.phtml',
+    		'error/admin/index'    		    => BASEPATH . 'theme/default/admin/pc/error/500.phtml',
+    		'admin/common/pagination'  	    => BASEPATH . 'theme/default/admin/pc/common/pagination.phtml',
+    		'admin/common/errorMessage'     => BASEPATH . 'theme/default/admin/pc/common/errorMessage.phtml',
+    		'admin/common/formErrorMessage' => BASEPATH . 'theme/default/admin/pc/common/formErrorMessage.phtml',
     	),
         'template_path_stack' => array(
             'Admin' => BASEPATH . 'theme/default/admin/pc/',

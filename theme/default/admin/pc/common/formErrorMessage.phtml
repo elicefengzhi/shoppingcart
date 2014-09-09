@@ -1,0 +1,7 @@
+<?php if($errorMessages): ?>
+	<?php foreach($errorMessages as $errors): ?>
+		<?php foreach($errors as $message): ?>
+			<p class ="errorClass"><?php echo $message; ?></p>
+		<?php endforeach; ?>
+	<?php endforeach; ?>
+<?php endif; ?>

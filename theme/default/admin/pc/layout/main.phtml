@@ -4,7 +4,7 @@
 <?php echo $this->headTitle(); ?>
 <?php echo $this->headMeta()->setCharset('UTF-8')->setName('keywords','')->setName('description','')->setName('author','elicefengzhi'); ?>
 <?php echo $this->headLink()->prependStylesheet($this->basePath('css/main.min.css')); ?>
-<?php echo $this->headscript()->appendFile($this->basePath('js/main.min.js'),'text/javascript');?>
+<?php echo $this->headscript()->prependFile($this->basePath('js/main.min.js'),'text/javascript');?>
 </head><body><div class="rick"><div id="center">
 <!-------------------------------------------------------------------tag_contents_start-->
 

@@ -2,73 +2,109 @@
 
 namespace Admin\Model;
 
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface;
+use Application\Model\BaseModel;
+use Zend\I18n\Translator\Translator;
 
-class NewsModel implements InputFilterAwareInterface
-{
-	protected $inputFilter;
-	public $news_title;
-	public $news_body;
-	public $create_time;
-	public $update_time;
-	
-	public function exchangeArray($data,$type)
+class NewsModel extends BaseModel
+{	
+	public function getData($data,$type = 'insert')
 	{
-		$this->news_title = isset($data['news_title']) ? $data['news_title'] : null;
-		$this->news_body = isset($data['news_body']) ? $data['news_body'] : null;
-		if($type == 'insert') {
-			$this->create_time = time();
-		}
-		else {
-			unset($this->create_time);
-		}
-		$this->update_time = !is_null($this->create_time) ? $this->create_time : time();
+		$dataArray = array();
+		$dataArray['news_title'] = isset($data['news_title']) ? $data['news_title'] : null;
+		$dataArray['news_file'] = isset($data['news_file']) ? $this->getUploadPath($data['news_file']) : null;
+		$dataArray['news_body'] = isset($data['news_body']) ? $data['news_body'] : null;
+		$type == 'insert' && $dataArray['create_time']= time();
+		$dataArray['update_time'] = !isset($dataArray['create_time']) ? $dataArray['create_time'] : time();
+		
+		return $dataArray;
 	}
 	
-	public function setInputFilter(InputFilterInterface $inputFilter) {}
-	
-	public function getInputFilter()
+	public function getNewsModel($type = 'insert',$existsWhere = null)
 	{
-		if(!$this->inputFilter) {
-			$inputFilter = new InputFilter();
-			
-			$inputFilter->add(array(
+		$translator = new Translator();
+		
+		return $this->getModel(array(
+			array(
 				'name' => 'news_title',
-				'required' => true,
 				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
+					array('name' => 'stripTags'),
+					array('name' => 'stringTrim'),
+					array('name' => 'htmlEntities'),
+					array('name' => 'stripNewLines')
 				),
 				'validators' => array(
 					array(
-						'name'    => 'StringLength',
+						'name'    => 'NotEmpty',
 						'options' => array(
-							'encoding' => 'UTF-8',
-							'max'      => 100,
+							'message' => $translator->translate('News title value is required and can\'t be empty')
 						),
 					),
-				)
-			));
-			
-			$inputFilter->add(array(
-				'name' => 'news_body',
-				'required' => true,
-				'validators' => array(
 					array(
 						'name'    => 'StringLength',
 						'options' => array(
-							'encoding' => 'UTF-8',
-							'max'      => 65530,
+							'max'     => 100,
+							'message' => $translator->translate('The input is more than 100 characters long')
 						),
 					),
-				)				
-			));
-			
-			$this->inputFilter = $inputFilter;
-		}
-		
-		return $this->inputFilter;
+		            array(
+		                'name'    => 'Db\NoRecordExists',
+		                'options' => array(
+		                    'table' => 'news',
+		                    'field' => 'news_title',
+	                    	'exclude' => is_null($existsWhere) ? 'delete_flg = 0' : $existsWhere,
+		                    'adapter' => $this->dbAdapter,
+		                    'message' => $translator->translate('A record matching the input was found')
+		                ),
+		           ),
+				)
+			),
+			array(
+				'name' => 'news_body',
+				'validators' => array(
+					array(
+						'name'    => 'NotEmpty',
+						'options' => array(
+							'message' => $translator->translate('News body value is required and can\'t be empty')
+						),
+					),
+					array(
+						'name'    => 'StringLength',
+						'options' => array(
+							'max'      => 65530,
+							'message' => $translator->translate('The input is more than 65530 characters long')
+						),
+					),
+				)
+		   ),
+		   array(
+		   		'name' => 'news_file',
+		   		'validators' => array(
+	   				array(
+   						'name' => 'File\Size',
+   						'options' => array(
+   								'max' => 1,
+   								'message' => 'dgdg'
+   						)
+	   				),
+		   			array(
+						'name' => 'File\MimeType',
+		   				'options' => array(
+							'mimeType' => 'image/gif,image/jpg',
+		   					'message' => 'sg'
+						)
+					)
+		   		),
+				'filters' => array(
+					array(
+						'name' => 'filerenameupload',
+						'options' => array(
+							'target'    => $GLOBALS['UPLOADPATH'].$this->createRandFileName(),
+							'overwrite' => true,
+							'use_upload_extension' => true
+						)
+					)
+				)
+		   )
+		));
 	}
 }

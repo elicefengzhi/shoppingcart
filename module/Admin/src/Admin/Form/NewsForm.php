@@ -25,11 +25,6 @@ class NewsForm extends Form
 		));
 		
 		$this->add(array(
-			'type' => 'File',
-			'name' => 'news_file',
-		));
-		
-		$this->add(array(
 			'type' => 'button',
 			'name' => 'news_botton',
 			'options' => array('label' => ''),

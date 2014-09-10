@@ -8,10 +8,85 @@ use Zend\InputFilter\InputFilterInterface;
 
 class BaseModel implements InputFilterAwareInterface
 {
-	private $inputArray;
-	protected $translator;
-	protected $inputFilter;
-	protected $dbAdapter;
+	private $inputArray;//inputFilter数组参数
+	private $config;//配置
+	protected $inputFilter;//inputFilter对象
+	protected $dbAdapter;//数据库适配器
+	
+	protected $fileMaxSize;//上传单文件对大容量
+	protected $fileMimeType;//上传文件mimeType
+	
+	function __construct()
+	{
+		$applicationConfig = include __DIR__.'/../config/module.config.php';
+		$this->config = $applicationConfig['baseModel'];
+		$this->fileMaxSize = $this->config['upload']['fileMaxSize'];
+		$this->fileMimeType = $this->config['upload']['fileMimeType'];
+	}
+	
+	/**
+	 * 获得数据过滤数组
+	 * 
+	 * 	stringTrim = 1;
+	 *	stripTags = 2;
+	 *	htmlEntities = 4;
+	 *	stripNewLines = 8;
+	 * @param int $filtersInt
+	 * @return array
+	 */
+	protected function getFilters($filtersInt)
+	{
+		$filtersArray = array();
+		switch ($filtersInt) {
+			case 1:
+				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'));
+				break;
+			case 2:
+				$filtersArray = array_push($filtersArray,array('name' => 'stripTags'));
+				break;
+			case 3:
+				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'));
+				break;
+			case 4:
+				$filtersArray = array_push($filtersArray,array('name' => 'htmlEntities'));
+				break;
+			case 5:
+				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'htmlEntities'));
+				break;
+			case 6:
+				$filtersArray = array_push($filtersArray,array('name' => 'stripTags'),array('name' => 'htmlEntities'));
+				break;
+			case 7:
+				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'),array('name' => 'htmlEntities'));
+				break;
+			case 8:
+				$filtersArray = array_push($filtersArray,array('name' => 'stripNewLines'));
+				break;
+			case 9:
+				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripNewLines'));
+				break;
+			case 10:
+				$filtersArray = array_push($filtersArray,array('name' => 'stripTags'),array('name' => 'stripNewLines'));
+				break;
+			case 11:
+				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'),array('name' => 'stripNewLines'));
+				break;
+			case 12:
+				$filtersArray = array_push($filtersArray,array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
+				break;
+			case 13:
+				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
+				break;
+			case 14:
+				$filtersArray = array_push($filtersArray,array('name' => 'stripTags'),array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
+				break;
+			case 15:
+			default:
+				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'),array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
+		}
+		
+		return $filtersArray;
+	}
 	
 	/**
 	 * 创建图片名
@@ -23,29 +98,86 @@ class BaseModel implements InputFilterAwareInterface
 		return time().floor(microtime() * 10000).rand(10, 99);
 	}
 	
+	/**
+	 * 上传成功后，返回的图片路径
+	 * @param array $file 文件$_FILE
+	 * @return string
+	 */
 	protected function getUploadPath(Array $file)
 	{
 		return 'upload/'.str_replace($GLOBALS['UPLOADPATH'],'',$file['tmp_name']);
 	}
 	
-	public function setDbAdapter($dbAdapter)
+	/**
+	 * 文件mineType验证(inputFilter的数组内定义存在BUG，在此使用Callback调用此方法代替)
+	 * @param string $value
+	 * @return boolean
+	 */
+	protected function fileMimeType()
+	{
+		return function($value){
+			$mimeType = new \Zend\Validator\File\MimeType($this->fileMimeType);
+			return $mimeType->isValid($value);
+		};
+	}
+	
+	/**
+	 * 设置数据库适配器
+	 * @param \Zend\Db\Adapter\Adapter $dbAdapter
+	 */
+	public function setDbAdapter(\Zend\Db\Adapter\Adapter $dbAdapter)
 	{
 		$this->dbAdapter = $dbAdapter;
 	}
 	
-	protected function setModel($inputFilter)
+	/**
+	 * 设置inputFilter
+	 * @param InputFilterInterface $inputFilter
+	 */
+	protected function setModel(InputFilterInterface $inputFilter)
 	{
 		$this->setInputFilter($inputFilter);
 	}
 	
+	/**
+	 * 获得inputFilter
+	 * @param array $inputArray inputFilter设置数组
+	 * @return \Zend\InputFilter\InputFilter
+	 */
 	protected function getModel(Array $inputArray)
 	{
 		$this->inputArray = $inputArray;
 		return $this->getInputFilter();
 	}
 	
+	/**
+	 * 设置上传单文件对大容量
+	 * @param string $fileMaxSize
+	 */
+	public function setFileMaxSize($fileMaxSize)
+	{
+		$this->fileMaxSize = $fileMaxSize;
+	}
+	
+	/**
+	 * 设置上传文件mimeType
+	 * @param string $fileMimeType
+	 */
+	public function setFileMimeType($fileMimeType)
+	{
+		$this->fileMimeType = $fileMimeType;
+	}
+	
+	/**
+	 * 设置inputFilter主体程序
+	 * @see \Zend\InputFilter\InputFilterAwareInterface::setInputFilter()
+	 */
 	public function setInputFilter(InputFilterInterface $inputFilter) {}
 	
+	/**
+	 * 获得inputFilter主体程序
+	 * @see \Zend\InputFilter\InputFilterAwareInterface::getInputFilter()
+	 */
 	public function getInputFilter()
 	{
 		if(!$this->inputFilter) {
@@ -57,22 +189,6 @@ class BaseModel implements InputFilterAwareInterface
 					$inputFilter->add($input);
 				}
 			}
-				
-// 			$fileInput = new \Zend\InputFilter\FileInput('news_file');
-// 			$fileInput->setRequired(true);
-// 			$fileInput->getValidatorChain()
-// 			->attachByName('filesize',      array('max' => 204800))
-// 			->attachByName('fileMimeType',  array())
-// 			->attachByName('fileimagesize', array('maxWidth' => 100, 'maxHeight' => 100));
-// 			$fileInput->getFilterChain()->attachByName(
-// 					'filerenameupload',
-// 					array(
-// 							'target'    => $GLOBALS['UPLOADPATH'].$this->createRandFileName(),
-// 							'overwrite' => true,
-// 							'use_upload_extension' => true
-// 					)
-// 			);
-//			$inputFilter->add($fileInput);
 
 			$this->inputFilter = $inputFilter;
 		}

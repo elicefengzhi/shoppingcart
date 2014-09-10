@@ -28,10 +28,8 @@ class NewsController extends BaseController
     		$news->setDbAdapter($this->serviceLocator->get('Zend\Db\Adapter\Adapter'));
     		
     		$form->setInputFilter($news->getNewsModel());
-    		$form->setData(array_merge_recursive($request->getPost()->toArray(),$request->getFiles()->toArray()));
-    		var_dump($form->isValid());var_dump($form->getMessages());exit;
+    		$form->setData($request->getPost()->toArray());
     		if ($form->isValid()) {
-    			var_dump($news->getData($form->getData()));exit;
     			$this->serviceLocator->get('DbSql')->News()->add();
     	
     			return $this->redirect()->toRoute('admin/news');

@@ -26,12 +26,7 @@ class NewsModel extends BaseModel
 		return $this->getModel(array(
 			array(
 				'name' => 'news_title',
-				'filters' => array(
-					array('name' => 'stripTags'),
-					array('name' => 'stringTrim'),
-					array('name' => 'htmlEntities'),
-					array('name' => 'stripNewLines')
-				),
+				'filters' => $this->getFilters(1 + 2 + 4 + 8),
 				'validators' => array(
 					array(
 						'name'    => 'NotEmpty',
@@ -76,35 +71,6 @@ class NewsModel extends BaseModel
 					),
 				)
 		   ),
-		   array(
-		   		'name' => 'news_file',
-		   		'validators' => array(
-	   				array(
-   						'name' => 'File\Size',
-   						'options' => array(
-   								'max' => 1,
-   								'message' => 'dgdg'
-   						)
-	   				),
-		   			array(
-						'name' => 'File\MimeType',
-		   				'options' => array(
-							'mimeType' => 'image/gif,image/jpg',
-		   					'message' => 'sg'
-						)
-					)
-		   		),
-				'filters' => array(
-					array(
-						'name' => 'filerenameupload',
-						'options' => array(
-							'target'    => $GLOBALS['UPLOADPATH'].$this->createRandFileName(),
-							'overwrite' => true,
-							'use_upload_extension' => true
-						)
-					)
-				)
-		   )
 		));
 	}
 }

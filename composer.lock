@@ -241,12 +241,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/RWOverdijk/AssetManager.git",
-                "reference": "47d29f56fc7935833adba9e18e17f777b9e8a2d6"
+                "reference": "e75ef9b040a44e2d70c4165a7c1f2de9100cca91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RWOverdijk/AssetManager/zipball/47d29f56fc7935833adba9e18e17f777b9e8a2d6",
-                "reference": "47d29f56fc7935833adba9e18e17f777b9e8a2d6",
+                "url": "https://api.github.com/repos/RWOverdijk/AssetManager/zipball/e75ef9b040a44e2d70c4165a7c1f2de9100cca91",
+                "reference": "e75ef9b040a44e2d70c4165a7c1f2de9100cca91",
                 "shasum": ""
             },
             "require": {
@@ -276,15 +276,14 @@
             ],
             "authors": [
                 {
-                    "name": "Marco Pivetta",
-                    "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/",
-                    "role": "Developer"
-                },
-                {
                     "name": "Wesley Overdijk",
                     "email": "r.w.overdijk@gmail.com",
                     "homepage": "http://blog.spoonx.nl/"
+                },
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com",
+                    "homepage": "http://ocramius.github.com/"
                 }
             ],
             "description": "An assetmanager module for Zend Framework 2.",
@@ -295,7 +294,7 @@
                 "zend framework 2",
                 "zf2"
             ],
-            "time": "2014-05-29 15:34:41"
+            "time": "2014-09-05 05:41:48"
         },
         {
             "name": "symfony/process",

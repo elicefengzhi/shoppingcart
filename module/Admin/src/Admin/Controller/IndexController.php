@@ -3,6 +3,7 @@
 namespace Admin\Controller;
 
 use Admin\Controller\BaseController;
+use Admin\Form\IndexForm;
 
 class IndexController extends BaseController
 {	
@@ -13,6 +14,9 @@ class IndexController extends BaseController
     
     public function loginAction()
     {
+    	$form = new IndexForm();
+    	$form->setAttribute('action',$this->url()->fromRoute('admin/index/login'));
+    	
     	$request = $this->getRequest();
     	if($request->isPost()) {
     		$post = $request->getPost()->toArray();
@@ -25,7 +29,7 @@ class IndexController extends BaseController
     			return $this->redirect()->toRoute('admin');
     		}
     	}
-    	return array();
+    	return array('form' => $form);
     }
     
     public function logoutAction()

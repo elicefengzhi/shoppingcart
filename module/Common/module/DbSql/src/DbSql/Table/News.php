@@ -10,8 +10,6 @@ class News extends BaseDb
 	
 	public function add($data)
 	{
-		//$data['create_time'] = time();
-		//$data['update_time'] = $data['create_time'];
 		return $this->addData($data);
 	}
 	

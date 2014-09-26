@@ -78,7 +78,7 @@ trait DbHelper{
 	function getTableByWhere($columns,$where,$limit = false,$isOne = false)
 	{
 		$select = $this->tableGateway->getSql()->select();
-		$select->columns($columns);
+		$columns != 'all' && $select->columns($columns);
 		$select->where($where);
 		if($limit !== false && is_array($limit)) {
 			isset($limit[0]) && $select->limit($limit[0]);

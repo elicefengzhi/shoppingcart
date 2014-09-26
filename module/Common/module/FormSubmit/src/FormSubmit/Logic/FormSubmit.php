@@ -231,12 +231,13 @@ Class FormSubmit
      * @throws \FormSubmit\Exception\FormSubmitException
      * @return boolean|unknown
      */
-	private function forSubmitDataBase($requestType,$where)
+	private function forSubmitDataBase($requestData,$requestType,$where)
 	{
 		if($this->isExists === false) {
 			//触发数据库操作前事件
 			$this->events->trigger('FormSubmit/DbBefore',$this,array());
-			$validatedData = $this->validatedData;
+			//如果insert或update方法给定了数据，使用该数据
+			$validatedData = is_null($requestData) ? $this->validatedData : $requestData;
 		
 			//是否开启事务
 			$this->isTransaction === true && $this->dbModel->beginTransaction();
@@ -471,7 +472,7 @@ Class FormSubmit
 // 		$this->isExists = $exists;
 
 		//数据库操作
-		return $this->forSubmitDataBase($requestType,$where);
+		return $this->forSubmitDataBase($requestData,$requestType,$where);
 // 		if($this->isExists === false) {
 // 			//触发数据库操作前事件
 // 			$this->events->trigger('FormSubmit/DbBefore',$this,array());

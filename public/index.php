@@ -14,6 +14,7 @@ defined('APPLICATIONPATH') || define('APPLICATIONPATH', BASEPATH.'module/Applica
 defined('BASEURL') || define('BASEURL', '/');
 
 $applicationEnv = 'local';
+$GLOBALS['UPLOADPATH'] = BASEPATH.'public/upload/';
 
 // Run the application!
 Zend\Mvc\Application::init(require 'config/application.config.'.$applicationEnv.'.php')->run();

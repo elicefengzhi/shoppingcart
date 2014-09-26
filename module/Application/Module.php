@@ -44,8 +44,7 @@ class Module implements AutoloaderProviderInterface
     public function assetManager($event)
     {
 		$config = $this->getConfig();
-		isset($config['asset_manager']) ? $GLOBALS['UPLOADPATH'] = $config['asset_manager']['resolver_configs']['paths'][0].'/upload/'
-		: $GLOBALS['UPLOADPATH'] = BASEPATH.'public/upload/';
+		isset($config['asset_manager']) && $GLOBALS['UPLOADPATH'] = $config['asset_manager']['resolver_configs']['paths'][0].'/upload/';
     }
     
     public function init(ModuleManager $moduleManager)

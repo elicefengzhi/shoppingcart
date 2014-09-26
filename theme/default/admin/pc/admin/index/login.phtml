@@ -1,4 +1,4 @@
-<form id="login-form" action="<?php echo $this->url(); ?>" method="post">
+<?php echo $this->form()->openTag($form); ?>
 <div id="page_login_main">
 <div id="login">
 <table cellspacing="0">
@@ -8,11 +8,11 @@
 </tr>
 <tr>
 <td class="td0" valign="middle"><p><img /></p></td>
-<td class="td1" valign="middle"><div class="box"><input name="uname" id="uname" type="text" /></div></td>
+<td class="td1" valign="middle"><div class="box"><?php echo $this->formInput($form->get('uname')) ?></div></td>
 </tr>
 <tr>
 <td class="td0" valign="middle"><p><img /></p></td>
-<td class="td1" valign="middle"><div class="box"><input name="pwd" id="pwd" type="password" /></div></td>
+<td class="td1" valign="middle"><div class="box"><?php echo $this->formInput($form->get('pwd')) ?></div></td>
 </tr>
 <tr>
 <td class="td0" valign="middle"><p><img /></p></td>
@@ -22,5 +22,5 @@
 <div id="button_submit"><img /></div>
 </div>
 </div>
-</form>
+<?php echo $this->form()->closeTag(); ?>
 <script type="text/javascript" src="/js/admin/login.js"></script>

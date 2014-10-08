@@ -1,4 +1,4 @@
-elice-zend-framework-2 
+shoppingcart
 ======================
 
-一个例子
+zf2框架相关技术的实验和演示项目

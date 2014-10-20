@@ -47,7 +47,7 @@ class ChildColumns extends BaseHelper
 			$this->childColumnsValues[$childColumnKey] = $dataArray;
 			if($type == 'input') {
 				unset($sourceData[$sourceKey]);
-				$this->formSubmit->setValidatedData($sourceData);
+				$this->formSubmit->validatedData($sourceData);
 			}
 		} 
 	}

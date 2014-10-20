@@ -1,0 +1,32 @@
+{
+    "name": "hyphers/visio-crud-zf2",
+    "description": "CRUD generator dedicated to ZF2",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "crud",
+        "zf2"
+    ],
+    "authors": [
+        {
+            "name": "HyPHPers Isobar Poland  (Piotr Duda , Przemysław Wlodkowski, Bartlomiej Wereszczynski , Jacek Pawelec , Robert Bodych)"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "zendframework/zendframework": ">2.1.3"
+    },
+    "require-dev": {
+        "zendframework/zendframework": "2.*",
+        "phpunit/phpunit": "~4.0",
+        "dudapiotr/zftable": "dev-master",
+        "rwoverdijk/assetmanager" : "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "VisioCrudModeler": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}

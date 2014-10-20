@@ -1,0 +1,8 @@
+<a href="<?=$this->url('%s/default', array('controller' => '%s', 'action' => 'create'))?>" class="btn btn-success">Create</a>
+
+<div id="tableContainer">
+</div>
+
+<script>
+    $("#tableContainer").zfTable('/%s/%s/ajax-list');
+</script>

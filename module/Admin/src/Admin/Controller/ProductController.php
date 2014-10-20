@@ -26,14 +26,12 @@ class ProductController extends BaseController
     		$logic = $this->serviceLocator->get('admin/product/logic');
     		$logic->setTimeData();
     		$logic->insertProductImageAndAd();
-    		$return = $user->insert()->table('product')->existsFields(array('name'))->existsWhere(array('delete_flg' => 1))->validate($this->serviceLocator->get('Validate')->AdminProduct())
+    		$return = $user->requestData()->table('product')->existsFields(array('name'))->existsWhere(array('delete_flg' => 0))->validate($this->serviceLocator->get('Validate')->AdminProduct())
     		->helper('ValidateAfter','ChildColumns','input','AdProduct','ad')
     		->helper('ValidateAfter','ChildColumns','input','TypeProduct','ptypeId')
     		->mediaUpload(false,false)->customFilter(array('editorValue' => null))->submit();
     		
-    		//$return === false && $user->isVal() === false && $errorMessage = $user->getValidateErrorMessage();
-    		//$return === false && $user->isExists() === true && $errorMessage[][] = '商品名は既に登録されております';
-    		if($return === false && ($user->isVal() === false || $user->isExists() === false)) {
+    		if($return === false && ($user->isVal() === false || $user->isExists() === true)) {
     			$errorMessage = $user->getValidateErrorMessage();
     		}
     		if($return !== false) return $this->redirect()->toRoute('admin/product');
@@ -60,15 +58,13 @@ class ProductController extends BaseController
     		$logic = $this->serviceLocator->get('admin/product/logic');
     		$logic->insertProductImageAndAd($pId,'update');
     		$logic->setTimeData(true);
-    		$return = $product->update()->table('product')->where(array('product_id' => $pId))->existsFields(array('name'))->existsWhere(array('delete_flg' => 1))->validate($this->serviceLocator->get('Validate')->AdminProduct())
+    		$return = $product->requestData()->table('product')->where(array('product_id' => $pId))->existsFields(array('name'))->existsWhere(array('delete_flg' => 0))->validate($this->serviceLocator->get('Validate')->AdminProduct())
     		->helper('ValidateAfter','ChildColumns','input','AdProduct','ad')
     		->helper('ValidateAfter','ChildColumns','input','TypeProduct','ptypeId')
     		->mediaUpload(false,false)->customFilter(array('editorValue' => null))->submit();
     		
     		if($return === false) {
-    			//$product->isVal() === false && $errorMessage = $return->getValidateErrorMessage();
-    			//$product->isExists() === true && $errorMessage = '商品名は既に登録されております';
-    			if($product->isVal() === false || $product->isExists() === false) {
+    			if($product->isVal() === false || $product->isExists() === true) {
     				$errorMessage = $product->getValidateErrorMessage();
     			}
     			$productList = $product->getSourceData();
@@ -103,7 +99,7 @@ class ProductController extends BaseController
     {
     	$pId = $this->params('pId',false);
     	if($pId !== false) {
-	    	$return = $this->serviceLocator->get('DbSql')->Product()->edit(array('delete_flg' => 1),array('product_id' => (int)$pId));
+	    	$return = $this->serviceLocator->get('DbSql')->Product()->edit(array('delete_flg' => 0),array('product_id' => (int)$pId));
 	    	$return === true ? $return = 'true' : $return = 'false';
 	    	
 	    	echo $return;

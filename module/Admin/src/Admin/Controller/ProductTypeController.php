@@ -20,18 +20,31 @@ class ProductTypeController extends BaseController
     	$errorMessage = '';
     	$user = $this->serviceLocator->get('FormSubmit')->Insert();
     	if($user !== false) {
-    		$return = $user->insert()->table('product_type')->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->AdminProductType())->submit();
+    		$sourceData = $this->params()->fromPost();
+    		//$return = $user->requestData()->table('product_type')->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->AdminProductType())->submit();
+    		$return = $user->requestData()->table('product_type')->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->QuickValidate())
+    				       ->validateFunction('quickValidate',
+    				       		array(
+    				       			'name' => array(
+    				       				'data' => $sourceData['name'],
+    				       				'notEmpty' => array('message' => '商品カテゴリを入力してください')
+    				       			)
+    							))
+    					  ->validateErrorMessageFunction('getQuickErrorMessage')->submit();
     		if($return !== false) return $this->redirect()->toRoute('admin/product-type');
-    		$return === false && $user->isVal() === false && $errorMessage = $user->getValidateErrorMessage();
-    		$return === false && $user->isExists() === true && $errorMessage = '商品カテゴリは既に登録されております';
+
+    		if($return === false && ($user->isVal() === false || $user->isExists() === true)) {
+    			$errorMessage = $user->getValidateErrorMessage();
+    		}
     	}
-    	
+
     	$productType = $this->serviceLocator->get('DbSql')->ProductType();
     	$typeList = $productType->getType(array('parent_id' => 0));
     	$viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();
     	$viewHelper->setSourceData($typeList,'typeParentList');
+    	$viewHelper->setSourceData($errorMessage,'errorMessage');
 
-    	return array('viewHelper' => $viewHelper,'errorMessage' => $errorMessage,'url' => $this->url()->fromRoute('admin/product-type/add'));
+    	return array('viewHelper' => $viewHelper,'url' => $this->url()->fromRoute('admin/product-type/add'));
     }
     
     public function editAction()

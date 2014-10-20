@@ -20,9 +20,10 @@ class PageController extends BaseController
         $page = $this->serviceLocator->get('FormSubmit')->Insert();
         if($page !== false) {
         	$time = time();
-        	$return = $page->insert()->table('page')->addField(array('create_time' => $time,'update_time' => $time))->existsFields(array('page_title'))->customFilter(array('editorValue' => null,'page_body' => 0))->validate($this->serviceLocator->get('Validate')->AdminPage())->submit();
-            $return === false && $page->isVal() === false && $errorMessage = $page->getValidateErrorMessage();
-            $return === false && $page->isExists() === true && $errorMessage[][] = 'タイトルは既に登録されております';
+        	$return = $page->requestData()->table('page')->addField(array('create_time' => $time,'update_time' => $time))->existsFields(array('page_title'))->customFilter(array('editorValue' => null,'page_body' => 0))->validate($this->serviceLocator->get('Validate')->AdminPage())->submit();
+            if($return === false && ($page->isVal() === false || $page->isExists() === true)) {
+    			$errorMessage = $page->getValidateErrorMessage();
+    		}
             if($return !== false) return $this->redirect()->toRoute('admin/page');
         }
         $viewHelper = $this->serviceLocator->get('ViewHelper')->Admin();

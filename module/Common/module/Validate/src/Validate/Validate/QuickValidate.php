@@ -9,11 +9,20 @@ class QuickValidate extends BaseValidator
 	protected $quickErrorMessage = array();//快速验证错误信息
 	
 	/**
+	 * 获得验证错误信息
+	 * @return array
+	 */
+	public function getQuickErrorMessage()
+	{
+		return $this->quickErrorMessage;
+	}
+	
+	/**
 	 * 快速验证
 	 * @param array $validateParams 验证数组
 	 * @return boolean|array
 	 */
-	public function validate(Array $validateArray)
+	public function quickValidate(Array $validateArray)
 	{
 		if(count($validateArray) > 0) {
 			foreach($validateArray as $field => $validateParams) {
@@ -85,7 +94,7 @@ class QuickValidate extends BaseValidator
 				}	
 			}
 				
-			return count($this->quickErrorMessage) > 0 ? $this->quickErrorMessage : true;
+			return count($this->quickErrorMessage) > 0 ? false : true;
 		}
 	}
 }

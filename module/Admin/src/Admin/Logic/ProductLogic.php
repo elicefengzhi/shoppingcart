@@ -15,7 +15,7 @@ class ProductLogic extends BaseLogic
 			$time = time();
 			$isOnlyUpdate === false && $sourceData['creat_time'] = $time;
 			$sourceData['update_time'] = $time;
-			$target->setValidatedData($sourceData);
+			$target->validatedData($sourceData);
 		});		
 	}
 	
@@ -31,7 +31,7 @@ class ProductLogic extends BaseLogic
 				foreach($chlidData as $data) {
 					$return = $serviceLocator->get('DbSql')->ProductImage()->add(array('product_id' => $productId,'image_path' => $data));
 					if($return === false) {
-						$target->setIsRollBack(true);
+						$target->isRollBack(true);
 						return false;
 					}
 				}	
@@ -45,14 +45,14 @@ class ProductLogic extends BaseLogic
 				if($delReturn === false) {
 					$exists = $serviceLocator->get('DbSql')->AdProduct()->getExistsByProductId(array('product_id' => $productId));
 					if($exists == true) {
-						$target->setIsRollBack(true);
+						$target->isRollBack(true);
 						return false;
 					}
 				}
 				foreach($chlidData as $data) {
 					$return = $serviceLocator->get('DbSql')->AdProduct()->add(array('product_id' => $productId,'ad_id' => $data));
 					if($return === false) {
-						$target->setIsRollBack(true);
+						$target->isRollBack(true);
 						return false;
 					}
 				}
@@ -65,7 +65,7 @@ class ProductLogic extends BaseLogic
 				if($delReturn === false) {
 					$exists = $serviceLocator->get('DbSql')->ProductProductType()->getExistsByProductId(array('product_id' => $productId));
 					if($exists == true) {
-						$target->setIsRollBack(true);
+						$target->isRollBack(true);
 						return false;
 					}
 				}
@@ -73,7 +73,7 @@ class ProductLogic extends BaseLogic
 				foreach($chlidData as $data) {
 					$return = $serviceLocator->get('DbSql')->ProductProductType()->add(array('product_id' => $productId,'ptype_id' => $data));
 					if($return === false) {
-						$target->setIsRollBack(true);
+						$target->isRollBack(true);
 						return false;
 					}
 				}

@@ -1,0 +1,16 @@
+<?php if ($this->descriptor instanceof \VisioCrudModeler\Descriptor\ListGeneratorInterface):?>
+<?php foreach ($this->descriptor->listGenerator() as $name=>$dataSet):?>
+<h2><?php echo $name;?> fields:</h2>
+<?php if ($dataSet instanceof \VisioCrudModeler\Descriptor\ListGeneratorInterface): ?>
+<ol>
+   <?php foreach ($dataSet->listGenerator() as $field=>$description):?>
+   <li><b><?php echo $field?></b> (<?php echo $description->getType();?>) 
+   <?php if ($description instanceof \VisioCrudModeler\Descriptor\ReferenceFieldInterface && $description->isReference()):?>
+   references <b><?php echo $description->referencedDataSetName()?>.<?php echo $description->referencedFieldName()?></b>
+   <?php endif;?>
+   </li> 
+   <?php endforeach;?> 
+</ol>
+<?php endif;?>
+<?php endforeach;?>
+<?php endif;?>

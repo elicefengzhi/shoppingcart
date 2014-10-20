@@ -21,50 +21,30 @@ Class Base
 	protected $isInsertExists = true;//默认进行添加数据重复验证
 	protected $isUpdateExists = true;//默认进行更新数据重复验证
 	protected $validateClass = false;//默认不验证
-	protected $validateErrorMessage = false;//默认使用自带的错误提示语句
 	protected $mediaIsMerge;//媒体上传后的地址是否合并入validatedData
 	
-	protected $isFilter = true;//默认过滤request参数
-	protected $customFilter = false;//默认不进行自定义过滤
-	protected $addField = false;//默认没有附加字段
-	
+    /**
+	 * 如果调用的方法在本类不存在，则试图通过formSubmit对象调用相应方法
+     */
 	function __call($methodName,$arguments)
 	{
-		return $this->formSubmit->$methodName($arguments);
+		//如果formSubmit对象没有创建则创建，已经创建则调用该对象相应方法
+		if(!is_object($this->formSubmit)) {
+			$formSubmit = new FormSubmit($this->initArray,$this->serviceLocator);
+			$this->formSubmit = $formSubmit;
+		}
+		$return = call_user_func_array(array($this->formSubmit,$methodName),$arguments);
+		
+		return is_null($return) ? $this : $return;
 	}
 	
 	/**
-	 * 附加字段
-	 * @param array $Field
+	 * 设置RequestData数据
+	 * 程序自动获取Request的Post(默认)或Get
+	 * @param array $requestData
 	 * @return \FormSubmit\Logic\Base
 	 */
-	public function addField(Array $Field)
-	{
-		$this->addField = $Field;
-		return $this;
-	}
-	
-	/**
-	 * 表单插入数据
-	 * 如果不传参，程序自动获取Request的Post(默认)或Get
-	 *
-	 * @param array $requestData
-	 * @return \FormSubmit\Logic\Insert
-	 */
-	public function insert(Array $requestData = null)
-	{
-		!empty($requestData) && $this->requestData = $requestData;
-		return $this;
-	}
-	
-	/**
-	 * 表单更新数据
-	 * 如果不传参，程序自动获取Request的Post(默认)或Get
-	 *
-	 * @param array $requestData
-	 * @return \FormSubmit\Logic\Insert
-	 */
-	public function update(Array $requestData = null)
+	public function requestData(Array $requestData = null)
 	{
 		!empty($requestData) && $this->requestData = $requestData;
 		return $this;
@@ -119,40 +99,6 @@ Class Base
 	}
 	
 	/**
-	 * 是否验证request参数
-	 * @param boolean $isFilter
-	 * @return \FormSubmit\Logic\Base
-	 */
-	public function isFilter($isFilter)
-	{
-		$this->isFilter = (bool)$isFilter;
-		return $this;
-	}
-	
-	/**
-	 * 自定义过滤
-	 * @example<br/>
-	 * 1. array('filter1' => 15 , 'filter2' => 2)<br/>
-	 * 2. array('filter1' => 1 + 2 + 4 + 8 , 'filter2' => 4 + 8)<br/>
-	 * 3. array('filter1' => \FormSubmit\Filter\Filter::HTMLENTITIES + \FormSubmit\Filter\Filter::STRINGTRIM)<br/>
-	 * 解释：<br/>
-	 * 不过滤 为 0<br/>
-	 * 为"null"，则视为多余字段从request参数中注销<br/>
-	 * STRINGTRIM 为 1<br/>
-	 * STRIPTAGS 为 2<br/>
-	 * HTMLENTITIES 为 4<br/>
-	 * STRIPNEWLINES 为 8<br/>
-	 * 
-	 * @param array $customFilter
-	 * @return \FormSubmit\Logic\Base
-	 */
-	public function customFilter(Array $customFilter)
-	{
-		$this->customFilter = $customFilter;
-		return $this;
-	}
-	
-	/**
 	 * 执行操作的表名或数据操作对象
 	 *
 	 * @param string|object $tableName
@@ -176,14 +122,15 @@ Class Base
 	
 	/**
 	 * 验证对象
-	 * 如果不传参则不验证数据正确性
+	 * 如果是对象，则作为验证对象调用
+	 * 如果是布尔值，则视为是否通过验证
 	 *
-	 * @param object $validateClass
+	 * @param object|boolean $validateClass
 	 * @return \FormSubmit\Logic\Insert
 	 */
-	public function validate($validateClass = false)
+	public function validate($validateClass)
 	{
-		$validateClass !== false && $this->validateClass = $validateClass;
+		$this->validateClass = (!is_object($validateClass) && !is_bool($validateClass)) ? false : $validateClass;
 		return $this;
 	}
 	
@@ -273,21 +220,6 @@ Class Base
 	}
 	
 	/**
-	 * 设置验证错误提示信息
-	 * 
-	 * 数组键名：
-	 * 'maxSizeError' 媒体上传最大容量
-	 * 'minSizeError' 媒体上传最小容量
-	 * 'mimeTypeError' 媒体上传mime类型
-	 * 'existsError' 数据存在
-	 * @param array $validateErrorMessage
-	 */
-	public function setValidateErrorMessage(Array $validateErrorMessage)
-	{
-		$this->validateErrorMessage = $validateErrorMessage;
-	}
-	
-	/**
 	 * 执行表单提交主程序
 	 * @param int $requestType
 	 * @throws \Exception
@@ -297,25 +229,15 @@ Class Base
 	{
 		if(empty($this->table)) throw new \FormSubmit\Exception\FormSubmitException("formsubmit table unknow");
 	
-		$formSubmit = new FormSubmit($this->initArray,$this->serviceLocator);
-		$this->formSubmit = $formSubmit;
+		$formSubmit = !is_object($this->formSubmit) ? new FormSubmit($this->initArray,$this->serviceLocator) : $this->formSubmit;
+
 		//如果不执行存在验证，则存在验证方法名赋值false
-		if($requestType == 'insert') {
-			$this->isInsertExists === false && $formSubmit->setInsertExistsFunction(false);
-		}
-		else {
-			$this->isUpdateExists === false && $formSubmit->setupdateExistsSelect(false);
-		}
-		//设置是否过滤request参数
-		$formSubmit->setIsFilter($this->isFilter);
-		//设置自定义过滤request参数
-		$formSubmit->setCustomFilter($this->customFilter);
-		//设置附加字段
-		$formSubmit->setAddField($this->addField);
+		$requestType == 'insert' ?
+		($this->isInsertExists === false && $formSubmit->insertExistsFunction(false)) :
+		($this->isUpdateExists === false && $formSubmit->updateExistsFunction(false));
+
 		//设置媒体上传后的地址是否合并入validatedData
-		$formSubmit->setMediaUpload($this->media,$this->mediaIsMerge);
-		//设置验证错误提示信息
-		$formSubmit->setSourceValidateErrorMessage($this->validateErrorMessage);
+		$formSubmit->mediaUpload($this->media,$this->mediaIsMerge);
 	
 		$insertReturn = $formSubmit->formSubmit($requestType,$this->requestData,$this->table,$this->where,$this->existsFields,$this->existsWhere,$this->validateClass);
 		return $insertReturn;

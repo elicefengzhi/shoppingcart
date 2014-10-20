@@ -1,0 +1,198 @@
+<script>
+   $(function() {
+        $( ".sortable" ).sortable({
+          connectWith: ".connectedSortable"
+        }).disableSelection();
+  });
+  </script>
+  
+
+  
+
+<div class="row clearfix" style="margin-top: 50px;">
+    <div class="col-md-2 column">			
+        <div class="box box-element">
+            <div class="view">
+                <h3>Data source </h3>
+                <ul>
+                    <?foreach ($tables as $table):?>
+                        <li><a href="#" class="show-fields" data-form="<?=$table?>"><?=$table?></a></li>
+                    <?endforeach;?>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7 column ui-sortable" style="">
+        <div class="box box-element">
+            
+            <?php foreach($dataSourceDescriptor->listGenerator() as $tableName=>$dataSetDescriptor):?>
+                <div class="view field-list-wrap" style="display: none" data-form="<?=$tableName?>">
+                    <h3>Table: <?=$tableName?></h3>
+                    Base class name <input type="text" class="form-control base-class-name" data-form="<?=$tableName?>" value="<?=$underscoreToCamelCase->filter($tableName)?>"/>
+                    <div class="row clearfix">
+                        <div class="col-md-6 column">
+                            <h4>Available <a href="#" class="move-all" data-ul="selected">(move all)</a></h4>
+                            <ul data-target="available" class="available list-group sortable connectedSortable">
+
+                            </ul>
+                        </div>
+                        <div class="col-md-6 column">
+                            <h4>Selected  <a href="#" class="move-all" data-ul="available">(move all)</a></h4>
+                            <ul data-target="selected"  class="selected list-group sortable connectedSortable">
+                                
+                                
+                                <?php foreach ($dataSetDescriptor->listFields() as $field) : ?>
+                                    <li class="list-group-item ui-state-default" data-form="<?=$tableName?>" data-element="<?=$field?>">
+                                        <strong><?=$field?></strong>
+                                        <a data-form="<?=$tableName?>" data-element="<?=$field?>"  data-label="<?=$underscoreToCamelCase->filter($field)?>" class="edit " href=""> (Edit) </a>
+                                    </li>
+
+                                <?php endforeach;?>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <div class="col-md-3 column ui-sortable" style="">
+        <div class="box box-element">
+            <div class="view">
+                <h3>Details </h3>
+                <hr/>
+                
+                
+                <div class="form-group">
+                    <label>Validators</label>
+                    <select class="form-control validators">
+                        <option value="null">Wybierz</option>
+                        <option value="required">Required</option>
+                        <option value="string-length">StringLength</option>
+                        <option value="digits">Digits</option>
+                        <option value="email">Email</option>
+                        <option value="greater-than">Greater Than</option>
+                        <option value="less-than">Less Than</option>
+                        <option value="between">Between</option>
+                    </select>
+                    <button class="btn-primary form-control add-validator" style="margin-top: 5px;">Add</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Filters</label>
+                    <select class="form-control filters">
+                        <option value="null">Wybierz</option>
+                        <option value="string-trim">StringTrim</option>
+                        <option value="strip-tags">StripTags</option>
+                    </select>
+                    <button class="btn-primary form-control add-filter" style="margin-top: 5px;">Add</button>
+                </div>
+                
+                <hr/>
+                
+                <div id="options-wrap">
+                    
+                    <?foreach($dataSourceDescriptor->listGenerator() as $tableName=>$dataSetDescriptor):?>
+                    
+                        <?foreach($dataSetDescriptor->getFields() as $field):?>
+                            <div data-form="<?=$tableName?>" data-element="<?=$field['name']?>" class="element-wrap" style="display: none;">
+                                <h4>Element: <?=$field['name']?></h4>
+                                <hr>
+                                
+                                <div class="form-group">
+                                    <label>Type</label>
+                                    <select  class="form-control" data-type="type">
+                                        <option value="text">Text</option>
+                                        <option value="hidden">Hidden</option>
+                                        <option value="textarea">Textarea</option>
+                                        <option value="checkbox">Checkbox</option>
+                                        <option value="select">Select</option>
+                                        <option value="radio">Radio</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Label</label>
+                                    <input type="text" class="form-control" data-type="label" value="<?=$underscoreToCamelCase->filter($field['name'])?>" >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Key</label>
+                                    <select  class="form-control" data-type="key">
+                                        <option value="">--Choose--</option>
+                                        <option value="primary" <?if($field['key'] == 'PRI'):?> selected="selected" <?endif;?> >Primary</option>
+                                        <option value="foreign">Foreign</option>
+                                    </select>
+                                </div>
+                                
+                                <h5><strong>Validators</strong></h5>
+                                <ul class="validator-list">
+                                    
+                                    <?echo $this->partial('validator/required' , array('field' => $field))?>
+                                    <?echo $this->partial('validator/string-length', array('field' => $field))?>
+                                    <?echo $this->partial('validator/digits', array('field' => $field))?>
+                                    
+                                </ul>
+                                <h5><strong>Filters</strong></h5>
+                                <ul class="filter-list">
+                                     <?echo $this->partial('filter/string-trim' , array('field' => $field))?>
+                                     <?echo $this->partial('filter/strip-tags', array('field' => $field))?>   
+                                </ul>
+                            </div>
+                        <?endforeach;?>
+                    <?endforeach;?>
+                    
+                    
+                </div>
+                <button class="btn-primary form-control build-validators" style="margin-top: 5px;">Build</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row clearfix" style="margin-top: 50px;">
+    <div class="col-md-6 column">	
+        <h3>Configuration</h3>
+        
+        <label>Author</label>
+        <input type="text" class="form-control" id="author" value="<?=$config['author']?>"/>
+        <label>Copyright</label>
+        <input type="text" class="form-control" id="copyright" value="<?=$config['copyright']?>"/>
+        <label>Project</label>
+        <input type="text" class="form-control" id="project" value="<?=$config['project']?>"/>
+        <label>License</label>
+        <input type="text" class="form-control" id="license" value="<?=$config['license']?>"/>
+        <label>Module name</label>
+        <input type="text" class="form-control" id="moduleName" value="<?=$config['moduleName']?>"/>
+        <label>AdapterServiceKey</label>
+        <input type="text" class="form-control" id="adapterServiceKey" value="<?=$config['adapterServiceKey']?>"/>
+        <label>Descriptor</label>
+        <input type="text" class="form-control" id="descriptor" value="web"/>
+    </div>
+</div>
+  
+<?
+$this->headScript()->prependFile($this->basePath() . '/modeler.js');
+?>
+
+
+<div>
+    <ul class="template-v" style="display: none;">
+        
+        <?echo $this->partial('validator/digits' , array('isTemplate' => true))?>
+        <?echo $this->partial('validator/required', array('isTemplate' => true))?>
+        <?echo $this->partial('validator/email', array('isTemplate' => true))?>
+        <?echo $this->partial('validator/string-length', array('isTemplate' => true))?>
+        <?echo $this->partial('validator/greater-than', array('isTemplate' => true))?>
+        <?echo $this->partial('validator/between', array('isTemplate' => true))?>
+
+    </ul>
+    <ul class="template-f" style="display: none;">
+        <?echo $this->partial('filter/string-trim' , array('isTemplate' => true))?>
+        <?echo $this->partial('filter/strip-tags', array('isTemplate' => true))?>
+    </ul>
+</div>
+  
+  
+<input type="hidden"  id="dbName" value="<?=$dataSourceDescriptor->getName()?>" />

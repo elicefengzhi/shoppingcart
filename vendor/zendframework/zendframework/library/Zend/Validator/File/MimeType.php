@@ -147,7 +147,7 @@ class MimeType extends AbstractValidator
                 }
                 return $this->options['magicFile'];
             }
-           
+
             ErrorHandler::start();
             $safeMode = ini_get('safe_mode');
             ErrorHandler::stop();
@@ -163,7 +163,7 @@ class MimeType extends AbstractValidator
                     } catch (Exception\ExceptionInterface $e) {
                         // Intentionally, catch and fall through
                     }
-                } 
+                }
             }
 
             if ($this->options['magicFile'] === null) {

@@ -107,126 +107,6 @@
         ]
     },
     {
-        "name": "zendframework/zendframework",
-        "version": "2.3.2",
-        "version_normalized": "2.3.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/zendframework/zf2.git",
-            "reference": "0b74b66dc07ff88140287bdf67d230c1bd32ee0c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/zf2/zipball/0b74b66dc07ff88140287bdf67d230c1bd32ee0c",
-            "reference": "0b74b66dc07ff88140287bdf67d230c1bd32ee0c",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.23",
-            "zendframework/zendxml": "~1.0-dev"
-        },
-        "replace": {
-            "zendframework/zend-authentication": "self.version",
-            "zendframework/zend-barcode": "self.version",
-            "zendframework/zend-cache": "self.version",
-            "zendframework/zend-captcha": "self.version",
-            "zendframework/zend-code": "self.version",
-            "zendframework/zend-config": "self.version",
-            "zendframework/zend-console": "self.version",
-            "zendframework/zend-crypt": "self.version",
-            "zendframework/zend-db": "self.version",
-            "zendframework/zend-debug": "self.version",
-            "zendframework/zend-di": "self.version",
-            "zendframework/zend-dom": "self.version",
-            "zendframework/zend-escaper": "self.version",
-            "zendframework/zend-eventmanager": "self.version",
-            "zendframework/zend-feed": "self.version",
-            "zendframework/zend-file": "self.version",
-            "zendframework/zend-filter": "self.version",
-            "zendframework/zend-form": "self.version",
-            "zendframework/zend-http": "self.version",
-            "zendframework/zend-i18n": "self.version",
-            "zendframework/zend-inputfilter": "self.version",
-            "zendframework/zend-json": "self.version",
-            "zendframework/zend-ldap": "self.version",
-            "zendframework/zend-loader": "self.version",
-            "zendframework/zend-log": "self.version",
-            "zendframework/zend-mail": "self.version",
-            "zendframework/zend-math": "self.version",
-            "zendframework/zend-memory": "self.version",
-            "zendframework/zend-mime": "self.version",
-            "zendframework/zend-modulemanager": "self.version",
-            "zendframework/zend-mvc": "self.version",
-            "zendframework/zend-navigation": "self.version",
-            "zendframework/zend-paginator": "self.version",
-            "zendframework/zend-permissions-acl": "self.version",
-            "zendframework/zend-permissions-rbac": "self.version",
-            "zendframework/zend-progressbar": "self.version",
-            "zendframework/zend-resources": "self.version",
-            "zendframework/zend-serializer": "self.version",
-            "zendframework/zend-server": "self.version",
-            "zendframework/zend-servicemanager": "self.version",
-            "zendframework/zend-session": "self.version",
-            "zendframework/zend-soap": "self.version",
-            "zendframework/zend-stdlib": "self.version",
-            "zendframework/zend-tag": "self.version",
-            "zendframework/zend-test": "self.version",
-            "zendframework/zend-text": "self.version",
-            "zendframework/zend-uri": "self.version",
-            "zendframework/zend-validator": "self.version",
-            "zendframework/zend-version": "self.version",
-            "zendframework/zend-view": "self.version",
-            "zendframework/zend-xmlrpc": "self.version"
-        },
-        "require-dev": {
-            "doctrine/annotations": ">=1.0",
-            "fabpot/php-cs-fixer": "dev-master",
-            "ircmaxell/random-lib": "dev-master",
-            "ircmaxell/security-lib": "dev-master",
-            "mikey179/vfsstream": "1.2.*",
-            "phpunit/phpunit": "3.7.*",
-            "satooshi/php-coveralls": "dev-master",
-            "sebastianbergmann/phpcov": "1.1.0"
-        },
-        "suggest": {
-            "doctrine/annotations": "Doctrine Annotations >=1.0 for annotation features",
-            "ext-intl": "ext/intl for i18n features (included in default builds of PHP)",
-            "ircmaxell/random-lib": "Fallback random byte generator for Zend\\Math\\Rand if OpenSSL/Mcrypt extensions are unavailable",
-            "ocramius/proxy-manager": "ProxyManager 0.5.* to handle lazy initialization of services",
-            "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
-            "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
-        },
-        "time": "2014-08-12 16:48:34",
-        "bin": [
-            "bin/classmap_generator.php",
-            "bin/pluginmap_generator.php",
-            "bin/templatemap_generator.php"
-        ],
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.3-dev",
-                "dev-develop": "2.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Zend\\": "library/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "description": "Zend Framework 2",
-        "homepage": "http://framework.zend.com/",
-        "keywords": [
-            "framework",
-            "zf2"
-        ]
-    },
-    {
         "name": "mobiledetect/mobiledetectlib",
         "version": "2.8.4",
         "version_normalized": "2.8.4.0",
@@ -417,55 +297,6 @@
         ]
     },
     {
-        "name": "symfony/process",
-        "version": "v2.5.4",
-        "version_normalized": "2.5.4.0",
-        "target-dir": "Symfony/Component/Process",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Process.git",
-            "reference": "136cf0bdaacea81f779583376d47dd8aef4fc6ba"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Process/zipball/136cf0bdaacea81f779583376d47dd8aef4fc6ba",
-            "reference": "136cf0bdaacea81f779583376d47dd8aef4fc6ba",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "time": "2014-08-31 03:22:04",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.5-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Process\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            },
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            }
-        ],
-        "description": "Symfony Process Component",
-        "homepage": "http://symfony.com"
-    },
-    {
         "name": "bjyoungblood/bjy-profiler",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -516,18 +347,187 @@
         ]
     },
     {
+        "name": "symfony/process",
+        "version": "v2.5.5",
+        "version_normalized": "2.5.5.0",
+        "target-dir": "Symfony/Component/Process",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Process.git",
+            "reference": "8a1ec96c4e519cee0fb971ea48a1eb7369dda54b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Process/zipball/8a1ec96c4e519cee0fb971ea48a1eb7369dda54b",
+            "reference": "8a1ec96c4e519cee0fb971ea48a1eb7369dda54b",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2014-09-23 05:25:11",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.5-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Process\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            },
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            }
+        ],
+        "description": "Symfony Process Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "zendframework/zendframework",
+        "version": "2.3.3",
+        "version_normalized": "2.3.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/zendframework/zf2.git",
+            "reference": "88c9b6f566fc1097f64ead155625db9bdfee531e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/zendframework/zf2/zipball/88c9b6f566fc1097f64ead155625db9bdfee531e",
+            "reference": "88c9b6f566fc1097f64ead155625db9bdfee531e",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.23",
+            "zendframework/zendxml": "~1.0-dev"
+        },
+        "replace": {
+            "zendframework/zend-authentication": "self.version",
+            "zendframework/zend-barcode": "self.version",
+            "zendframework/zend-cache": "self.version",
+            "zendframework/zend-captcha": "self.version",
+            "zendframework/zend-code": "self.version",
+            "zendframework/zend-config": "self.version",
+            "zendframework/zend-console": "self.version",
+            "zendframework/zend-crypt": "self.version",
+            "zendframework/zend-db": "self.version",
+            "zendframework/zend-debug": "self.version",
+            "zendframework/zend-di": "self.version",
+            "zendframework/zend-dom": "self.version",
+            "zendframework/zend-escaper": "self.version",
+            "zendframework/zend-eventmanager": "self.version",
+            "zendframework/zend-feed": "self.version",
+            "zendframework/zend-file": "self.version",
+            "zendframework/zend-filter": "self.version",
+            "zendframework/zend-form": "self.version",
+            "zendframework/zend-http": "self.version",
+            "zendframework/zend-i18n": "self.version",
+            "zendframework/zend-inputfilter": "self.version",
+            "zendframework/zend-json": "self.version",
+            "zendframework/zend-ldap": "self.version",
+            "zendframework/zend-loader": "self.version",
+            "zendframework/zend-log": "self.version",
+            "zendframework/zend-mail": "self.version",
+            "zendframework/zend-math": "self.version",
+            "zendframework/zend-memory": "self.version",
+            "zendframework/zend-mime": "self.version",
+            "zendframework/zend-modulemanager": "self.version",
+            "zendframework/zend-mvc": "self.version",
+            "zendframework/zend-navigation": "self.version",
+            "zendframework/zend-paginator": "self.version",
+            "zendframework/zend-permissions-acl": "self.version",
+            "zendframework/zend-permissions-rbac": "self.version",
+            "zendframework/zend-progressbar": "self.version",
+            "zendframework/zend-resources": "self.version",
+            "zendframework/zend-serializer": "self.version",
+            "zendframework/zend-server": "self.version",
+            "zendframework/zend-servicemanager": "self.version",
+            "zendframework/zend-session": "self.version",
+            "zendframework/zend-soap": "self.version",
+            "zendframework/zend-stdlib": "self.version",
+            "zendframework/zend-tag": "self.version",
+            "zendframework/zend-test": "self.version",
+            "zendframework/zend-text": "self.version",
+            "zendframework/zend-uri": "self.version",
+            "zendframework/zend-validator": "self.version",
+            "zendframework/zend-version": "self.version",
+            "zendframework/zend-view": "self.version",
+            "zendframework/zend-xmlrpc": "self.version"
+        },
+        "require-dev": {
+            "doctrine/annotations": ">=1.0",
+            "fabpot/php-cs-fixer": "dev-master#fcbb09b5204",
+            "ircmaxell/random-lib": "dev-master",
+            "ircmaxell/security-lib": "dev-master",
+            "mikey179/vfsstream": "1.2.*",
+            "phpunit/phpunit": "3.7.*",
+            "satooshi/php-coveralls": "dev-master",
+            "sebastianbergmann/phpcov": "1.1.0"
+        },
+        "suggest": {
+            "doctrine/annotations": "Doctrine Annotations >=1.0 for annotation features",
+            "ext-intl": "ext/intl for i18n features (included in default builds of PHP)",
+            "ircmaxell/random-lib": "Fallback random byte generator for Zend\\Math\\Rand if OpenSSL/Mcrypt extensions are unavailable",
+            "ocramius/proxy-manager": "ProxyManager 0.5.* to handle lazy initialization of services",
+            "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
+            "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
+        },
+        "time": "2014-09-16 22:58:11",
+        "bin": [
+            "bin/classmap_generator.php",
+            "bin/pluginmap_generator.php",
+            "bin/templatemap_generator.php"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3-dev",
+                "dev-develop": "2.4-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Zend\\": "library/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "description": "Zend Framework 2",
+        "homepage": "http://framework.zend.com/",
+        "keywords": [
+            "framework",
+            "zf2"
+        ]
+    },
+    {
         "name": "rwoverdijk/assetmanager",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/RWOverdijk/AssetManager.git",
-            "reference": "e75ef9b040a44e2d70c4165a7c1f2de9100cca91"
+            "reference": "865eebdd404fc47dfa961f7ae3453c70712e3857"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/RWOverdijk/AssetManager/zipball/e75ef9b040a44e2d70c4165a7c1f2de9100cca91",
-            "reference": "e75ef9b040a44e2d70c4165a7c1f2de9100cca91",
+            "url": "https://api.github.com/repos/RWOverdijk/AssetManager/zipball/865eebdd404fc47dfa961f7ae3453c70712e3857",
+            "reference": "865eebdd404fc47dfa961f7ae3453c70712e3857",
             "shasum": ""
         },
         "require": {
@@ -545,7 +545,7 @@
             "squizlabs/php_codesniffer": "1.5.*",
             "zendframework/zendframework": "2.*"
         },
-        "time": "2014-09-05 05:41:48",
+        "time": "2014-09-17 04:18:07",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -575,140 +575,6 @@
             "asset",
             "asset manager",
             "zend framework 2",
-            "zf2"
-        ]
-    },
-    {
-        "name": "zf-commons/zfc-base",
-        "version": "v0.1.2",
-        "version_normalized": "0.1.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/ZF-Commons/ZfcBase.git",
-            "reference": "fc68a49b58ba68584a9a4c44a1ca9df12b30d1bf"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/ZF-Commons/ZfcBase/zipball/fc68a49b58ba68584a9a4c44a1ca9df12b30d1bf",
-            "reference": "fc68a49b58ba68584a9a4c44a1ca9df12b30d1bf",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "zendframework/zend-db": "~2.1",
-            "zendframework/zend-eventmanager": "~2.1",
-            "zendframework/zend-loader": "~2.1",
-            "zendframework/zend-modulemanager": "~2.1",
-            "zendframework/zend-mvc": "~2.1",
-            "zendframework/zend-servicemanager": "~2.1",
-            "zendframework/zend-stdlib": "~2.1"
-        },
-        "time": "2013-05-02 12:33:49",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "ZfcBase": "src/"
-            },
-            "classmap": [
-                "./Module.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "authors": [
-            {
-                "name": "Kyle Spraggs",
-                "email": "theman@spiffyjr.me",
-                "homepage": "http://www.spiffyjr.me/"
-            },
-            {
-                "name": "Evan Coury",
-                "email": "me@evancoury.com",
-                "homepage": "http://blog.evan.pro/"
-            }
-        ],
-        "description": "A set of genetic (abstract) classes which are commonly used across multiple modules.",
-        "homepage": "https://github.com/ZF-Commons/ZfcBase",
-        "keywords": [
-            "zf2"
-        ]
-    },
-    {
-        "name": "zf-commons/zfc-user",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/ZF-Commons/ZfcUser.git",
-            "reference": "fff139fae040f983548b6f37bd63e6941659ad31"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/fff139fae040f983548b6f37bd63e6941659ad31",
-            "reference": "fff139fae040f983548b6f37bd63e6941659ad31",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "zendframework/zend-authentication": "~2.1",
-            "zendframework/zend-crypt": "~2.1",
-            "zendframework/zend-form": "~2.1",
-            "zendframework/zend-http": "~2.1",
-            "zendframework/zend-inputfilter": "~2.1",
-            "zendframework/zend-loader": "~2.1",
-            "zendframework/zend-modulemanager": "~2.1",
-            "zendframework/zend-mvc": "~2.1",
-            "zendframework/zend-servicemanager": "~2.1",
-            "zendframework/zend-session": "~2.1",
-            "zendframework/zend-stdlib": "~2.1",
-            "zendframework/zend-validator": "~2.1",
-            "zendframework/zend-view": "~2.1",
-            "zf-commons/zfc-base": "0.*"
-        },
-        "require-dev": {
-            "phpmd/phpmd": "1.4.*",
-            "phpunit/phpunit": ">=3.7,<4",
-            "squizlabs/php_codesniffer": "1.4.*",
-            "zendframework/zend-captcha": "~2.1"
-        },
-        "suggest": {
-            "zendframework/zend-captcha": "Zend\\Captcha if you want to use the captcha component"
-        },
-        "time": "2014-09-03 21:28:29",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.0.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "ZfcUser": "src/"
-            },
-            "classmap": [
-                "./Module.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Kyle Spraggs",
-                "email": "theman@spiffyjr.me",
-                "homepage": "http://www.spiffyjr.me/"
-            },
-            {
-                "name": "Evan Coury",
-                "email": "me@evancoury.com",
-                "homepage": "http://blog.evan.pro/"
-            }
-        ],
-        "description": "A generic user registration and authentication module for ZF2. Supports Zend\\Db and Doctrine2.",
-        "homepage": "https://github.com/ZF-Commons/ZfcUser",
-        "keywords": [
             "zf2"
         ]
     }

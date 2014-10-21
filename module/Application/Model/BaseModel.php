@@ -39,52 +39,52 @@ class BaseModel implements InputFilterAwareInterface
 		$filtersArray = array();
 		switch ($filtersInt) {
 			case 1:
-				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'));
+				array_push($filtersArray,array('name' => 'stringTrim'));
 				break;
 			case 2:
-				$filtersArray = array_push($filtersArray,array('name' => 'stripTags'));
+				array_push($filtersArray,array('name' => 'stripTags'));
 				break;
 			case 3:
-				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'));
+				array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'));
 				break;
 			case 4:
-				$filtersArray = array_push($filtersArray,array('name' => 'htmlEntities'));
+				array_push($filtersArray,array('name' => 'htmlEntities'));
 				break;
 			case 5:
-				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'htmlEntities'));
+				array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'htmlEntities'));
 				break;
 			case 6:
-				$filtersArray = array_push($filtersArray,array('name' => 'stripTags'),array('name' => 'htmlEntities'));
+				array_push($filtersArray,array('name' => 'stripTags'),array('name' => 'htmlEntities'));
 				break;
 			case 7:
-				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'),array('name' => 'htmlEntities'));
+				array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'),array('name' => 'htmlEntities'));
 				break;
 			case 8:
-				$filtersArray = array_push($filtersArray,array('name' => 'stripNewLines'));
+				array_push($filtersArray,array('name' => 'stripNewLines'));
 				break;
 			case 9:
-				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripNewLines'));
+				array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripNewLines'));
 				break;
 			case 10:
-				$filtersArray = array_push($filtersArray,array('name' => 'stripTags'),array('name' => 'stripNewLines'));
+				array_push($filtersArray,array('name' => 'stripTags'),array('name' => 'stripNewLines'));
 				break;
 			case 11:
-				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'),array('name' => 'stripNewLines'));
+				array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'),array('name' => 'stripNewLines'));
 				break;
 			case 12:
-				$filtersArray = array_push($filtersArray,array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
+				array_push($filtersArray,array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
 				break;
 			case 13:
-				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
+				array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
 				break;
 			case 14:
-				$filtersArray = array_push($filtersArray,array('name' => 'stripTags'),array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
+				array_push($filtersArray,array('name' => 'stripTags'),array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
 				break;
 			case 15:
 			default:
-				$filtersArray = array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'),array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
+				array_push($filtersArray,array('name' => 'stringTrim'),array('name' => 'stripTags'),array('name' => 'htmlEntities'),array('name' => 'stripNewLines'));
 		}
-		
+
 		return $filtersArray;
 	}
 	

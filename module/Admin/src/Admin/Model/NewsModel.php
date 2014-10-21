@@ -11,7 +11,6 @@ class NewsModel extends BaseModel
 	{
 		$dataArray = array();
 		$dataArray['news_title'] = isset($data['news_title']) ? $data['news_title'] : null;
-		$dataArray['news_file'] = isset($data['news_file']) ? $this->getUploadPath($data['news_file']) : null;
 		$dataArray['news_body'] = isset($data['news_body']) ? $data['news_body'] : null;
 		$type == 'insert' && $dataArray['create_time']= time();
 		$dataArray['update_time'] = !isset($dataArray['create_time']) ? $dataArray['create_time'] : time();

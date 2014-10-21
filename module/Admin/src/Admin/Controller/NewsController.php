@@ -30,7 +30,7 @@ class NewsController extends BaseController
     		$form->setInputFilter($news->getNewsModel());
     		$form->setData($request->getPost()->toArray());
     		if ($form->isValid()) {
-    			$this->serviceLocator->get('DbSql')->News()->add();
+    			$this->serviceLocator->get('DbSql')->News()->add($news->getData($form->getData()));
     	
     			return $this->redirect()->toRoute('admin/news');
     		}

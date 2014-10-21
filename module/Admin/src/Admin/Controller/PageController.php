@@ -20,7 +20,37 @@ class PageController extends BaseController
         $page = $this->serviceLocator->get('FormSubmit')->Insert();
         if($page !== false) {
         	$time = time();
-        	$return = $page->requestData()->table('page')->addField(array('create_time' => $time,'update_time' => $time))->existsFields(array('page_title'))->customFilter(array('editorValue' => null,'page_body' => 0))->validate($this->serviceLocator->get('Validate')->AdminPage())->submit();
+        	$return = $page->requestData()->table('page')->addField(array('create_time' => $time,'update_time' => $time))->existsFields(array('page_title'))->customFilter(array('editorValue' => null))
+        			  	->inputFilter(
+        			  		array(
+        			  			'page_title' => array(
+        			  				'name'       => 'page_title',
+        			  				'required'   => true,
+        			  				'validators' => array(
+        			  					array(
+        			  						'name' => 'not_empty',
+        			  						'options' => array(
+        			  							'message' => 'タイトルを入力してください'
+        			  						)	
+        			  					)
+        			  				),
+        			  			),
+        			  			'page_body' => array(
+        			  				'name' => 'page_body',
+        			  				'required'   => true,
+        			  				'filters'    => array(array('name' => 'stringTrim')),
+        			  				'validators' => array(
+        			  					array(
+        			  						'name' => 'not_empty',
+        			  						'options' => array(
+        			  							'message' => '内容を入力してください'
+        			  						)
+        			  					)
+        			  				),
+        						)
+        			  		)
+        				)
+        				->submit();
             if($return === false && ($page->isVal() === false || $page->isExists() === true)) {
     			$errorMessage = $page->getValidateErrorMessage();
     		}

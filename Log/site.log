@@ -26,3 +26,93 @@
 2014-10-20T12:30:49+08:00 DEBUG (7): Query finished {"elapsed":0.00018405914306641}
 2014-10-20T12:30:49+08:00 DEBUG (7): Query started {"sql":"SELECT `product_type`.* FROM `product_type` WHERE `parent_id` = :where1","parameters":"{\"where1\":\"39\"}"}
 2014-10-20T12:30:49+08:00 DEBUG (7): Query finished {"elapsed":0.00030612945556641}
+2014-10-21T12:04:28+08:00 DEBUG (7): Query started {"sql":"SELECT `admin`.`id` AS `id`, `admin`.`leve` AS `leve` FROM `admin` WHERE `uname` = :where1 AND `pwd` = :where2 AND `delete_flg` = :where3","parameters":"{\"where1\":\"admin\",\"where2\":\"4297f44b13955235245b2497399d7a93\",\"where3\":0}"}
+2014-10-21T12:04:28+08:00 DEBUG (7): Query finished {"elapsed":0.00048518180847168}
+2014-10-21T12:04:47+08:00 WARN (4): 
+time:2014-10-21 12:04:47
+level:WARN
+model:FormSubmit
+fileName:/var/www/shoppingcart/module/Common/module/FormSubmit/src/FormSubmit/Logic/FormSubmit.php
+line:136
+message:validate errorMessage function is undefined
+
+2014-10-21T12:04:47+08:00 WARN (4): 
+time:2014-10-21 12:04:47
+level:WARN
+model:FormSubmit
+fileName:/var/www/shoppingcart/module/Common/module/FormSubmit/src/FormSubmit/Logic/Insert.php
+line:28
+message:validate errorMessage function is undefined
+
+2014-10-21T12:19:07+08:00 WARN (4): 
+time:2014-10-21 12:19:07
+level:WARN
+model:FormSubmit
+fileName:/var/www/shoppingcart/module/Common/module/FormSubmit/src/FormSubmit/Logic/FormSubmit.php
+line:337
+message:exists param not in validate
+
+2014-10-21T12:19:07+08:00 WARN (4): 
+time:2014-10-21 12:19:07
+level:WARN
+model:FormSubmit
+fileName:/var/www/shoppingcart/module/Common/module/FormSubmit/src/FormSubmit/Logic/Insert.php
+line:28
+message:exists param not in validate
+
+2014-10-21T12:21:16+08:00 DEBUG (7): Query started {"sql":"SELECT `page`.`page_title` AS `page_title` FROM `page` WHERE `page_title` = :where1","parameters":"{\"where1\":\"ytrytrytry\"}"}
+2014-10-21T12:21:16+08:00 DEBUG (7): Query finished {"elapsed":0.00042891502380371}
+2014-10-21T12:21:16+08:00 DEBUG (7): Query started {"sql":"INSERT INTO `page` (`page_title`, `page_body`, `create_time`, `update_time`) VALUES ('ytrytrytry', '<p>rtytrytrytry<br/></p>', '1413865276', '1413865276')","parameters":null}
+2014-10-21T12:21:16+08:00 DEBUG (7): Query finished {"elapsed":0.062846899032593}
+2014-10-21T12:21:16+08:00 DEBUG (7): Query started {"sql":"SELECT COUNT(1) AS `c` FROM (SELECT `page`.* FROM `page`) AS `original_select`","parameters":"[]"}
+2014-10-21T12:21:16+08:00 DEBUG (7): Query finished {"elapsed":0.00050115585327148}
+2014-10-21T12:21:16+08:00 DEBUG (7): Query started {"sql":"SELECT `page`.* FROM `page` ORDER BY `update_time` DESC LIMIT :limit OFFSET :offset","parameters":"{\"limit\":10,\"offset\":0}"}
+2014-10-21T12:21:16+08:00 DEBUG (7): Query finished {"elapsed":0.00031805038452148}
+2014-10-21T12:25:17+08:00 DEBUG (7): Query started {"sql":"SELECT COUNT(1) AS `c` FROM (SELECT `page`.* FROM `page`) AS `original_select`","parameters":"[]"}
+2014-10-21T12:25:17+08:00 DEBUG (7): Query finished {"elapsed":0.00020694732666016}
+2014-10-21T12:25:17+08:00 DEBUG (7): Query started {"sql":"SELECT `page`.* FROM `page` ORDER BY `update_time` DESC LIMIT :limit OFFSET :offset","parameters":"{\"limit\":10,\"offset\":40}"}
+2014-10-21T12:25:17+08:00 DEBUG (7): Query finished {"elapsed":0.00028896331787109}
+2014-10-21T12:25:19+08:00 DEBUG (7): Query started {"sql":"SELECT COUNT(1) AS `c` FROM (SELECT `page`.* FROM `page`) AS `original_select`","parameters":"[]"}
+2014-10-21T12:25:19+08:00 DEBUG (7): Query finished {"elapsed":0.00036883354187012}
+2014-10-21T12:25:19+08:00 DEBUG (7): Query started {"sql":"SELECT `page`.* FROM `page` ORDER BY `update_time` DESC LIMIT :limit OFFSET :offset","parameters":"{\"limit\":10,\"offset\":0}"}
+2014-10-21T12:25:19+08:00 DEBUG (7): Query finished {"elapsed":0.00011301040649414}
+2014-10-21T14:23:29+08:00 DEBUG (7): Query started {"sql":"SELECT COUNT(1) AS `c` FROM (SELECT `page`.* FROM `page`) AS `original_select`","parameters":"[]"}
+2014-10-21T14:23:29+08:00 DEBUG (7): Query finished {"elapsed":0.00022506713867188}
+2014-10-21T14:23:29+08:00 DEBUG (7): Query started {"sql":"SELECT `page`.* FROM `page` ORDER BY `update_time` DESC LIMIT :limit OFFSET :offset","parameters":"{\"limit\":10,\"offset\":0}"}
+2014-10-21T14:23:29+08:00 DEBUG (7): Query finished {"elapsed":0.00011014938354492}
+2014-10-21T14:23:38+08:00 DEBUG (7): Query started {"sql":"SELECT `admin`.`id` AS `id`, `admin`.`leve` AS `leve` FROM `admin` WHERE `uname` = :where1 AND `pwd` = :where2 AND `delete_flg` = :where3","parameters":"{\"where1\":\"admin\",\"where2\":\"4297f44b13955235245b2497399d7a93\",\"where3\":0}"}
+2014-10-21T14:23:38+08:00 DEBUG (7): Query finished {"elapsed":0.00035881996154785}
+2014-10-21T14:26:27+08:00 DEBUG (7): Query started {"sql":"SELECT COUNT(1) AS `c` FROM (SELECT `page`.* FROM `page`) AS `original_select`","parameters":"[]"}
+2014-10-21T14:26:27+08:00 DEBUG (7): Query finished {"elapsed":0.00020599365234375}
+2014-10-21T14:26:27+08:00 DEBUG (7): Query started {"sql":"SELECT `page`.* FROM `page` ORDER BY `update_time` DESC LIMIT :limit OFFSET :offset","parameters":"{\"limit\":10,\"offset\":0}"}
+2014-10-21T14:26:27+08:00 DEBUG (7): Query finished {"elapsed":0.00010895729064941}
+2014-10-21T14:26:50+08:00 DEBUG (7): Query started {"sql":"SELECT `page`.`page_title` AS `page_title` FROM `page` WHERE `page_title` = :where1","parameters":"{\"where1\":\"fsf\"}"}
+2014-10-21T14:26:50+08:00 DEBUG (7): Query finished {"elapsed":0.050889015197754}
+2014-10-21T14:26:50+08:00 DEBUG (7): Query started {"sql":"INSERT INTO `page` (`page_title`, `page_body`, `create_time`, `update_time`) VALUES ('fsf', '<p>sdf<br/></p>', '1413872810', '1413872810')","parameters":null}
+2014-10-21T14:26:51+08:00 DEBUG (7): Query finished {"elapsed":0.1479959487915}
+2014-10-21T14:26:51+08:00 DEBUG (7): Query started {"sql":"SELECT COUNT(1) AS `c` FROM (SELECT `page`.* FROM `page`) AS `original_select`","parameters":"[]"}
+2014-10-21T14:26:51+08:00 DEBUG (7): Query finished {"elapsed":0.00058889389038086}
+2014-10-21T14:26:51+08:00 DEBUG (7): Query started {"sql":"SELECT `page`.* FROM `page` ORDER BY `update_time` DESC LIMIT :limit OFFSET :offset","parameters":"{\"limit\":10,\"offset\":0}"}
+2014-10-21T14:26:51+08:00 DEBUG (7): Query finished {"elapsed":0.00024986267089844}
+2014-10-21T14:27:01+08:00 DEBUG (7): Query started {"sql":"SELECT `page`.* FROM `page` WHERE `page_id` = :where1","parameters":"{\"where1\":\"46\"}"}
+2014-10-21T14:27:01+08:00 DEBUG (7): Query finished {"elapsed":0.00035500526428223}
+2014-10-21T14:27:03+08:00 DEBUG (7): Query started {"sql":"SELECT COUNT(1) AS `c` FROM (SELECT `page`.* FROM `page`) AS `original_select`","parameters":"[]"}
+2014-10-21T14:27:03+08:00 DEBUG (7): Query finished {"elapsed":0.00022196769714355}
+2014-10-21T14:27:03+08:00 DEBUG (7): Query started {"sql":"SELECT `page`.* FROM `page` ORDER BY `update_time` DESC LIMIT :limit OFFSET :offset","parameters":"{\"limit\":10,\"offset\":0}"}
+2014-10-21T14:27:03+08:00 DEBUG (7): Query finished {"elapsed":0.00011181831359863}
+2014-10-21T14:33:24+08:00 DEBUG (7): Query started {"sql":"SELECT `news`.`news_title` AS `news_title` FROM `news` WHERE `news_title` = :where1 AND delete_flg = 0","parameters":"{\"where1\":\"\"}"}
+2014-10-21T14:33:24+08:00 DEBUG (7): Query finished {"elapsed":0.01316499710083}
+2014-10-21T14:33:30+08:00 DEBUG (7): Query started {"sql":"SELECT `news`.`news_title` AS `news_title` FROM `news` WHERE `news_title` = :where1 AND delete_flg = 0","parameters":"{\"where1\":\"jj\"}"}
+2014-10-21T14:33:30+08:00 DEBUG (7): Query finished {"elapsed":0.00034618377685547}
+2014-10-21T14:35:22+08:00 DEBUG (7): Query started {"sql":"SELECT `news`.`news_title` AS `news_title` FROM `news` WHERE `news_title` = :where1 AND delete_flg = 0","parameters":"{\"where1\":\"jj\"}"}
+2014-10-21T14:35:22+08:00 DEBUG (7): Query finished {"elapsed":0.0002140998840332}
+2014-10-21T14:35:22+08:00 DEBUG (7): Query started {"sql":"INSERT INTO `news` (`news_title`, `news_file`, `news_body`, `create_time`, `update_time`) VALUES (:news_title, :news_file, :news_body, :create_time, :update_time)","parameters":"{\"news_title\":\"jj\",\"news_file\":null,\"news_body\":\"<p>yy<br/></p>\",\"create_time\":1413873322,\"update_time\":1413873322}"}
+2014-10-21T14:35:22+08:00 DEBUG (7): Query finished {"elapsed":0.012161016464233}
+2014-10-21T14:36:32+08:00 DEBUG (7): Query started {"sql":"SELECT `news`.`news_title` AS `news_title` FROM `news` WHERE `news_title` = :where1 AND delete_flg = 0","parameters":"{\"where1\":\"jj\"}"}
+2014-10-21T14:36:32+08:00 DEBUG (7): Query finished {"elapsed":0.00020289421081543}
+2014-10-21T14:36:32+08:00 DEBUG (7): Query started {"sql":"INSERT INTO `news` (`news_title`, `news_body`, `create_time`, `update_time`) VALUES (:news_title, :news_body, :create_time, :update_time)","parameters":"{\"news_title\":\"jj\",\"news_body\":\"<p>yy<br/></p>\",\"create_time\":1413873392,\"update_time\":1413873392}"}
+2014-10-21T14:36:32+08:00 DEBUG (7): Query finished {"elapsed":0.044009923934937}
+2014-10-21T14:36:33+08:00 DEBUG (7): Query started {"sql":"SELECT COUNT(1) AS `c` FROM (SELECT `news`.* FROM `news` WHERE `delete_flg` = :subselect1where1) AS `original_select`","parameters":"{\"subselect1where1\":0}"}
+2014-10-21T14:36:33+08:00 DEBUG (7): Query finished {"elapsed":0.00055885314941406}
+2014-10-21T14:36:33+08:00 DEBUG (7): Query started {"sql":"SELECT `news`.* FROM `news` WHERE `delete_flg` = :where1 ORDER BY `update_time` DESC LIMIT :limit OFFSET :offset","parameters":"{\"where1\":0,\"limit\":10,\"offset\":0}"}
+2014-10-21T14:36:33+08:00 DEBUG (7): Query finished {"elapsed":0.00030994415283203}

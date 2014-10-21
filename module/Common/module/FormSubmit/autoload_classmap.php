@@ -15,4 +15,5 @@ return array(
 	'FormSubmit\Service\FormSubmitFactory'       => __DIR__ . '/src/FormSubmit/Service/FormSubmitFactory.php',
 	'FormSubmit\Validate\OriginalParamsValidate' => __DIR__ . '/src/FormSubmit/Validate/OriginalParamsValidate.php',
 	'FormSubmit\Validate\Validate'               => __DIR__ . '/src/FormSubmit/Validate/Validate.php',
+	'FormSubmit\InputFilter\InputFilter'         => __DIR__ . '/src/FormSubmit/InputFilter/InputFilter.php',
 );

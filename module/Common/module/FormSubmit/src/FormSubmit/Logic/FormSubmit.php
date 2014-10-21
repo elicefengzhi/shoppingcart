@@ -157,6 +157,29 @@ Class FormSubmit
 		$this->events->trigger('FormSubmit/ValidateAfter',$this,array());
 	}
 	
+	private function formSubmitInputFilter($requestData,$inputFilter)
+	{
+		//触发inputFilter前事件
+		$this->events->trigger('FormSubmit/InputFilterBefore',$this,array());
+		if($this->isValidate !== false) {
+			$inputFilterClass = new \FormSubmit\InputFilter\InputFilter();
+			$this->isVal = $inputFilterClass->isVal($requestData,$inputFilter);
+			
+			if($this->isVal === false) {
+				$this->validateErrorMessage = $inputFilterClass->getMessage();
+				return false;
+			}
+			
+			$this->validatedData = $inputFilterClass->getValues();
+			if(!is_array($this->validatedData) || count($this->validatedData) <= 0) {
+				throw new \FormSubmit\Exception\FormSubmitException('inputFilter return data is empty');
+				return false;
+			}
+		}
+		//触发inputFilter后事件
+		$this->events->trigger('FormSubmit/InputFilterAfter',$this,array());
+	}
+	
 	/**
 	 * 主程序媒体上传
 	 * @return boolean
@@ -359,10 +382,11 @@ Class FormSubmit
 	 * @param array $existsParams
 	 * @param array|object $existsWhere
 	 * @param boolean|object $validateClass
+	 * @param boolean|array $inputFilter
 	 * @throws \FormSubmit\Exception\FormSubmitException
 	 * @return boolean
 	 */
-	public function formSubmit($requestType,$requestData,$table,$where,$existsParams,$existsWhere,$validateClass)
+	public function formSubmit($requestType,$requestData,$table,$where,$existsParams,$existsWhere,$validateClass,$inputFilter)
 	{
 		$dbReturn = true;//返回值初始化
 		$initArray = $this->initArray;//获得配置信息
@@ -379,7 +403,12 @@ Class FormSubmit
 		$this->setParams($requestType,$requestData,$initArray,$table,$validateClass,$existsParams);
 
 		//Request参数验证
-		if($this->formSubmitValidate($validateClass,$requestData) === false) return false;
+		if(is_array($inputFilter)) {
+			if($this->formSubmitInputFilter($requestData,$inputFilter) === false) return false;
+		}
+		else {
+			if($this->formSubmitValidate($validateClass,$requestData) === false) return false;
+		}
 
 		//媒体上传
 		if($this->formSubmitMediaUpload() === false) return false;

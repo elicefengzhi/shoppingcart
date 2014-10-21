@@ -21,6 +21,7 @@ Class Base
 	protected $isInsertExists = true;//默认进行添加数据重复验证
 	protected $isUpdateExists = true;//默认进行更新数据重复验证
 	protected $validateClass = false;//默认不验证
+	protected $inputFilter = false;//默认不进行inputFilter
 	protected $mediaIsMerge;//媒体上传后的地址是否合并入validatedData
 	
     /**
@@ -55,7 +56,7 @@ Class Base
 	 * 如果不传参则不验证
 	 *
 	 * @param array $existsFields
-	 * @return \FormSubmit\Logic\Insert
+	 * @return \FormSubmit\Logic\Base
 	 */
 	public function existsFields(Array $existsFields = null)
 	{
@@ -68,7 +69,7 @@ Class Base
 	 * 如果不传参则没有条件
 	 * 
 	 * @param array|object $existWhere
-	 * @return \FormSubmit\Logic\FormSubmit
+	 * @return \FormSubmit\Logic\Base
 	 */
 	public function existsWhere($existsWhere = false)
 	{
@@ -102,7 +103,7 @@ Class Base
 	 * 执行操作的表名或数据操作对象
 	 *
 	 * @param string|object $tableName
-	 * @return \FormSubmit\Logic\Insert
+	 * @return \FormSubmit\Logic\Base
 	 */
 	public function table($table)
 	{
@@ -124,13 +125,24 @@ Class Base
 	 * 验证对象
 	 * 如果是对象，则作为验证对象调用
 	 * 如果是布尔值，则视为是否通过验证
-	 *
+	 * 如果同时为validate和inputfilter赋值，已inputfilter优先 
 	 * @param object|boolean $validateClass
-	 * @return \FormSubmit\Logic\Insert
+	 * @return \FormSubmit\Logic\Base
 	 */
 	public function validate($validateClass)
 	{
 		$this->validateClass = (!is_object($validateClass) && !is_bool($validateClass)) ? false : $validateClass;
+		return $this;
+	}
+	
+	/**
+	 * 如果同时为validate和inputfilter赋值，已inputfilter优先 
+	 * @param array $inputFilter
+	 * @return \FormSubmit\Logic\Base
+	 */
+	public function inputFilter(Array $inputFilter)
+	{
+		$this->inputFilter = $inputFilter;
 		return $this;
 	}
 	
@@ -171,7 +183,7 @@ Class Base
 	 * helper的执行需要对应formSubmit主程序提供的具体事件为基础
 	 * 
 	 * 参数规则：
-	 * 第一个参数：事件名(ValidateBefore、ValidateAfter、ExistsBefore、ExistsAfter、DbBefore、DbAfter)
+	 * 第一个参数：事件名(ValidateBefore、ValidateAfter、InputFilterBefore、InputFilterAfter、ExistsBefore、ExistsAfter、DbBefore、DbAfter)
 	 * 第二个参数：helper类的类名
 	 * 之后的参数任意，这些参数都会赋值给相应helper类的init方法
 	 * 
@@ -239,7 +251,7 @@ Class Base
 		//设置媒体上传后的地址是否合并入validatedData
 		$formSubmit->mediaUpload($this->media,$this->mediaIsMerge);
 	
-		$insertReturn = $formSubmit->formSubmit($requestType,$this->requestData,$this->table,$this->where,$this->existsFields,$this->existsWhere,$this->validateClass);
+		$insertReturn = $formSubmit->formSubmit($requestType,$this->requestData,$this->table,$this->where,$this->existsFields,$this->existsWhere,$this->validateClass,$this->inputFilter);
 		return $insertReturn;
 	}
 }

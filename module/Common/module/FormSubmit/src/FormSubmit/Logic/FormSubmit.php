@@ -18,7 +18,6 @@ Class FormSubmit
 	protected $sourceData;//原始的request参数
 	protected $uploadedPath;//上传好的文件路径
 	
-	protected $isValidate = true;//是否验证request参数
 	protected $validateClass;//验证对象
 	protected $validateFunction = false;//验证方法名
 	protected $validateErrorMessage;//错误提示语句，默认使用自带的错误提示语句
@@ -96,8 +95,11 @@ Class FormSubmit
 		//如果existsParams为false，则不执行更新存在验证
 		$existsParams === false ? $this->updateExistsFunction = false : $this->updateExistsFunction = $initArray['db']['updateExistsFunction'];
 		
-		$this->validateFunction === false && $this->validateFunction = $initArray['validate']['validateFunction'];
-		$this->validateErrorMessageFunction === false && $this->validateErrorMessageFunction = $initArray['validate']['errorMessageFunction'];
+		//如果不是null，则需要获得验证方法名等以便进行验证
+		if(!is_null($this->validateClass)) {
+			$this->validateFunction === false && $this->validateFunction = $initArray['validate']['validateFunction'];
+			$this->validateErrorMessageFunction === false && $this->validateErrorMessageFunction = $initArray['validate']['errorMessageFunction'];
+		}
 	}
 	
 	/**
@@ -111,7 +113,9 @@ Class FormSubmit
 	{
 		//触发验证前事件
 		$this->events->trigger('FormSubmit/ValidateBefore',$this,array());
-		if($this->isValidate !== false) {
+
+		//如果validateClass不是null，则需要进行验证
+		if(!is_null($this->validateClass)) {
 			//验证输入参数
 			//如果validateClass为布尔值，此参数直接作为是否通过验证参数
 			if(is_bool($this->validateClass)) {
@@ -153,6 +157,7 @@ Class FormSubmit
 				return false;
 			}
 		}
+
 		//触发验证后事件
 		$this->events->trigger('FormSubmit/ValidateAfter',$this,array());
 	}
@@ -161,7 +166,9 @@ Class FormSubmit
 	{
 		//触发inputFilter前事件
 		$this->events->trigger('FormSubmit/InputFilterBefore',$this,array());
-		if($this->isValidate !== false) {
+
+		//如果inputFilter不为false，则需要执行inputFilter操作
+		if($this->inputFilter !== false) {
 			$inputFilterClass = new \FormSubmit\InputFilter\InputFilter();
 			$this->isVal = $inputFilterClass->isVal($requestData,$inputFilter);
 			
@@ -176,6 +183,7 @@ Class FormSubmit
 				return false;
 			}
 		}
+
 		//触发inputFilter后事件
 		$this->events->trigger('FormSubmit/InputFilterAfter',$this,array());
 	}
@@ -284,7 +292,7 @@ Class FormSubmit
 				if($this->tableName !== false) {
 					//如果是程序自动插入，则调用函数执行插入
 					$sql = new \FormSubmit\DbSql\DbSql($this->serviceLocator->get('FormSubmit/adapter'),$this->tableName);
-					$dbReturn = $sql->insert($validatedData);
+					$dbReturn = $sql->insert($validatedData,$where);
 					if($dbReturn !== false) {
 						$this->lastInsertId = $dbReturn;
 						$dbReturn = true;
@@ -388,7 +396,6 @@ Class FormSubmit
 	 */
 	public function formSubmit($requestType,$requestData,$table,$where,$existsParams,$existsWhere,$validateClass,$inputFilter)
 	{
-		$dbReturn = true;//返回值初始化
 		$initArray = $this->initArray;//获得配置信息
 
 		//原始参数验证
@@ -492,7 +499,9 @@ Class FormSubmit
 	}
 	
 	/**
-	 * 设置是否过滤request参数
+	 * 设置是否过滤request参数<br/>
+	 * 默认进行stringTrim+stripTags+htmlEntities+stripNewLines验证<br/>
+	 * 如果不需要验证，则一定要明确对此函数赋值
 	 * @param boolean $isFilter
 	 */
 	public function isFilter($isFilter)
@@ -501,27 +510,20 @@ Class FormSubmit
 	}
 	
 	/**
-	 * 设置是否验证request参数
-	 * @param boolean $isValidate
-	 */
-	public function isValidate($isValidate)
-	{
-		$this->isValidate = (bool)$isValidate;
-	}
-	
-	/**
 	 * 自定义过滤
 	 * @example<br/>
 	 * 1. array('filter1' => 15 , 'filter2' => 2)<br/>
 	 * 2. array('filter1' => 1 + 2 + 4 + 8 , 'filter2' => 4 + 8)<br/>
-	 * 3. array('filter1' => \FormSubmit\Filter\Filter::HTMLENTITIES + \FormSubmit\Filter\Filter::STRINGTRIM)<br/>
+	 * 3. array('filter1' => \FormSubmit\Filter\Filter::HTMLENTITIES + \FormSubmit\Filter\Filter::STRINGTRIM)
+	 * 
 	 * 解释：<br/>
-	 * 不过滤 为 0<br/>
-	 * 为"null"，则视为多余字段从request参数中注销<br/>
 	 * STRINGTRIM 为 1<br/>
 	 * STRIPTAGS 为 2<br/>
 	 * HTMLENTITIES 为 4<br/>
 	 * STRIPNEWLINES 为 8<br/>
+	 * 
+	 * 如果对某字段不过滤，则赋值空('')<br/>
+	 * 为"null"，则视为多余字段从request参数中注销<br/>
 	 * 
 	 * @param array $customFilter
 	 * @return \FormSubmit\Logic\Base

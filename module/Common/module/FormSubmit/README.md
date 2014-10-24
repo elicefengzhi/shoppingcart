@@ -1,3 +1,67 @@
+插入和更新时模块调用
+-----------
+插入
+$this->serviceLocator->get('FormSubmit')->Insert();
+
+更新
+$this->serviceLocator->get('FormSubmit')->Update();
+
+以上都会返回一个布尔值代表是否存在需要操作的数据(默认为post)，也可自行判断
+
+可调用方法
+-----------
+setRequestType：
+此方法接收一个字符串，设置接收的数据类型，可以接收get、post和cookie，默认为post
+
+$property = $this->serviceLocator->get('FormSubmit');
+$property->setRequestType('get');
+
+requestData:
+此方法接收一个数组，需要操作的数据，默认情况下操作数据是自动获取，不需要额外传参
+
+$insert = $this->serviceLocator->get('FormSubmit')->Insert();
+$insert->requestData(array('name' => 'test','age' => 12));
+
+table:
+此方法接收一个字符串或一个对象，执行操作的表名或数据操作对象
+
+$this->serviceLocator->get('FormSubmit')->Insert()->table('user');
+
+执行插入操作，操作的数据表是'user'
+
+$this->serviceLocator->get('FormSubmit')->Insert()->table($this->serviceLocator->get('DbSql')->ProductType());
+
+此处参数是一个对象，如果module.conifg.php中已经定义了'dbInsertFunction'，在执行插入时会自动调用该方法
+如果没有定义'dbInsertFunction'，则需要为'dbInsertFunction'函数赋值
+update操作需要注意事项与insert相同
+
+where:
+此方法接收boolean|Where|\Closure|string|array，数据库操作所需要的条件
+
+$this->serviceLocator->get('FormSubmit')->Update()->table('user')->where(array('name' => 'test'));
+
+或
+
+$where = new \Zend\Db\Sql\Where();
+$where = $where->equalTo('name', 'test');
+$this->serviceLocator->get('FormSubmit')->Update()->table('user')->where($where);
+
+执行更新操作，操作的数据表是'user'，条件是'name'等于'test'
+如果table为一个自定义的对象，对where赋值是无效的
+
+existsFields:
+此方法接收一个数组，数据库插入和更新时往往需要验证当前需要操作的数据字段是否已经在数据库里存在
+
+$this->serviceLocator->get('FormSubmit')->Insert()->table('user')->existsFields(array('name'));
+
+'user'表的'name'字段值不能重复
+
+existsWhere:
+此方法接收boolean|Where|\Closure|string|array，存在验证附加的条件
+
+
+
+
 #设置post、get提交
 $property = $this->serviceLocator->get('FormSubmit');
 $property->setRequestType('get');//post(默认)或get

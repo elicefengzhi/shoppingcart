@@ -20,12 +20,6 @@ Class Update extends Base
 	 */
 	public function submit()
 	{
-		try {
-			return $this->formSubmit('update');
-		}
-		catch(\FormSubmit\Exception\FormSubmitException $e)
-		{
-			throw new \FormSubmit\Exception\FormSubmitException($e->getMessage());
-		}
+		return $this->formSubmit('update');
 	}
 }

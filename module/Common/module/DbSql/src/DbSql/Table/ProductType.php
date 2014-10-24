@@ -8,6 +8,17 @@ class ProductType extends BaseDb
 {
     protected $table = 'product_type';
     
+    public function add($data)
+    {
+    	$return = $this->insert($data);
+    	if($return == 1) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
+    
     public function del($where)
     {
     	$return = $this->delete($where);

@@ -20,7 +20,7 @@ Class Base
 	protected $existsWhere = false;//默认没有存在对比条件
 	protected $isInsertExists = true;//默认进行添加数据重复验证
 	protected $isUpdateExists = true;//默认进行更新数据重复验证
-	protected $validateClass = false;//默认不验证
+	protected $validateClass = null;//默认不验证
 	protected $inputFilter = false;//默认不进行inputFilter
 	protected $mediaIsMerge;//媒体上传后的地址是否合并入validatedData
 	
@@ -40,7 +40,7 @@ Class Base
 	}
 	
 	/**
-	 * 设置RequestData数据
+	 * 设置RequestData数据<br/>
 	 * 程序自动获取Request的Post(默认)或Get
 	 * @param array $requestData
 	 * @return \FormSubmit\Logic\Base
@@ -52,9 +52,8 @@ Class Base
 	}
 	
 	/**
-	 * 需要验证存在的字段
-	 * 如果不传参则不验证
-	 *
+	 * 需要验证存在的字段<br/>
+	 * 如果不传参则不验证，即使向existsWhere传参也不会验证
 	 * @param array $existsFields
 	 * @return \FormSubmit\Logic\Base
 	 */
@@ -65,10 +64,9 @@ Class Base
 	}
 	
 	/**
-	 * 验证存在的字段条件
-	 * 如果不传参则没有条件
-	 * 
-	 * @param array|object $existWhere
+	 * 验证存在的字段条件<br/>
+	 * 如果不传参则没有条件<br/>
+	 * @param boolean|Where|\Closure|string|array $existWhere
 	 * @return \FormSubmit\Logic\Base
 	 */
 	public function existsWhere($existsWhere = false)
@@ -78,31 +76,8 @@ Class Base
 	}
 	
 	/**
-	 * 添加数据时是否执行重复数据验证
-	 * @param boolean $isInsertExists
-	 * @return \FormSubmit\Logic\Base
-	 */
-	public function isInsertExists($isInsertExists)
-	{
-		$this->isInsertExists = (bool)$isInsertExists;
-		return $this;
-	}
-	
-	/**
-	 * 更新数据时是否执行重复数据验证
-	 * @param boolean $isUpdateExists
-	 * @return \FormSubmit\Logic\Base
-	 */
-	public function isUpdateExists($isUpdateExists)
-	{
-		$this->isUpdateExists = (bool)$isUpdateExists;
-		return $this;
-	}
-	
-	/**
 	 * 执行操作的表名或数据操作对象
-	 *
-	 * @param string|object $tableName
+	 * @param string|object $table
 	 * @return \FormSubmit\Logic\Base
 	 */
 	public function table($table)
@@ -113,7 +88,8 @@ Class Base
 	
 	/**
 	 * 执行数据库操作时的where条件
-	 * @param array|object $where
+	 * 如果不传参则没有条件<br/>
+	 * @param boolean|Where|\Closure|string|array $where
 	 * @return \FormSubmit\Logic\Base
 	 */
 	public function where($where = false) {
@@ -122,16 +98,16 @@ Class Base
 	}
 	
 	/**
-	 * 验证对象
-	 * 如果是对象，则作为验证对象调用
-	 * 如果是布尔值，则视为是否通过验证
-	 * 如果同时为validate和inputfilter赋值，已inputfilter优先 
+	 * 验证对象<br/>
+	 * 如果是对象，则作为验证对象调用<br/>
+	 * 如果是布尔值，则视为是否通过验证<br/>
+	 * 如果同时为validate和inputfilter赋值，已inputfilter优先<br/>
 	 * @param object|boolean $validateClass
 	 * @return \FormSubmit\Logic\Base
 	 */
 	public function validate($validateClass)
 	{
-		$this->validateClass = (!is_object($validateClass) && !is_bool($validateClass)) ? false : $validateClass;
+		$this->validateClass = (!is_object($validateClass) && !is_bool($validateClass) && !is_null($validateClass)) ? false : $validateClass;
 		return $this;
 	}
 	
@@ -242,11 +218,6 @@ Class Base
 		if(empty($this->table)) throw new \FormSubmit\Exception\FormSubmitException("formsubmit table unknow");
 	
 		$formSubmit = !is_object($this->formSubmit) ? new FormSubmit($this->initArray,$this->serviceLocator) : $this->formSubmit;
-
-		//如果不执行存在验证，则存在验证方法名赋值false
-		$requestType == 'insert' ?
-		($this->isInsertExists === false && $formSubmit->insertExistsFunction(false)) :
-		($this->isUpdateExists === false && $formSubmit->updateExistsFunction(false));
 
 		//设置媒体上传后的地址是否合并入validatedData
 		$formSubmit->mediaUpload($this->media,$this->mediaIsMerge);

@@ -21,8 +21,7 @@ class ProductTypeController extends BaseController
     	$user = $this->serviceLocator->get('FormSubmit')->Insert();
     	if($user !== false) {
     		$sourceData = $this->params()->fromPost();
-    		//$return = $user->requestData()->table('product_type')->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->AdminProductType())->submit();
-    		$return = $user->requestData()->table('product_type')->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->QuickValidate())
+    		$return = $user->table($this->serviceLocator->get('DbSql')->ProductType())->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->QuickValidate())
     				       ->validateFunction('quickValidate',
     				       		array(
     				       			'name' => array(
@@ -56,12 +55,15 @@ class ProductTypeController extends BaseController
     	
     	$user = $this->serviceLocator->get('FormSubmit')->Update();
     	if($user !== false) {
-    		$return = $user->update()->table('product_type')->where(array('ptype_id' => $typeId))->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->AdminProductType())->submit();
+    		$where = new \Zend\Db\Sql\Where();
+    		$where = $where->equalTo('ptype_id', $typeId);
+    		$return = $user->table('product_type')->where($where)->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->AdminProductType())->submit();
     		if($return !== false) {
     			return $this->redirect()->toRoute('admin/product-type');
     		}
-    		$user->isVal() === false && $errorMessage = $user->getValidateErrorMessage();
-    		$user->isExists() === true && $errorMessage = '商品カテゴリは既に登録されております';
+    	    if($return === false && ($user->isVal() === false || $user->isExists() === true)) {
+    			$errorMessage = $user->getValidateErrorMessage();
+    		}
     		$typeList = $user->getSourceData();
     	}
     	

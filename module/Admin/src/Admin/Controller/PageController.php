@@ -20,7 +20,7 @@ class PageController extends BaseController
         $page = $this->serviceLocator->get('FormSubmit')->Insert();
         if($page !== false) {
         	$time = time();
-        	$return = $page->requestData()->table('page')->addField(array('create_time' => $time,'update_time' => $time))->existsFields(array('page_title'))->customFilter(array('editorValue' => null))
+        	$return = $page->table('page')->addField(array('create_time' => $time,'update_time' => $time))->existsFields(array('page_title'))->customFilter(array('editorValue' => null,'page_body' => ''))
         			  	->inputFilter(
         			  		array(
         			  			'page_title' => array(
@@ -71,7 +71,7 @@ class PageController extends BaseController
     	
     	$page = $this->serviceLocator->get('FormSubmit')->Update();
     	if($page !== false) {
-    		$return = $page->update()->table('page')->addField(array('update_time' => time()))->where(array('page_id' => $pId))->existsFields(array('page_title'))->customFilter(array('editorValue' => null,'page_body' => 0))->validate($this->serviceLocator->get('Validate')->AdminPage())->submit();
+    		$return = $page->table('page')->addField(array('update_time' => time()))->where(array('page_id' => $pId))->existsFields(array('page_title'))->customFilter(array('editorValue' => null,'page_body' => ''))->validate($this->serviceLocator->get('Validate')->AdminPage())->submit();
     		if($return !== false) {
     			return $this->redirect()->toRoute('admin/page');
     		}

@@ -25,6 +25,7 @@ class FormSubmitFactory implements FactoryInterface
 		$request = new \Zend\Http\PhpEnvironment\Request;
 		$this->requestType === 'post' && $requestData = $request->getPost()->toArray();
 		$this->requestType === 'get' && $requestData = $request->getQuery()->toArray();
+		$this->requestType === 'cookie' && $requestData = $request->getCookie()->toArray();
 		//如果没有数据提交返回false
 		if(count($requestData) <= 0) return false; 
 
@@ -37,7 +38,9 @@ class FormSubmitFactory implements FactoryInterface
 	 * @param string $type post或get
 	 */
 	public function setRequestType($type) {
-		$type === 'post' ? $this->requestType = 'post' : $this->requestType = 'get';
+		$type === 'post' && $this->requestType = 'post';
+		$type === 'get' && $this->requestType = 'get';
+		$type === 'cookie' && $this->requestType = 'cookie';
 	}
 	
     public function createService(ServiceLocatorInterface $serviceLocator)

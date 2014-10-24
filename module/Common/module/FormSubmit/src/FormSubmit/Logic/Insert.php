@@ -20,12 +20,6 @@ Class Insert extends Base
 	 */
 	public function submit()
 	{
-		try {
-			return $this->formSubmit('insert');
-		}
-		catch(\FormSubmit\Exception\FormSubmitException $e)
-		{
-			throw new \FormSubmit\Exception\FormSubmitException($e->getMessage());
-		}
+		return $this->formSubmit('insert');
 	}
 }

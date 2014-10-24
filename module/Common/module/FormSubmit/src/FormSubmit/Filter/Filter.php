@@ -65,7 +65,11 @@ class Filter
 	 */
 	private function itemFilter($data,$int)
 	{
+		$data = trim($data);
 		switch ($int) {
+			case '':
+				$returnData = $data;
+				break;
 			case 1:
 				$returnData = $this->stringTrim($data);
 				break;

@@ -89,7 +89,7 @@ class NewsController extends BaseController
     			$news = $this->serviceLocator->get('DbSql')->News();
     			$news->beginTransaction();
     			foreach($postData['delete'] as $data) {
-    				$return = $news->edit(array('delete_flg' => 1),array('news_id' => (int)$data));
+    				$return = $news->edit(array('delete_flg' => 0),array('news_id' => (int)$data));
     				if($return === false) {
     					$news->rollback();
     					return $this->redirect()->toRoute('admin/news');

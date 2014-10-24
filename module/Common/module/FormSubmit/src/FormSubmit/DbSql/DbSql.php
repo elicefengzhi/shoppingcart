@@ -21,12 +21,13 @@ Class DbSql
 	 * @param array $data 插入参数
 	 * @return int|boolean 成功返回自增id，否则返回false
 	 */
-	public function insert($data)
+	public function insert($data,$where)
 	{
 	    $adapter = $this->dbAdapter;
 	    $sql = new Sql($adapter);
 	    $insert = $sql->insert($this->table);
 	    $insert->values($data);
+	    $where !== false && $insert->where($where);
 	    $selectString = $sql->getSqlStringForSqlObject($insert);
 	    $results = $this->dbAdapter->query($selectString,$adapter::QUERY_MODE_EXECUTE);
 
@@ -61,10 +62,11 @@ Class DbSql
 	 * @param array $existsWhere
 	 * @return array
 	 */
-	public function getWhereByField(Array $fieldName,$where,$existsWhere)
+	public function getWhereByField(Array $fieldName = null,$where,$existsWhere)
 	{
 		$select = new Select();
-		$select = $select->from($this->table)->columns($fieldName);
+		$select = $select->from($this->table);
+		!is_null($fieldName) && $select = $select->columns($fieldName);
 		if(is_array($where) || is_object($where)) {
 			$select = $select->where($where);
 		}
@@ -91,7 +93,7 @@ Class DbSql
 	    $sql = new Sql($adapter);
 	    $update = $sql->update($this->table);
 	    $update->set($data);
-	    $update->where($where);
+	    $where !== false && $update->where($where);
 	    $selectString = $sql->getSqlStringForSqlObject($update);
 	    $results = $this->dbAdapter->query($selectString,$adapter::QUERY_MODE_EXECUTE);
 	    

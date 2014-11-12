@@ -54,16 +54,40 @@ return array(
 			),
 		),
 		'filters' => array(
-			'js/main.min.js' => array(
-				array(
-					'filter' => 'JSMin', 
-				),
-			),
-			'css/main.min.css' => array(
-				array(
-					'filter' => 'CssMin',
-				),
-			),
+// 			'css/main.min.css' => array(
+// 				array(
+// 					'service' => 'urlEmbed',
+// 				)
+// 			),
+// 			'js/main.min.js' => array(
+// 				array(
+// 					'service' => 'jsTemplate',
+// 				)
+// 			)
+		),
+	),
+		
+	'service_manager' => array(
+		'factories' => array(
+			'urlEmbed' => function($sm) {
+				$config = require __DIR__ .'/asseticAdd.config.php';
+				$urlEmbed = new \Application\Logic\AsseticAdd\UrlEmbed();
+				$urlEmbed->setBaseUrl($config['urlEmbed']['baseUrl']);
+				$urlEmbed->setFileReplaceUrl($config['urlEmbed']['fileReplaceUrl']);
+				return $urlEmbed;
+			},
+			'jsTemplate' => function($sm) {
+				$config = require __DIR__ .'/asseticAdd.config.php';
+				$jsTemplate = new \Application\Logic\AsseticAdd\JsTemplate();
+				$jsTemplateHelper = new \Application\Logic\AsseticAdd\JsTemplateHelper();
+				$jsTemplateHelper->setServiceManager($sm);
+				$jsTemplateHelper->setConfig($config['jsTemplate']);
+				$keyWords = $jsTemplateHelper->getReplaceWords();
+				$jsTemplate->setConfig($config['jsTemplate']);
+				$jsTemplate->setKeyWords($keyWords);
+
+				return $jsTemplate;
+			}
 		),
 	),
 );

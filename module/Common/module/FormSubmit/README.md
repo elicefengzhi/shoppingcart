@@ -29,7 +29,7 @@ $this->serviceLocator->get('FormSubmit')->Insert()->table('user');
 
 执行插入操作，操作的数据表是'user'
 
-$this->serviceLocator->get('FormSubmit')->Insert()->table($this->serviceLocator->get('DbSql')->ProductType());
+$this->serviceLocator->get('FormSubmit')->Insert()->table($this->serviceLocator->get('DbSql')->User());
 
 此处参数是一个对象，如果module.conifg.php中已经定义了'dbInsertFunction'，在执行插入时会自动调用该方法
 如果没有定义'dbInsertFunction'，则需要为'dbInsertFunction'函数赋值
@@ -57,9 +57,34 @@ $this->serviceLocator->get('FormSubmit')->Insert()->table('user')->existsFields(
 'user'表的'name'字段值不能重复
 
 existsWhere:
-此方法接收boolean|Where|\Closure|string|array，存在验证附加的条件
+此方法接收boolean|Where|\Closure|string|array，存在验证附加的条件，使用方法参照'where'
 
+validate:
+此方法接收一个自定义的对象或布尔值，自定义验证的对象，当是'false'时表示不验证
+如果同时为'validate'和'inputfilter'赋值，以inputfilter优先
 
+$this->serviceLocator->get('FormSubmit')->Insert()->table('user')->validate($this->serviceLocator->get('Validate')->User())
+
+'user'表使用'$this->serviceLocator->get('Validate')->User()'对象进行自定义验证
+
+validateFunction:
+第一个参数是调用的方法名，后面的参数任意，为需要传给此方法的参数
+
+$this->serviceLocator->get('FormSubmit')->Insert()->table('user')->validate($this->serviceLocator->get('Validate')->User())
+->validateFunction('functionName','param1','param2')
+
+inputFilter:
+此方法接收一个数组，传递一个给'Zend\InputFilter\Factory'对象'createInputFilter'方法的配置参数，用于验证、过滤
+如果同时为'validate'和'inputfilter'赋值，以inputfilter优先
+
+$this->serviceLocator->get('FormSubmit')->Insert()->table('user')->inputFilter(array(....))
+
+dbInsertFunction:
+此方法接收一个字符串，插入操作的函数名。
+如果给'table'传递了对象，就会调用此方法名的方法，此时这个方法必须接收一个参数用于获得经过处理有的requestData。
+如果给'table'传递了对象但是没有显示调用此方法，程序会根据模块配置文件中定义的方法名传参。
+
+$this->serviceLocator->get('FormSubmit')->Insert()->table($this->serviceLocator->get('DbSql')->User())->dbInsertFunction('functionName')
 
 
 #设置post、get提交

@@ -101,7 +101,7 @@ Class Base
 	 * 验证对象<br/>
 	 * 如果是对象，则作为验证对象调用<br/>
 	 * 如果是布尔值，则视为是否通过验证<br/>
-	 * 如果同时为validate和inputfilter赋值，已inputfilter优先<br/>
+	 * 如果同时为validate和inputfilter赋值，以inputfilter优先<br/>
 	 * @param object|boolean $validateClass
 	 * @return \FormSubmit\Logic\Base
 	 */
@@ -112,7 +112,7 @@ Class Base
 	}
 	
 	/**
-	 * 如果同时为validate和inputfilter赋值，已inputfilter优先 
+	 * 如果同时为validate和inputfilter赋值，以inputfilter优先 
 	 * @param array $inputFilter
 	 * @return \FormSubmit\Logic\Base
 	 */

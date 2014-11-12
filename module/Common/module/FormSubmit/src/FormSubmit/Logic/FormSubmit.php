@@ -299,11 +299,14 @@ Class FormSubmit
 					}
 				}
 				else {
-					if(!method_exists($this->dbModel,$function)) {
+					$functionName = is_array($function) ? $function['name'] : $function;
+					if(!method_exists($this->dbModel,$functionName)) {
 						throw new \FormSubmit\Exception\FormSubmitException('insert function is undefined');
 						return false;
 					}
-					$dbReturn = $this->dbModel->$function($validatedData);
+					is_array($function) ? $args = array_push($function['args'],$validatedData) : $args = $validatedData;
+					$dbReturn = is_array($function) ? call_user_func_array(array($this->dbModel,$functionName),$args) : $this->dbModel->$functionName($validatedData);
+					//$dbReturn = $this->dbModel->$function($validatedData);
 					$this->lastInsertId = $this->dbModel->lastInsertId();
 				}
 			}
@@ -433,7 +436,16 @@ Class FormSubmit
 	 */
 	public function dbInsertFunction($dbInsertFunction)
 	{
-		$this->dbInsertFunction = $dbInsertFunction;
+		//$this->dbInsertFunction = $dbInsertFunction;
+		$args = func_get_args();
+		if(count($args > 0)) {
+			//赋值函数名
+			$this->validateFunction = $args[0];
+			//注销函数名数组元素
+			unset($args[0]);
+			//如果还有其余数组元素，全部作为函数参数处理
+			count($args) > 0 && $this->dbInsertFunction = array('name'=> $this->dbInsertFunction , 'args' => $args);
+		}
 	}
 	
 	/**

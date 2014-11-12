@@ -454,3 +454,81 @@ message:insert function is undefined
 2014-10-24T17:31:53+08:00 DEBUG (7): Query finished {"elapsed":0.00033903121948242}
 2014-10-24T17:31:53+08:00 DEBUG (7): Query started {"sql":"SELECT `product_type`.*, `pt`.`name` AS `parent_name` FROM `product_type` LEFT JOIN `product_type` AS `pt` ON `product_type`.`parent_id` = `pt`.`ptype_id` ORDER BY `product_type`.`parent_id` ASC LIMIT :limit OFFSET :offset","parameters":"{\"limit\":10,\"offset\":0}"}
 2014-10-24T17:31:53+08:00 DEBUG (7): Query finished {"elapsed":0.00027704238891602}
+2014-11-11T10:48:16+08:00 DEBUG (7): Query started {"sql":"SELECT `admin`.`id` AS `id`, `admin`.`leve` AS `leve` FROM `admin` WHERE `uname` = :where1 AND `pwd` = :where2 AND `delete_flg` = :where3","parameters":"{\"where1\":\"admin\",\"where2\":\"4297f44b13955235245b2497399d7a93\",\"where3\":0}"}
+2014-11-11T10:48:16+08:00 DEBUG (7): Query finished {"elapsed":0.02581000328064}
+2014-11-11T10:48:23+08:00 DEBUG (7): Query started {"sql":"SELECT `advertisement`.* FROM `advertisement`","parameters":"[]"}
+2014-11-11T10:48:23+08:00 DEBUG (7): Query finished {"elapsed":0.018593072891235}
+2014-11-11T10:48:23+08:00 DEBUG (7): Query started {"sql":"SELECT `product_type`.* FROM `product_type` WHERE `parent_id` = :where1","parameters":"{\"where1\":0}"}
+2014-11-11T10:48:23+08:00 DEBUG (7): Query finished {"elapsed":0.00052690505981445}
+2014-11-11T10:48:29+08:00 DEBUG (7): Query started {"sql":"SELECT `product_type`.* FROM `product_type` WHERE `parent_id` = :where1","parameters":"{\"where1\":\"38\"}"}
+2014-11-11T10:48:29+08:00 DEBUG (7): Query finished {"elapsed":0.00028800964355469}
+2014-11-11T10:48:44+08:00 WARN (4): 
+time:2014-11-11 10:48:44
+level:WARN
+model:FormSubmit
+fileName:/var/www/shoppingcart/module/Common/module/FormSubmit/src/FormSubmit/Media/MediaUpload.php
+line:163
+message:52edf318139ac332221cae701f55df52.jpg receive is warn
+
+2014-11-11T10:48:44+08:00 WARN (4): 
+time:2014-11-11 10:48:44
+level:WARN
+model:FormSubmit
+fileName:/var/www/shoppingcart/module/Common/module/FormSubmit/src/FormSubmit/Media/MediaUpload.php
+line:167
+message:52edf318139ac332221cae701f55df52.jpg receive is warn
+
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `product`.* FROM `product` WHERE `name` = :where1 AND `delete_flg` = :where2","parameters":"{\"where1\":\"gegwegweg\",\"where2\":0}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.013696908950806}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"INSERT INTO `product` (`name`, `original_price`, `price`, `stock`, `point`, `is_add`, `description`, `creat_time`, `update_time`) VALUES ('gegwegweg', '111', '222', '2', '1', '1', 'sdgdg', '1415674167', '1415674167')","parameters":null}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00053095817565918}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"INSERT INTO `image_product` (`product_id`, `image_path`) VALUES (:product_id, :image_path)","parameters":"{\"product_id\":\"49\",\"image_path\":\"upload/1415674167246812.jpg\"}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.061647176742554}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"INSERT INTO `ad_product` (`product_id`, `ad_id`) VALUES (:product_id, :ad_id)","parameters":"{\"product_id\":\"49\",\"ad_id\":\"2\"}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.051487922668457}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"INSERT INTO `ad_product` (`product_id`, `ad_id`) VALUES (:product_id, :ad_id)","parameters":"{\"product_id\":\"49\",\"ad_id\":\"3\"}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.041540861129761}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"INSERT INTO `product_productType` (`product_id`, `ptype_id`) VALUES (:product_id, :ptype_id)","parameters":"{\"product_id\":\"49\",\"ptype_id\":\"38\"}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.060549020767212}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT COUNT(1) AS `c` FROM (SELECT `product`.`product_id` AS `product_id`, `product`.`name` AS `name`, `product`.`original_price` AS `original_price`, `product`.`price` AS `price`, `product`.`stock` AS `stock`, `product`.`point` AS `point`, `product`.`is_add` AS `is_add`, `product`.`creat_time` AS `creat_time`, `product`.`update_time` AS `update_time` FROM `product` WHERE `delete_flg` = :subselect1where1) AS `original_select`","parameters":"{\"subselect1where1\":0}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00036716461181641}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `forum`.* FROM `forum`","parameters":"[]"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00028514862060547}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `product`.`product_id` AS `product_id`, `product`.`name` AS `name`, `product`.`original_price` AS `original_price`, `product`.`price` AS `price`, `product`.`stock` AS `stock`, `product`.`point` AS `point`, `product`.`is_add` AS `is_add`, `product`.`creat_time` AS `creat_time`, `product`.`update_time` AS `update_time` FROM `product` WHERE `delete_flg` = :where1 ORDER BY `product`.`update_time` DESC, `update_time` DESC LIMIT :limit OFFSET :offset","parameters":"{\"where1\":0,\"limit\":10,\"offset\":0}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00037908554077148}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `product_type`.`name` AS `name` FROM `product_type` INNER JOIN `product_productType` AS `ppt` ON `ppt`.`ptype_id` = `product_type`.`ptype_id` WHERE `ppt`.`product_id` = :where1 ORDER BY `parent_id` ASC","parameters":"{\"where1\":49}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00034689903259277}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `advertisement`.`ad_name` AS `ad_name` FROM `advertisement` INNER JOIN `ad_product` AS `adp` ON `adp`.`ad_id` = `advertisement`.`ad_id` WHERE `adp`.`product_id` = :where1","parameters":"{\"where1\":49}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00021195411682129}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `forum`.`forum_name` AS `forum_name` FROM `forum` INNER JOIN `forum_product` AS `fp` ON `fp`.`forum_id` = `forum`.`forum_id` WHERE `fp`.`product_id` = :where1","parameters":"{\"where1\":49}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00034594535827637}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `product_type`.`name` AS `name` FROM `product_type` INNER JOIN `product_productType` AS `ppt` ON `ppt`.`ptype_id` = `product_type`.`ptype_id` WHERE `ppt`.`product_id` = :where1 ORDER BY `parent_id` ASC","parameters":"{\"where1\":48}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00039315223693848}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `advertisement`.`ad_name` AS `ad_name` FROM `advertisement` INNER JOIN `ad_product` AS `adp` ON `adp`.`ad_id` = `advertisement`.`ad_id` WHERE `adp`.`product_id` = :where1","parameters":"{\"where1\":48}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00029301643371582}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `forum`.`forum_name` AS `forum_name` FROM `forum` INNER JOIN `forum_product` AS `fp` ON `fp`.`forum_id` = `forum`.`forum_id` WHERE `fp`.`product_id` = :where1","parameters":"{\"where1\":48}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00026702880859375}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `product_type`.`name` AS `name` FROM `product_type` INNER JOIN `product_productType` AS `ppt` ON `ppt`.`ptype_id` = `product_type`.`ptype_id` WHERE `ppt`.`product_id` = :where1 ORDER BY `parent_id` ASC","parameters":"{\"where1\":37}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00034213066101074}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `advertisement`.`ad_name` AS `ad_name` FROM `advertisement` INNER JOIN `ad_product` AS `adp` ON `adp`.`ad_id` = `advertisement`.`ad_id` WHERE `adp`.`product_id` = :where1","parameters":"{\"where1\":37}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.0002739429473877}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `forum`.`forum_name` AS `forum_name` FROM `forum` INNER JOIN `forum_product` AS `fp` ON `fp`.`forum_id` = `forum`.`forum_id` WHERE `fp`.`product_id` = :where1","parameters":"{\"where1\":37}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00026917457580566}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `product_type`.`name` AS `name` FROM `product_type` INNER JOIN `product_productType` AS `ppt` ON `ppt`.`ptype_id` = `product_type`.`ptype_id` WHERE `ppt`.`product_id` = :where1 ORDER BY `parent_id` ASC","parameters":"{\"where1\":42}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00032305717468262}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `advertisement`.`ad_name` AS `ad_name` FROM `advertisement` INNER JOIN `ad_product` AS `adp` ON `adp`.`ad_id` = `advertisement`.`ad_id` WHERE `adp`.`product_id` = :where1","parameters":"{\"where1\":42}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00028514862060547}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query started {"sql":"SELECT `forum`.`forum_name` AS `forum_name` FROM `forum` INNER JOIN `forum_product` AS `fp` ON `fp`.`forum_id` = `forum`.`forum_id` WHERE `fp`.`product_id` = :where1","parameters":"{\"where1\":42}"}
+2014-11-11T10:49:27+08:00 DEBUG (7): Query finished {"elapsed":0.00026798248291016}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query started {"sql":"SELECT `product`.* FROM `product` WHERE `product_id` = :where1 AND `delete_flg` = :where2","parameters":"{\"where1\":49,\"where2\":0}"}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query finished {"elapsed":0.00029397010803223}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query started {"sql":"SELECT `image_product`.`image_id` AS `image_id`, `image_product`.`image_path` AS `image_path` FROM `image_product` WHERE `product_id` = :where1","parameters":"{\"where1\":49}"}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query finished {"elapsed":0.00018906593322754}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query started {"sql":"SELECT `advertisement`.* FROM `advertisement`","parameters":"[]"}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query finished {"elapsed":8.9168548583984e-5}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query started {"sql":"SELECT `product_type`.`ptype_id` AS `ptype_id`, `product_type`.`parent_id` AS `parent_id` FROM `product_type` INNER JOIN `product_productType` AS `ppt` ON `ppt`.`ptype_id` = `product_type`.`ptype_id` WHERE `ppt`.`product_id` = :where1 ORDER BY `parent_id` ASC","parameters":"{\"where1\":49}"}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query finished {"elapsed":0.00036716461181641}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query started {"sql":"SELECT `ad_product`.`ad_id` AS `ad_id` FROM `ad_product` WHERE `product_id` = :where1","parameters":"{\"where1\":49}"}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query finished {"elapsed":0.000244140625}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query started {"sql":"SELECT `product_type`.* FROM `product_type` WHERE `parent_id` = :where1","parameters":"{\"where1\":0}"}
+2014-11-11T10:49:34+08:00 DEBUG (7): Query finished {"elapsed":0.00033402442932129}

@@ -2,11 +2,11 @@
 
 namespace Application;
 
-use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\ModuleManager;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Application\Logic;
+use Application\Logic\BootStrap;
 
 class Module implements AutoloaderProviderInterface 
 {	
@@ -44,12 +44,13 @@ class Module implements AutoloaderProviderInterface
     public function assetManager($event)
     {
 		$config = $this->getConfig();
+		//修改全局上传路径变量
 		isset($config['asset_manager']) && $GLOBALS['UPLOADPATH'] = $config['asset_manager']['resolver_configs']['paths'][0].'/upload/';
     }
     
     public function init(ModuleManager $moduleManager)
     { 
-    	//资产相关设置
+    	//资产相关设置，调用assetManager方法
     	$moduleManager->getEventManager()->attach('loadModule',array($this,'assetManager'));
     	
     	//设置移动端试图层路径
@@ -57,25 +58,10 @@ class Module implements AutoloaderProviderInterface
 		$mobile->changeMobileViewPath($moduleManager);
     }
     
-    public function onDispatchError(MvcEvent $event){
-    	//自定义错误处理
-    	$response = $event->getResponse();
-    	if($response->getStatusCode() == 500){
-    		$errorStrategy = new Logic\ErrorStrategy();
-    		$applicationConfig = $this->getConfig();
-    		$errorStrategy->errorHandle($applicationConfig,$event->getParam('exception'),$event->getApplication()->getServiceManager());
-    	}
-    }
-    
     public function onBootstrap (EventInterface $event)
     {
-    	//设置多语言
-    	$language = new Logic\Language($event->getApplication()->getServiceManager()->get('viewHelperManager'),$event->getApplication()->getServiceManager());
-    	
-    	//错误处理
-    	$eventManager = $event->getParam('application')->getEventManager();
-    	$eventManager->getSharedManager()->attach('*', MvcEvent::EVENT_DISPATCH, array($this,'onDispatchError'), -100);
-    	$eventManager->getSharedManager()->attach('*', MvcEvent::EVENT_DISPATCH_ERROR, array($this,'onDispatchError'), -100);
-    	$eventManager->getSharedManager()->attach('*', MvcEvent::EVENT_RENDER_ERROR, array($this,'onDispatchError'), - 100);
+    	$bootStrap = new BootStrap();
+    	$bootStrap->setApplicationConfig($this->getConfig());
+    	$bootStrap->onBootstrap($event);
     }
 }

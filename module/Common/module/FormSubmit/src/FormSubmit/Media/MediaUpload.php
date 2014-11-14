@@ -111,6 +111,7 @@ class MediaUpload
 		}
 		if($returnFileSize === true) {
 			//mimeType验证
+			$mimeType->setOptions(array('magicFile' => false));
 			if($mimeType->isValid($file['tmp_name']) === false) {
 				$returnMimeType = false;
 				$mimeType = $this->mimeType;

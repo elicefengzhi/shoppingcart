@@ -38,19 +38,6 @@ class Validate
 		$exists = false;
 
 		if($this->requestType == 'insert') {
-// 			//如果是Zend\Db\Sql\Select对象直接赋值
-// 			if($existsWhere instanceof \Zend\Db\Sql\Select) {
-// 				$recordExistsOption = $existsWhere;
-// 			}
-// 			//如果是数组，转换成Zend\Db\Sql\Select对象
-// 			else {
-// 				$select = new \FormSubmit\DbSql\DbSql($adapter,$table);
-// 				$recordExistsOption = $select->getExistsSelectObject($existsDataKey,$where,$existsDataValue,$existsWhere);
-// 			}
-// 			$validator = new \Zend\Validator\Db\RecordExists($recordExistsOption);
-// 			$validator->setAdapter($adapter);
-// 			if($validator->isValid($existsDataValue) === false) return false;
-
 			$select = new \FormSubmit\DbSql\DbSql($adapter,$table);
 			$current = $select->getWhereByField(null,$existsArray,$existsWhere);
 			$return = count($current) > 0 ? true : false;

@@ -21,7 +21,7 @@ class ProductTypeController extends BaseController
     	$user = $this->serviceLocator->get('FormSubmit')->Insert();
     	if($user !== false) {
     		$sourceData = $this->params()->fromPost();
-    		$return = $user->table($this->serviceLocator->get('DbSql')->ProductType())->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->QuickValidate())
+    		$return = $user->table($this->serviceLocator->get('DbSql')->ProductType())->dbInsertFunction('add')->existsFields(array('name'))->validate($this->serviceLocator->get('Validate')->QuickValidate())
     				       ->validateFunction('quickValidate',
     				       		array(
     				       			'name' => array(

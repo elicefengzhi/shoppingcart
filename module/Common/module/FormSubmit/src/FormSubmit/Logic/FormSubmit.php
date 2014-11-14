@@ -33,11 +33,11 @@ Class FormSubmit
 	protected $isRollBack;//开启回滚
 	protected $isVal;//是否通过验证
 	
-	protected $dbInsertFunction;//添加方法名
-	protected $insertExistsFunction;//添加存在验证方法名
+	protected $dbInsertFunction = null;//添加方法名
+	protected $insertExistsFunction = null;//添加存在验证方法名
 	
 	protected $isUpdateWhere;//数据库更新是否有条件
-	protected $dbUpdateFunction;//更新方法名 
+	protected $dbUpdateFunction = null;//更新方法名 
 	protected $updateExistsFunction;//更新存在验证方法名 
 	
 	protected $mediaUpload;//媒体上传对象
@@ -88,10 +88,13 @@ Class FormSubmit
 		is_object($table) ? $this->dbModel = $table : $this->tableName = trim((string)$table);
 	
 		$this->validateClass = $validateClass;
-		$this->dbInsertFunction = $initArray['db']['dbInsertFunction'];
+		//如果没有给dbInsertFunction额外赋值，使用配置中的值
+		is_null($this->dbInsertFunction) && $this->dbInsertFunction = $initArray['db']['dbInsertFunction'];
 		//如果existsParams为false，则不执行添加存在验证
-		$existsParams === false ? $this->insertExistsFunction = false : $this->insertExistsFunction = $initArray['db']['insertExistsFunction'];
-		$this->dbUpdateFunction = $initArray['db']['dbUpdateFunction'];
+		//如果没有给insertExistsFunction额外赋值，使用配置中的值
+		$existsParams === false ? $this->insertExistsFunction = false : (is_null($this->insertExistsFunction) && $this->insertExistsFunction = $initArray['db']['insertExistsFunction']);
+		//如果没有给dbUpdateFunction额外赋值，使用配置中的值
+		is_null($this->dbUpdateFunction) && $this->dbUpdateFunction = $initArray['db']['dbUpdateFunction'];
 		//如果existsParams为false，则不执行更新存在验证
 		$existsParams === false ? $this->updateExistsFunction = false : $this->updateExistsFunction = $initArray['db']['updateExistsFunction'];
 		
@@ -99,6 +102,23 @@ Class FormSubmit
 		if(!is_null($this->validateClass)) {
 			$this->validateFunction === false && $this->validateFunction = $initArray['validate']['validateFunction'];
 			$this->validateErrorMessageFunction === false && $this->validateErrorMessageFunction = $initArray['validate']['errorMessageFunction'];
+		}
+	}
+	
+	/**
+	 * 对函数任意传参时的处理
+	 * @param string $function
+	 * @param array $args
+	 */
+	private function functionAgrs($function,$args)
+	{
+		if(count($args > 0)) {
+			//赋值函数名
+			$this->$function = $args[0];
+			//注销函数名数组元素
+			unset($args[0]);
+			//如果还有其余数组元素，全部作为函数参数处理
+			count($args) > 0 && $this->$function = array('name'=> $this->$function , 'args' => $args);
 		}
 	}
 	
@@ -299,15 +319,21 @@ Class FormSubmit
 					}
 				}
 				else {
+					//如果传人的值是字符串则用此字符串作为待调用的函数名，如果是数组，则使用name元素的值作为待调用的函数名
 					$functionName = is_array($function) ? $function['name'] : $function;
 					if(!method_exists($this->dbModel,$functionName)) {
-						throw new \FormSubmit\Exception\FormSubmitException('insert function is undefined');
+						throw new \FormSubmit\Exception\FormSubmitException($functionName.' insert function is undefined');
 						return false;
 					}
-					is_array($function) ? $args = array_push($function['args'],$validatedData) : $args = $validatedData;
+					//如果包含额外参数，保证传入函数的第一个参数为验证后的requestData，后面的参数为额外参数
+					$args = array();
+					$args[0] = $validatedData;
+					is_array($function) && $args = array_merge($args,$function['args']);
+					
 					$dbReturn = is_array($function) ? call_user_func_array(array($this->dbModel,$functionName),$args) : $this->dbModel->$functionName($validatedData);
-					//$dbReturn = $this->dbModel->$function($validatedData);
-					$this->lastInsertId = $this->dbModel->lastInsertId();
+					$dbReturn = (boolean)$dbReturn;
+					method_exists($this->dbModel,'lastInsertId') && $this->lastInsertId = $this->dbModel->lastInsertId();
+					unset($args);
 				}
 			}
 			else {
@@ -318,11 +344,21 @@ Class FormSubmit
 					$dbReturn = $sql->update($validatedData,$where);
 				}
 				else {
-					if(!method_exists($this->dbModel,$function)) {
-						throw new \FormSubmit\Exception\FormSubmitException('update function is undefined');
+					//如果传人的值是字符串则用此字符串作为待调用的函数名，如果是数组，则使用name元素的值作为待调用的函数名
+					$functionName = is_array($function) ? $function['name'] : $function;
+					if(!method_exists($this->dbModel,$functionName)) {
+						throw new \FormSubmit\Exception\FormSubmitException($functionName.' update function is undefined');
 						return false;
 					}
-					$dbReturn= $this->dbModel->$function($validatedData,$where);
+					//如果包含额外参数，保证传入函数的第一个参数为验证后的requestData、第二个参数为更新的条件，后面的参数为额外参数
+					$args = array();
+					$args[0] = $validatedData;
+					$args[1] = $where;
+					is_array($function) && $args = array_merge($args,$function['args']);
+
+					$dbReturn = is_array($function) ? call_user_func_array(array($this->dbModel,$functionName),$args) : $this->dbModel->$functionName($validatedData,$where);
+					$dbReturn = (boolean)$dbReturn;
+					unset($args);
 				}
 			}
 			//触发数据库操作后事件
@@ -371,13 +407,26 @@ Class FormSubmit
 		$exists = false;
 		if($type == 'insert') {
 			$insertExistsFunction = $this->insertExistsFunction;
-			if(method_exists($this->dbModel,$insertExistsFunction) === false) throw new \FormSubmit\Exception\FormSubmitException($insertExistsFunction.' method is undefined');
-			$exists = $this->dbModel->$insertExistsFunction($existsField,$existsWhere);
+			$functionName = is_array($insertExistsFunction) ? $insertExistsFunction['name'] : $insertExistsFunction;
+			$args = array();
+			$args[0] = $existsField;
+			$args[1] = $existsWhere;
+			$args = array_merge($args,$insertExistsFunction['args']);
+			
+			if(method_exists($this->dbModel,$functionName) === false) throw new \FormSubmit\Exception\FormSubmitException($functionName.' method is undefined');
+			$exists = is_array($insertExistsFunction) ? call_user_func_array(array($this->dbModel,$functionName),$args) : $this->dbModel->$functionName($existsField,$existsWhere);
+			$exists = (boolean)$exists;
 		}
 		else {
 			$updateExistsFunction = $this->updateExistsFunction;
-			if(method_exists($this->dbModel,$updateExistsFunction) === false) throw new \FormSubmit\Exception\FormSubmitException($updateExistsFunction.' method is undefined');
-			$mainParams = $this->dbModel->$updateExistsFunction($existsField,$existsWhere);
+			$functionName = is_array($updateExistsFunction) ? $updateExistsFunction['name'] : $updateExistsFunction;
+			$args = array();
+			$args[0] = $existsField;
+			$args[1] = $existsWhere;
+			$args = array_merge($args,$updateExistsFunction['args']);
+			
+			if(method_exists($this->dbModel,$functionName) === false) throw new \FormSubmit\Exception\FormSubmitException($functionName.' method is undefined');
+			$mainParams = is_array($insertExistsFunction) ? call_user_func_array(array($this->dbModel,$functionName),$args) : $this->dbModel->$functionName($existsField,$existsWhere);
 			$mainParams !== false && $mainParams != current($this->updateExistsValue) && $exists = true;
 		}
 
@@ -431,21 +480,13 @@ Class FormSubmit
 	}
 	
 	/**
-	 * 设置插入函数名
+	 * 设置插入函数名及额外参数
 	 * @param string $dbInsertFunction
 	 */
 	public function dbInsertFunction($dbInsertFunction)
 	{
-		//$this->dbInsertFunction = $dbInsertFunction;
 		$args = func_get_args();
-		if(count($args > 0)) {
-			//赋值函数名
-			$this->validateFunction = $args[0];
-			//注销函数名数组元素
-			unset($args[0]);
-			//如果还有其余数组元素，全部作为函数参数处理
-			count($args) > 0 && $this->dbInsertFunction = array('name'=> $this->dbInsertFunction , 'args' => $args);
-		}
+		$this->functionAgrs('dbInsertFunction',$args);
 	}
 	
 	/**
@@ -454,7 +495,10 @@ Class FormSubmit
 	 */
 	public function insertExistsFunction($insertExistsFunction)
 	{
-		$this->insertExistsFunction = $insertExistsFunction;
+		$args = func_get_args();
+		$this->functionAgrs('insertExistsFunction',$args);
+		//如果给该函数传值，则自动开启自定义存在验证
+		$this->isCustomExists = true;
 	}
 	
 	/**
@@ -463,7 +507,8 @@ Class FormSubmit
 	 */
 	public function dbUpdateFunction($dbUpdateFunction)
 	{
-		$this->dbUpdateFunction = $dbUpdateFunction;
+		$args = func_get_args();
+		$this->functionAgrs('dbUpdateFunction',$args);
 	}
 	
 	/**
@@ -472,7 +517,10 @@ Class FormSubmit
 	 */
 	public function updateExistsFunction($updateExistsFunction)
 	{
-		$this->updateExistsFunction = $updateExistsFunction;
+		$args = func_get_args();
+		$this->functionAgrs('updateExistsFunction',$args);
+		//如果给该函数传值，则自动开启自定义存在验证
+		$this->isCustomExists = true;
 	}
 	
 	/**
@@ -482,14 +530,7 @@ Class FormSubmit
 	public function validateFunction()
 	{
 		$args = func_get_args();
-		if(count($args > 0)) {
-			//赋值函数名
-			$this->validateFunction = $args[0];
-			//注销函数名数组元素
-			unset($args[0]);
-			//如果还有其余数组元素，全部作为函数参数处理
-			count($args) > 0 && $this->validateFunction = array('name'=> $this->validateFunction , 'args' => $args);
-		}
+		$this->functionAgrs('validateFunction',$args);
 	}
 	
 	/**

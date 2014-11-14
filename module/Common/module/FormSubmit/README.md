@@ -24,6 +24,8 @@ $insert->requestData(array('name' => 'test','age' => 12));
 
 table:
 此方法接收一个字符串或一个对象，执行操作的表名或数据操作对象
+如果参数是对象，下列方法所给出的待调用方法名都会从此对象中调用
+'dbInsertFunction'、'insertExistsFunction'、'dbUpdateFunction'、'updateExistsFunction'
 
 $this->serviceLocator->get('FormSubmit')->Insert()->table('user');
 
@@ -80,11 +82,53 @@ inputFilter:
 $this->serviceLocator->get('FormSubmit')->Insert()->table('user')->inputFilter(array(....))
 
 dbInsertFunction:
-此方法接收一个字符串，插入操作的函数名。
-如果给'table'传递了对象，就会调用此方法名的方法，此时这个方法必须接收一个参数用于获得经过处理有的requestData。
-如果给'table'传递了对象但是没有显示调用此方法，程序会根据模块配置文件中定义的方法名传参。
+第一个参数是调用的方法名，后面的参数任意，为需要传给此方法的参数，插入数据库时需要调用的方法名及相关参数
+待调用的函数需要返回一个布尔值以代表是否验证通过(程序会强转返回值为布尔类型)
+如果给'table'传递了对象，就会调用此方法名的方法，此时这个方法必须接收一个参数用于获得经过处理有的'requestData'(比如下面方法'add'的$data参数)。
+如果不给此函数传参，则使用自带的程序执行插入操作
+
+function add($data) {
+	...
+}
+
+如果给'table'传递了对象但是没有显示调用此方法，程序会根据模块配置文件中'dbInsertFunction'定义的方法名传参
 
 $this->serviceLocator->get('FormSubmit')->Insert()->table($this->serviceLocator->get('DbSql')->User())->dbInsertFunction('functionName')
+
+isCustomExists:
+此方法接收一个布尔值，是否进行自定义存在验证(默认不进行)
+
+insertExistsFunction:
+第一个参数是调用的方法名，后面的参数任意，为需要传给此方法的参数，插入数据库时存在验证需要调用的方法名及相关参数
+如果对此函数传参，则自动执行自定义插入存在验证(isCustomExists = true)
+待调用的函数需要返回一个布尔值以代表是否验证通过(程序会强转返回值为布尔类型)
+此方法调用'table'方法传入的对象，这个方法第一个一个参数必须用于获得'existsFields'方法传递的参数(比如下面方法'insertExistsFunction'的$existsField参数)，第二个参数必须获得'existsWhere'方法传递的参数(比如下面方法'insertExistsFunction'的$existsWhere参数)。
+如果不给此函数传参，则使用自带的程序执行更新操作
+
+function insertExistsFunction($existsField,$existsWhere) {
+	...
+}
+
+如果给'table'传递了对象但是没有显示调用此方法，程序会根据模块配置文件中'insertExistsFunction'定义的方法名传参
+
+$this->serviceLocator->get('FormSubmit')->Insert()->table($this->serviceLocator->get('DbSql')->User())->existsFields(array('name'))->insertExistsFunction('functionName')
+
+dbUpdateFunction:
+第一个参数是调用的方法名，后面的参数任意，为需要传给此方法的参数，更新数据库时需要调用的方法名及相关参数
+待调用的函数需要返回一个布尔值以代表是否验证通过(程序会强转返回值为布尔类型)
+如果给'table'传递了对象，就会调用此方法名的方法，此时这个方法第一个参数用于获得经过处理有的'requestData'(比如下面方法'update'的$data参数)，第二个参数必须接受'where'方法传递的值(比如下面方法'update'的$where参数)。
+如果不给此函数传参，则使用自带的程序执行更操作
+
+function update($data,$where) {
+	...
+}
+
+如果给'table'传递了对象但是没有显示调用此方法，程序会根据模块配置文件中'dbUpdateFunction'定义的方法名传参
+
+$this->serviceLocator->get('FormSubmit')->Update()->table($this->serviceLocator->get('DbSql')->User())->dbUpdateFunction('functionName')
+
+updateExistsFunction:
+参见'insertExistsFunction'
 
 
 #设置post、get提交

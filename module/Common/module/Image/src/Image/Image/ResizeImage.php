@@ -23,6 +23,7 @@ class ResizeImage
 	public function setSaveBasePath($saveBasePath)
 	{
 		$this->saveBasePath = $saveBasePath;
+		return $this;
 	}
 	
 	public function setImagePrefix($prefix)
@@ -59,7 +60,7 @@ class ResizeImage
 	 * heighten：按高度等比缩放
 	 * @return boolean
 	 */
-	public function Resize($imageFile,Array $size)
+	public function Resize($imageFile,Array $size,$option = null)
 	{
 		$isVal = $this->validate->IsVal($imageFile);
 		if($isVal === false) return false;
@@ -75,7 +76,8 @@ class ResizeImage
 		$baseName = new \Zend\Filter\BaseName();
 		$imageBaseName = $baseName->filter($imageFile);
 		$saveImageFile = $this->saveBasePath.$this->prefix.$imageBaseName;
-		$image->resize($size)->save($saveImageFile,$this->option);
+		is_null($option) && $option = array();
+		$image->resize($size)->save($saveImageFile,$option);
 		
 		if(is_file($saveImageFile)) {
 			return true;

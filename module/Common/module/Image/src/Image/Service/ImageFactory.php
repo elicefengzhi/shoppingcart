@@ -29,10 +29,10 @@ class ImageFactory implements FactoryInterface
     	isset($init['Image/init']) ? $initArray = $init['Image/init'] : $initArray = false;
     	
     	$extension = $init['Image/init']['extensionOrder'];
-    	if($extension == 'imagick') {
+    	if(in_array('imagick',$extension)) {
     		extension_loaded('imagick') ? $imagine = new \Imagine\Imagick\Imagine() : $imagine = new \Imagine\Gd\Imagine();
     	}
-    	else if($extension == 'gmagick') {
+    	else if(in_array('gmagick',$extension)) {
     		extension_loaded('gmagick') ? $imagine = new \Imagine\Gmagick\Imagine() : $imagine = new \Imagine\Gd\Imagine();
     	}
 		else {

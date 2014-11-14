@@ -14,6 +14,7 @@ class Validate
 		}
 
 		$mimeType = new \Zend\Validator\File\MimeType($this->mimeType);
+		$mimeType->setOptions(array('magicFile' => false));
 		if($mimeType->isValid($file) === false) {
 			throw new \Exception("image validate MimeType error , MimeType : image/jpg image/jpeg image/png image/gif");
 			return false;

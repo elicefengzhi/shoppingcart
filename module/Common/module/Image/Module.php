@@ -17,7 +17,7 @@ class Module implements AutoloaderProviderInterface
                     __NAMESPACE__ => __DIR__ . '/src/' . str_replace('\\', '/' , __NAMESPACE__),
                 ),
             	'namespaces' => array(
-            		'Imagine' => __DIR__ . '/src/' . str_replace('\\', '/' , __NAMESPACE__) . '/Lib/imagine/imagine/lib/Imagine',
+            		'Imagine' => __DIR__ . '/src/Image/Lib/imagine/imagine/lib/Imagine',
             	),
             ),
         );

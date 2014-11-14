@@ -19,6 +19,11 @@ class ProductType extends BaseDb
     	}
     }
     
+    public function edit($data,$where)
+    {
+     	return $this->editData($data,$where);
+    }
+    
     public function del($where)
     {
     	$return = $this->delete($where);

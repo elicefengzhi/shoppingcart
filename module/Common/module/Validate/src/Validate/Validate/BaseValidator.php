@@ -596,7 +596,7 @@ class BaseValidator
 	}
 	
 	/**
-	 * データー初期化
+	 * 数据初始化
 	 * @param string $name
 	 * @param bool $Emety
 	 * @return bool|string
@@ -653,11 +653,11 @@ class BaseValidator
 
 			$errorMessage = $this->imageUploadModule->errormessage;
 			if(count($errorMessage) > 0) {
-				$this->errorMessage['画像アップロードチェック'] = $this->imageUploadModule->errormessage;
+				$this->errorMessage['图片上传验证'] = $this->imageUploadModule->errormessage;
 				$ReturnData = false;
 			}
 			else if($ReturnData === false){
-				$this->errorMessage['画像アップロードチェック'] = '画像アップロード失敗';
+				$this->errorMessage['图片上传验证'] = '图片上传失败';
 				$ReturnData = false;
 			}
 		}

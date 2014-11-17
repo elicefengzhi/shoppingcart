@@ -30,13 +30,12 @@ Class FormSubmit
 	protected $isCustomExists = false;//是否自定义数据验证
 	protected $isExists;//request数据是否已经存在
 	protected $isTransaction;//是否开启事务
-	protected $isRollBack;//开启回滚
+	protected $isRollBack = false;//开启回滚
 	protected $isVal;//是否通过验证
 	
 	protected $dbInsertFunction = null;//添加方法名
 	protected $insertExistsFunction = null;//添加存在验证方法名
 	
-	protected $isUpdateWhere;//数据库更新是否有条件
 	protected $dbUpdateFunction = null;//更新方法名 
 	protected $updateExistsFunction;//更新存在验证方法名 
 	
@@ -49,7 +48,6 @@ Class FormSubmit
 		$this->initArray = $initArray;
 		$this->serviceLocator = $serviceLocator;
 		$this->isTransaction = false;
-		$this->isUpdateWhere = true;
 		$this->isCustomExists = false;
 		$this->tableName = false;
 		$this->events = new EventManager();
@@ -406,29 +404,22 @@ Class FormSubmit
 		$type = $this->requestType;
 		$exists = false;
 		if($type == 'insert') {
-			$insertExistsFunction = $this->insertExistsFunction;
-			$functionName = is_array($insertExistsFunction) ? $insertExistsFunction['name'] : $insertExistsFunction;
-			$args = array();
-			$args[0] = $existsField;
-			$args[1] = $existsWhere;
-			$args = array_merge($args,$insertExistsFunction['args']);
-			
-			if(method_exists($this->dbModel,$functionName) === false) throw new \FormSubmit\Exception\FormSubmitException($functionName.' method is undefined');
-			$exists = is_array($insertExistsFunction) ? call_user_func_array(array($this->dbModel,$functionName),$args) : $this->dbModel->$functionName($existsField,$existsWhere);
-			$exists = (boolean)$exists;
+			$existsFunction = $this->insertExistsFunction;
+			$functionName = is_array($existsFunction) ? $existsFunction['name'] : $existsFunction;
 		}
 		else {
-			$updateExistsFunction = $this->updateExistsFunction;
-			$functionName = is_array($updateExistsFunction) ? $updateExistsFunction['name'] : $updateExistsFunction;
-			$args = array();
-			$args[0] = $existsField;
-			$args[1] = $existsWhere;
-			$args = array_merge($args,$updateExistsFunction['args']);
-			
-			if(method_exists($this->dbModel,$functionName) === false) throw new \FormSubmit\Exception\FormSubmitException($functionName.' method is undefined');
-			$mainParams = is_array($insertExistsFunction) ? call_user_func_array(array($this->dbModel,$functionName),$args) : $this->dbModel->$functionName($existsField,$existsWhere);
-			$mainParams !== false && $mainParams != current($this->updateExistsValue) && $exists = true;
+			$existsFunction = $this->updateExistsFunction;
+			$functionName = is_array($existsFunction) ? $existsFunction['name'] : $existsFunction;
 		}
+		
+		$args = array();
+		$args[0] = $existsField;
+		$args[1] = $existsWhere;
+		$args = array_merge($args,$existsFunction['args']);
+			
+		if(method_exists($this->dbModel,$functionName) === false) throw new \FormSubmit\Exception\FormSubmitException($functionName.' method is undefined');
+		$exists = is_array($existsFunction) ? call_user_func_array(array($this->dbModel,$functionName),$args) : $this->dbModel->$functionName($existsField,$existsWhere);
+		$exists = (boolean)$exists;
 
 		return $exists;
 	}
@@ -525,7 +516,7 @@ Class FormSubmit
 	
 	/**
 	 * 设置验证函数名<br/>
-	 * 第一个参数为调用的函数名，其余参数为函数的参数(可以没有)
+	 * 第一个参数为调用的函数名，其余参数为函数的参数
 	 */
 	public function validateFunction()
 	{
@@ -540,15 +531,6 @@ Class FormSubmit
 	public function validateErrorMessageFunction($validateErrorMessageFunction)
 	{
 		$this->validateErrorMessageFunction = $validateErrorMessageFunction;
-	}
-	
-	/**
-	 * 设置数据库更新是否有条件
-	 * @param boolean $isUpdateWhere
-	 */
-	public function isUpdateWhere($isUpdateWhere)
-	{
-		$this->isUpdateWhere = (bool)$isUpdateWhere;
 	}
 	
 	/**
@@ -601,7 +583,7 @@ Class FormSubmit
 	 */
 	public function isTransaction($isTransaction)
 	{
-		$this->isTransaction = $isTransaction;
+		$this->isTransaction = (boolean)$isTransaction;
 	}
 	
 	/**
@@ -644,7 +626,7 @@ Class FormSubmit
 	 */
 	public function isRollBack($isRollBack)
 	{
-		$this->isRollBack = $isRollBack;
+		$this->isRollBack = (boolean)$isRollBack;
 	}
 	
 	/**
@@ -653,7 +635,7 @@ Class FormSubmit
 	 */
 	public function isCustomExists($isCustomExists)
 	{
-		$this->isCustomExists = $isCustomExists;
+		$this->isCustomExists = (boolean)$isCustomExists;
 	}
 	
 	/**

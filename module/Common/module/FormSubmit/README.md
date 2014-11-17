@@ -75,6 +75,24 @@ validateFunction:
 $this->serviceLocator->get('FormSubmit')->Insert()->table('user')->validate($this->serviceLocator->get('Validate')->User())
 ->validateFunction('functionName','param1','param2')
 
+validateErrorMessageFunction:
+此方法接收一个字符串，自定义验证时自定义验证对象通过此方法给出可供调用的错误信息
+如果不给此函数传参，则使用配置文件中的'errorMessageFunction'的值调用
+
+validatedData:
+此方法接收一个数组，设置验证后数据，多用于触发事件时动态修改验证后数据
+
+sourceValidateErrorMessage:
+此方法接收一个字符串，设置验证错误提示信息
+如果不给此函数传参，则使用ErrorMessage.php中的值，详细可见ErrorMessage.php
+数组键名：
+'maxSizeError' 媒体上传最大容量
+'minSizeError' 媒体上传最小容量
+'mimeTypeError' 媒体上传mime类型
+'existsError' 数据存在
+
+$this->serviceLocator->get('FormSubmit')->Insert()->table('user')->sourceValidateErrorMessage(array('maxSizeError' => '上传最大限制为%s'))
+
 inputFilter:
 此方法接收一个数组，传递一个给'Zend\InputFilter\Factory'对象'createInputFilter'方法的配置参数，用于验证、过滤
 如果同时为'validate'和'inputfilter'赋值，以inputfilter优先
@@ -119,7 +137,7 @@ dbUpdateFunction:
 如果给'table'传递了对象，就会调用此方法名的方法，此时这个方法第一个参数用于获得经过处理有的'requestData'(比如下面方法'update'的$data参数)，第二个参数必须接受'where'方法传递的值(比如下面方法'update'的$where参数)。
 如果不给此函数传参，则使用自带的程序执行更操作
 
-function update($data,$where) {
+function dbUpdateFunction($existsField,$existsWhere) {
 	...
 }
 
@@ -130,29 +148,85 @@ $this->serviceLocator->get('FormSubmit')->Update()->table($this->serviceLocator-
 updateExistsFunction:
 参见'insertExistsFunction'
 
+isFilter:
+此方法接收一个布尔值，是否过滤requestData(默认进行stringTrim+stripTags+htmlEntities+stripNewLines验证)
 
-#设置post、get提交
-$property = $this->serviceLocator->get('FormSubmit');
-$property->setRequestType('get');//post(默认)或get
+$this->serviceLocator->get('FormSubmit')->Insert()->table('user')->isFilter(false);
 
-#添加数据一般形式
-//'news_title'不可重复，操作表为'News'，$this->serviceLocator->get('Validate')->AdminNews()为验证的对象。
-$page->insert()->existsFields(array('news_title'))->table('News')->validate($this->serviceLocator->get('Validate')->AdminNews())->submit();
-
-#更新数据一般形式
-//当前修改的数据为'news_id'为'4'的数据，'news_title'不可重复操作表为'News'，$this->serviceLocator->get('Validate')->AdminNews()为验证的对象。
-$return = $page->update()->table('News')->where(array('news_id' => 4))->existsFields(array('news_title'))->validate($this->serviceLocator->get('Validate')->AdminNews())->submit();
-
-#关于自定义过滤
-1. 不过滤 为 0
-2. 为"null"，则视为多余字段从request参数中注销
+customFilter:
+此方法接收一个数组，自定义过滤
+关于自定义过滤:
+1. 为"null"，则视为多余字段从request参数中注销
+2. 不过滤 为 0
 3. STRINGTRIM 为 1
 4. STRIPTAGS 为 2
 5. HTMLENTITIES 为 4
 6. STRIPNEWLINES 为 8
-//过滤形式
+过滤形式(数组键值为字段名，值为过滤值):
 1. array('filter1' => 15 , 'filter2' => 2)
 2. array('filter1' => 1 + 2 + 4 + 8 , 'filter2' => 4 + 8)
 3. array('filter1' => \FormSubmit\Filter\Filter::HTMLENTITIES + \FormSubmit\Filter\Filter::STRINGTRIM)
-//在更新数据时使用自定义过滤
-$return = $page->update()->table('News')->where(array('news_id' => $nId))->existsFields(array('news_title'))->customFilter(array('editorValue' => null,'news_body' => 0,'news_title' => 1 + 4 + 8))->validate($this->serviceLocator->get('Validate')->AdminNews())->submit();
+
+$this->serviceLocator->get('FormSubmit')->Insert()->table('user')->customFilter(array('filter1' => null,'filter2' => 0,'filter3' => 1 + 4 + 8));
+
+addField:
+此方法接收一个数组，设置附加字段。附加字段会在requestData验证和过滤后合并入requestData
+
+$this->serviceLocator->get('FormSubmit')->Insert()->table('user')->addField(array('create_time' => time()));
+
+isTransaction:
+此方法接收一个布尔值，是否进行事物(默认不进行)
+
+$this->serviceLocator->get('FormSubmit')->Insert()->table('user')->isTransaction(true)
+
+mediaUpload:
+此方法接收两个参数，媒体上传
+第一个参数为对象或者布尔值，如果是对象则使用此对象，如果是'false'使用程序自带对象(默认为'false')
+第二个参数为布尔值，媒体上传后的地址是否合并入验证后requestData(默认为'true')
+
+helper:
+如果有一些相同扩展操作在多出使用，可以定义在'helper'中
+'helper'如果继承自'BaseHelper'，则可以通过成员变量'formSubmit'获取'FormSubmit'类的对象
+'helper'可以通过实现'registerFunction'方法，注册一个可在'FormSubmit'类中'getHelperFunction'方法调用的方法名
+第一个参数：事件名(ValidateBefore、ValidateAfter、InputFilterBefore、InputFilterAfter、ExistsBefore、ExistsAfter、DbBefore、DbAfter)
+第二个参数：帮助类的类名
+之后的参数任意，这些参数都会赋值给相应帮助类的'init'方法
+帮助类需要定义在'Helper'文件夹中，帮助类必须公开实现'init'和'action'方法及继承'BaseHelper'类。具体可参照'ChildColumns'
+
+getHelperFunction:
+执行相应helper对象方法，第一个参数为'helper'对象名('helper'方法的第二个参数)，'helper'方法名，后续参数为此方法需要传入的参数
+
+$target->getHelperFunction('ChildColumns','getChildColumnsValues','TypeProduct')
+
+调用'ChildColumns'帮助类的'getChildColumnsValues'方法，对此方法传一个参数'TypeProduct'
+
+isRollBack:
+此方法接收一个布尔值，是否回滚(默认不进行)
+只有在'isTransaction'为'true'时，此方法设置'true'，才会有效果
+
+isVal:
+此方法接收一个布尔值，是否验证通过(默认不通过)
+
+isExists:
+此方法接收一个布尔值，是否数据存在验证通过
+
+getServiceLocator:
+获得serviceLocator
+
+getValidateErrorMessage:
+获得验证错误信息
+
+getValidatedData:
+获得验证及过滤后requestData
+
+getUploadedPath:
+获得所有媒体上传路径
+
+getSourceData:
+获得原始数据
+
+getLastInsertId:
+获得最后插入id(在执行数据库插入时，程序会自动获得此值。如果是自定义插入，程序会尝试调用对象的'lastInsertId'方法来获得此值)
+
+getOtherErrorMessage:
+获得其它错误信息

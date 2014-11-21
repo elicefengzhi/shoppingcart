@@ -27,7 +27,7 @@ class BootStrap
 		//设置多语言
 		//$language = new Language($event->getApplication()->getServiceManager()->get('viewHelperManager'),$event->getApplication()->getServiceManager());
 		//$language->setLocale();
-		
+
 		//错误处理
 		$eventManager = $event->getParam('application')->getEventManager();
 		$eventManager->getSharedManager()->attach('*', MvcEvent::EVENT_DISPATCH, array($this,'onDispatchError'), -100);

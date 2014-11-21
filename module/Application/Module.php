@@ -23,7 +23,10 @@ class Module implements AutoloaderProviderInterface
 	
     public function getConfig()
     {
-        return include __DIR__ . '/config/module.config.php';
+        $moduleConfig = include __DIR__ . '/config/module.config.php';
+        $asseticConfig = include __DIR__ . '/config/assetic.config.php';
+        
+        return array_merge($moduleConfig,$asseticConfig);
     }
     
     public function getViewHelperConfig()
@@ -49,7 +52,7 @@ class Module implements AutoloaderProviderInterface
     }
     
     public function init(ModuleManager $moduleManager)
-    { 
+    {
     	//资产相关设置，调用assetManager方法
     	$moduleManager->getEventManager()->attach('loadModule',array($this,'assetManager'));
     	

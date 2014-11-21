@@ -63,7 +63,7 @@ existsWhere:
 
 validate:
 此方法接收一个自定义的对象或布尔值，自定义验证的对象，当是'false'时表示不验证
-如果同时为'validate'和'inputfilter'赋值，以inputfilter优先
+如果同时为'validate'和'inputfilter'赋值，以inputfilter优先(先执行)
 
 $this->serviceLocator->get('FormSubmit')->Insert()->table('user')->validate($this->serviceLocator->get('Validate')->User())
 
@@ -95,7 +95,7 @@ $this->serviceLocator->get('FormSubmit')->Insert()->table('user')->sourceValidat
 
 inputFilter:
 此方法接收一个数组，传递一个给'Zend\InputFilter\Factory'对象'createInputFilter'方法的配置参数，用于验证、过滤
-如果同时为'validate'和'inputfilter'赋值，以inputfilter优先
+如果同时为'validate'和'inputfilter'赋值，以inputfilter优先(先执行)
 
 $this->serviceLocator->get('FormSubmit')->Insert()->table('user')->inputFilter(array(....))
 

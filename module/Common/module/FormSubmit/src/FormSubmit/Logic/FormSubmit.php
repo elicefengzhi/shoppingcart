@@ -41,6 +41,7 @@ Class FormSubmit
 	
 	protected $mediaUpload;//媒体上传对象
 	protected $mediaIsMerge;//设置媒体上传后的地址是否合并入validatedData
+	protected $form = null;
 	public $helperObjectArray = array();//helper对象保持数组
 	
 	function __construct($initArray,$serviceLocator)
@@ -453,12 +454,8 @@ Class FormSubmit
 		$this->setParams($requestType,$requestData,$initArray,$table,$validateClass,$existsParams);
 
 		//Request参数验证
-		if(is_array($inputFilter)) {
-			if($this->formSubmitInputFilter($requestData,$inputFilter) === false) return false;
-		}
-		else {
-			if($this->formSubmitValidate($validateClass,$requestData) === false) return false;
-		}
+		if($this->formSubmitInputFilter($requestData,$inputFilter) === false) return false;
+		if($this->formSubmitValidate($validateClass,$requestData) === false) return false;
 
 		//媒体上传
 		if($this->formSubmitMediaUpload() === false) return false;
@@ -531,6 +528,21 @@ Class FormSubmit
 	public function validateErrorMessageFunction($validateErrorMessageFunction)
 	{
 		$this->validateErrorMessageFunction = $validateErrorMessageFunction;
+	}
+	
+	/**
+	 * 设置Zend\Form\Form
+	 * @param Zend\Form\Form|array $form
+	 * @throws \FormSubmit\Exception\FormSubmitException
+	 */
+	public function form($form)
+	{
+		if($form instanceof \Zend\Form\Form || is_array($form)) {
+			$this->form = $form;
+		}
+		else {
+			throw new \FormSubmit\Exception\FormSubmitException('form function params error');
+		}
 	}
 	
 	/**

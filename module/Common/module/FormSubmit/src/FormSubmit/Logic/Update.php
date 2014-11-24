@@ -20,6 +20,7 @@ Class Update extends Base
 	 */
 	public function submit()
 	{
+		if($this->requestData === false) return false;
 		return $this->formSubmit('update');
 	}
 }

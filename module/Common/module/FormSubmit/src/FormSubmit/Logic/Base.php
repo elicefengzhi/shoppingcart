@@ -159,7 +159,7 @@ Class Base
 	 * helper的执行需要对应formSubmit主程序提供的具体事件为基础
 	 * 
 	 * 参数规则：
-	 * 第一个参数：事件名(ValidateBefore、ValidateAfter、InputFilterBefore、InputFilterAfter、ExistsBefore、ExistsAfter、DbBefore、DbAfter)
+	 * 第一个参数：事件名(ValidateBefore、ValidateAfter、InputFilterBefore、InputFilterAfter、FormBefore、FormAfter、ExistsBefore、ExistsAfter、DbBefore、DbAfter)
 	 * 第二个参数：helper类的类名
 	 * 之后的参数任意，这些参数都会赋值给相应helper类的init方法
 	 * 

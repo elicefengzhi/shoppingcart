@@ -14,7 +14,7 @@ Class FormSubmit
 	
 	protected $tableName;//操作表名
 	protected $lastInsertId;//添加数据的自增ID
-	protected $validatedData;//验证后的request参数
+	protected $validatedData = false;//验证后的request参数
 	protected $sourceData;//原始的request参数
 	protected $uploadedPath;//上传好的文件路径
 	
@@ -28,20 +28,21 @@ Class FormSubmit
 	protected $customFilter = false;//自定义request参数过滤，默认不进行自定义过滤
 	protected $addField = false;//附加字段，默认过滤request参数
 	protected $isCustomExists = false;//是否自定义数据验证
-	protected $isExists;//request数据是否已经存在
+	protected $isExists = false;//request数据是否已经存在
 	protected $isTransaction;//是否开启事务
 	protected $isRollBack = false;//开启回滚
 	protected $isVal;//是否通过验证
+	protected $form = false;
+	protected $inputFilter = false;
 	
 	protected $dbInsertFunction = null;//添加方法名
 	protected $insertExistsFunction = null;//添加存在验证方法名
 	
 	protected $dbUpdateFunction = null;//更新方法名 
-	protected $updateExistsFunction;//更新存在验证方法名 
+	protected $updateExistsFunction = null;//更新存在验证方法名 
 	
 	protected $mediaUpload;//媒体上传对象
 	protected $mediaIsMerge;//设置媒体上传后的地址是否合并入validatedData
-	protected $form = null;
 	public $helperObjectArray = array();//helper对象保持数组
 	
 	function __construct($initArray,$serviceLocator)
@@ -163,31 +164,39 @@ Class FormSubmit
 				}
 				return false;
 			}
-			//验证通过后根据isFilter过滤参数
-			if($this->isFilter) {
-				$filter = new Filter();
-				$this->validatedData = $filter->filterData($requestData,$this->customFilter);
-			}
-			else {
-				$this->validatedData = $requestData;
-			}
 			if(!is_array($this->validatedData) || count($this->validatedData) <= 0) {
 				throw new \FormSubmit\Exception\FormSubmitException('validate return data is empty');
 				return false;
 			}
+		}
+		
+		//验证通过后根据isFilter过滤参数
+		if($this->isFilter) {
+			$filter = new Filter();
+			$this->validatedData = $filter->filterData($requestData,$this->customFilter);
+		}
+		else {
+			$this->validatedData = $requestData;
 		}
 
 		//触发验证后事件
 		$this->events->trigger('FormSubmit/ValidateAfter',$this,array());
 	}
 	
+	/**
+	 * inputFilter
+	 * @param array $requestData
+	 * @param array $inputFilter
+	 * @throws \FormSubmit\Exception\FormSubmitException
+	 * @return boolean
+	 */
 	private function formSubmitInputFilter($requestData,$inputFilter)
 	{
 		//触发inputFilter前事件
 		$this->events->trigger('FormSubmit/InputFilterBefore',$this,array());
 
 		//如果inputFilter不为false，则需要执行inputFilter操作
-		if($this->inputFilter !== false) {
+		if($inputFilter !== false) {
 			$inputFilterClass = new \FormSubmit\InputFilter\InputFilter();
 			$this->isVal = $inputFilterClass->isVal($requestData,$inputFilter);
 			
@@ -201,10 +210,35 @@ Class FormSubmit
 				throw new \FormSubmit\Exception\FormSubmitException('inputFilter return data is empty');
 				return false;
 			}
+			
+			$this->inputFilter = $inputFilterClass->getInputFilter();
 		}
 
 		//触发inputFilter后事件
 		$this->events->trigger('FormSubmit/InputFilterAfter',$this,array());
+	}
+	
+	public function formSubmitForm()
+	{
+		$isVal = true;
+		$form = $this->form;
+		
+		if($form !== false) {
+			//触发form前事件
+			$this->events->trigger('FormSubmit/FormBefore',$this,array());
+
+			(is_null($form->getInputFilter()) && $this->inputFilter !== false) && $form->setInputFilter($this->inputFilter);
+			$data = $this->validatedData === false ? $this->sourceData : $this->validatedData;
+			$form->setData($data);
+			
+			$isVal = ($this->inputFilter === false && !is_null($form->getInputFilter())) ? $form->isValid() : true;
+			$this->validatedData === false && $this->validatedData = $form->getData();
+
+			//触发form后事件
+			$this->events->trigger('FormSubmit/FormAfter',$this,array());
+		}
+		
+		return $isVal;
 	}
 	
 	/**
@@ -245,7 +279,6 @@ Class FormSubmit
 	 */
 	private function formSubmitExists($requestType,$table,$where,$existsParams,$existsWhere)
 	{
-		$exists = false;
 		if($existsParams !== false) {
 			if(!is_array($existsParams) || count($existsParams) <= 0) {
 				throw new \FormSubmit\Exception\FormSubmitException('exists params is not array or array is empty');
@@ -281,10 +314,11 @@ Class FormSubmit
 				}
 				is_array($this->validateErrorMessage) ? $this->validateErrorMessage = array_merge($this->validateErrorMessage,$existsErrorMessage) : $this->validateErrorMessage = $existsErrorMessage;
 			}
+			$this->isExists = $exists;
+			
 			//触发数据存在验证后事件
 			$this->events->trigger('FormSubmit/ExistsAfter',$this,array());
 		}
-		$this->isExists = $exists;
 	}
 	
     /**
@@ -456,6 +490,7 @@ Class FormSubmit
 		//Request参数验证
 		if($this->formSubmitInputFilter($requestData,$inputFilter) === false) return false;
 		if($this->formSubmitValidate($validateClass,$requestData) === false) return false;
+		if($this->formSubmitForm() === false) return false;
 
 		//媒体上传
 		if($this->formSubmitMediaUpload() === false) return false;
@@ -531,13 +566,20 @@ Class FormSubmit
 	}
 	
 	/**
-	 * 设置Zend\Form\Form
-	 * @param Zend\Form\Form|array $form
+	 * 设置\Zend\Form\Form
+	 * @param \Zend\Form\Form|array $form
+	 * @param array $attrs
 	 * @throws \FormSubmit\Exception\FormSubmitException
 	 */
-	public function form($form)
+	public function form($form,$attrs)
 	{
 		if($form instanceof \Zend\Form\Form || is_array($form)) {
+			//如果传入的参数不是一个Zend\Form\Form对象，是一个数组，则使用\Zend\Form\Factory创建Zend\Form\Form对象
+			if(is_array($form)) {
+				$form = new \FormSubmit\Form\FormSubmitForm($form,$attrs);
+				$form = $form->getForm();
+			}
+			
 			$this->form = $form;
 		}
 		else {
@@ -741,6 +783,15 @@ Class FormSubmit
 	public function getHelperObjectArrayByKey($key)
 	{
 		return array_key_exists($key,$this->helperObjectArray) ? $this->helperObjectArray[$key] : false;
+	}
+	
+	/**
+	 * 获得\Zend\Form\Form对象
+	 * @return \Zend\Form\Form
+	 */
+	public function getForm()
+	{
+		return $this->form;
 	}
 	
 	/**

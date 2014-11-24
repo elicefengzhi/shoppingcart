@@ -48,4 +48,13 @@ class InputFilter
 	    $this->inputFilter->setData($requestData);
 	    return $this->inputFilter->isValid();
 	}
+	
+	/**
+	 * 获得inputFilter
+	 * @return \Zend\InputFilter\InputFilterInterface
+	 */
+	public function getInputFilter()
+	{
+		return $this->inputFilter;
+	}
 }

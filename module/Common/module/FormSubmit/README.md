@@ -16,6 +16,9 @@ setRequestType：
 $property = $this->serviceLocator->get('FormSubmit');
 $property->setRequestType('get');
 
+IsRequestReturnFalse:
+此方法接收一个布尔值，设置通过'RequestType'所给定的类型获得'requestData'的值如果是空的话是否返回'false'(默认为true)
+
 requestData:
 此方法接收一个数组，需要操作的数据，默认情况下操作数据是自动获取，不需要额外传参
 
@@ -98,6 +101,10 @@ inputFilter:
 如果同时为'validate'和'inputfilter'赋值，以inputfilter优先(先执行)
 
 $this->serviceLocator->get('FormSubmit')->Insert()->table('user')->inputFilter(array(....))
+
+form:
+第一个参数为'\Zend\Form\Form'对象或一个数组，如果是对象就使用传入的对象，如果是数组尝试使用数组创建一个'\Zend\Form\Form'。
+第二个参数为一个数组，'form'的属性设置('setAttributes')
 
 dbInsertFunction:
 第一个参数是调用的方法名，后面的参数任意，为需要传给此方法的参数，插入数据库时需要调用的方法名及相关参数

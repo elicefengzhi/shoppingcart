@@ -20,6 +20,7 @@ Class Insert extends Base
 	 */
 	public function submit()
 	{
+		if($this->requestData === false) return false;
 		return $this->formSubmit('insert');
 	}
 }

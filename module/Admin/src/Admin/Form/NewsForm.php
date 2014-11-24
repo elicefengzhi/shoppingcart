@@ -14,7 +14,7 @@ class NewsForm extends Form
 			'id' => 'news-form',
 			'method' => 'post'
 		));
-		
+
 		$this->add(array(
 			'type' => 'Text',
 			'name' => 'news_title',

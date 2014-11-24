@@ -15,6 +15,7 @@ class FormSubmitFactory implements FactoryInterface
 	private $serviceLocator;
 	private $initArray;
 	private $requestType = 'post';
+	private $isRequestReturnFalse = true;
 	
 	function __call($className,$args)
 	{
@@ -27,7 +28,8 @@ class FormSubmitFactory implements FactoryInterface
 		$this->requestType === 'get' && $requestData = $request->getQuery()->toArray();
 		$this->requestType === 'cookie' && $requestData = $request->getCookie()->toArray();
 		//如果没有数据提交返回false
-		if(count($requestData) <= 0) return false; 
+		if(count($requestData) <= 0 && $this->isRequestReturnFalse === true) return false;
+		count($requestData) <= 0 && $this->isRequestReturnFalse === false && $requestData = false;
 
 		$formSubmit = new $classNamespace($requestData,$this->initArray,$this->serviceLocator);
 		return $formSubmit;
@@ -35,12 +37,21 @@ class FormSubmitFactory implements FactoryInterface
 	
 	/**
 	 * 设置request类型
-	 * @param string $type post或get
+	 * @param string $type post、get、cookie
 	 */
 	public function setRequestType($type) {
 		$type === 'post' && $this->requestType = 'post';
 		$type === 'get' && $this->requestType = 'get';
 		$type === 'cookie' && $this->requestType = 'cookie';
+		
+		return $this;
+	}
+	
+	public function IsRequestReturnFalse($isRequestReturnFalse)
+	{
+		$this->isRequestReturnFalse = (boolean)$isRequestReturnFalse;
+		
+		return $this;
 	}
 	
     public function createService(ServiceLocatorInterface $serviceLocator)

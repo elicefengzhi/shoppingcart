@@ -106,6 +106,12 @@ form:
 第一个参数为'\Zend\Form\Form'对象或一个数组，如果是对象就使用传入的对象，如果是数组尝试使用数组创建一个'\Zend\Form\Form'。
 第二个参数为一个数组，'form'的属性设置('setAttributes')
 
+$news = $this->serviceLocator->get('FormSubmit')->IsRequestReturnFalse(false)->Insert()->table('news')->form(array(...),array(
+	'id' => 'news-form',
+	'method' => 'post',
+));
+$form = $news->getForm();//获得一个创建好的'\Zend\Form\Form'
+
 dbInsertFunction:
 第一个参数是调用的方法名，后面的参数任意，为需要传给此方法的参数，插入数据库时需要调用的方法名及相关参数
 待调用的函数需要返回一个布尔值以代表是否验证通过(程序会强转返回值为布尔类型)

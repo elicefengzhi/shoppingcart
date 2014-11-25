@@ -20,7 +20,7 @@ class NewsController extends BaseController
     public function addAction()
     {
     	$translator = new \Zend\I18n\Translator\Translator();
-    		$formSpec = [
+    	$formSpec = [
     			'hydrator' => 'Zend\Stdlib\Hydrator\ArraySerializable',
     			'elements' => [
         			[
@@ -93,22 +93,22 @@ class NewsController extends BaseController
         				)
 	        		],
     			],
-    		];
-        	$news = $this->serviceLocator->get('FormSubmit')->IsRequestReturnFalse(false)->Insert()->table('news')->form($formSpec,array(
-    			'id' => 'news-form',
-    			'method' => 'post',
-    			'action' => $this->url()->fromRoute('admin/news/add')
-    		));
-    		$form = $news->getForm();
-    		$request = $this->request;
-    		if($request->isPost()) {
-    			$time = time();
-    			$return = $news->addField(array('create_time' => $time,'update_time' => $time))->customFilter(array('news_botton' => null,'editorValue' => null,'news_body' => ''))->submit();
-    			if($return === false && ($news->isVal() === false || $news->isExists() === true)) {
-    				$errorMessage = $news->getValidateErrorMessage();
-    			}
-    			if($return !== false) return $this->redirect()->toRoute('admin/news');
+    	];
+        $news = $this->serviceLocator->get('FormSubmit')->IsRequestReturnFalse(false)->Insert()->table('news')->form($formSpec,array(
+    		'id' => 'news-form',
+    		'method' => 'post',
+    		'action' => $this->url()->fromRoute('admin/news/add')
+    	));
+    	$form = $news->getForm();
+    	$request = $this->request;
+    	if($request->isPost()) {
+    		$time = time();
+    		$return = $news->addField(array('create_time' => $time,'update_time' => $time))->customFilter(array('news_botton' => null,'editorValue' => null,'news_body' => ''))->submit();
+    		if($return === false && ($news->isVal() === false || $news->isExists() === true)) {
+    			$errorMessage = $news->getValidateErrorMessage();
     		}
+    		if($return !== false) return $this->redirect()->toRoute('admin/news');
+    	}
     	
     	return array('form' => $form);
     }

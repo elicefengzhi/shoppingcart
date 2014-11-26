@@ -8,11 +8,11 @@ class FormSubmitForm
 {
 	private $form;
 	
-	function __construct(Array $spec,Array $attrs)
+	function __construct(Array $spec,Array $attrs = null)
 	{
 		$factory = new Factory();
 		$this->form = $factory->createForm($spec);
-		count($attrs) > 0 && $this->form->setAttributes($attrs);
+		!is_null($attrs) && count($attrs) > 0 && $this->form->setAttributes($attrs);
 	}
 	
 	public function getForm()

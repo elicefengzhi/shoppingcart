@@ -97,7 +97,7 @@ sourceValidateErrorMessage:
 $this->serviceLocator->get('FormSubmit')->Insert()->table('user')->sourceValidateErrorMessage(array('maxSizeError' => '上传最大限制为%s'))
 
 inputFilter:
-此方法接收一个数组，传递一个给'Zend\InputFilter\Factory'对象'createInputFilter'方法的配置参数，用于验证、过滤
+此方法接收一个数组获'Traversable'对象，用于'createInputFilter'的配置
 如果同时为'validate'和'inputfilter'赋值，以inputfilter优先(先执行)
 
 $this->serviceLocator->get('FormSubmit')->Insert()->table('user')->inputFilter(array(....))

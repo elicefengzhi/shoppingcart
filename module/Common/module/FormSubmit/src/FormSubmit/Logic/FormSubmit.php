@@ -186,38 +186,39 @@ Class FormSubmit
 	/**
 	 * inputFilter
 	 * @param array $requestData
-	 * @param array $inputFilter
 	 * @throws \FormSubmit\Exception\FormSubmitException
 	 * @return boolean
 	 */
-	private function formSubmitInputFilter($requestData,$inputFilter)
+	private function formSubmitInputFilter($requestData)
 	{
 		//触发inputFilter前事件
 		$this->events->trigger('FormSubmit/InputFilterBefore',$this,array());
 
 		//如果inputFilter不为false，则需要执行inputFilter操作
+		$inputFilter = $this->inputFilter;
 		if($inputFilter !== false) {
-			$inputFilterClass = new \FormSubmit\InputFilter\InputFilter();
-			$this->isVal = $inputFilterClass->isVal($requestData,$inputFilter);
-			
-			if($this->isVal === false) {
-				$this->validateErrorMessage = $inputFilterClass->getMessage();
+			$inputFilter->setData($requestData);
+			if($inputFilter->isValid() === false) {
+				$this->isVal = false;
+				$this->validateErrorMessage = $inputFilter->getMessages();
 				return false;
 			}
 			
-			$this->validatedData = $inputFilterClass->getValues();
+			$this->validatedData = $inputFilter->getValues();
 			if(!is_array($this->validatedData) || count($this->validatedData) <= 0) {
 				throw new \FormSubmit\Exception\FormSubmitException('inputFilter return data is empty');
 				return false;
 			}
-			
-			$this->inputFilter = $inputFilterClass->getInputFilter();
 		}
 
 		//触发inputFilter后事件
 		$this->events->trigger('FormSubmit/InputFilterAfter',$this,array());
 	}
 	
+	/**
+	 * form
+	 * @return boolean
+	 */
 	public function formSubmitForm()
 	{
 		$isVal = true;
@@ -237,6 +238,7 @@ Class FormSubmit
 			//触发form后事件
 			$this->events->trigger('FormSubmit/FormAfter',$this,array());
 		}
+		$this->isVal = $isVal;
 		
 		return $isVal;
 	}
@@ -472,7 +474,7 @@ Class FormSubmit
 	 * @throws \FormSubmit\Exception\FormSubmitException
 	 * @return boolean
 	 */
-	public function formSubmit($requestType,$requestData,$table,$where,$existsParams,$existsWhere,$validateClass,$inputFilter)
+	public function formSubmit($requestType,$requestData,$table,$where,$existsParams,$existsWhere,$validateClass)
 	{
 		$initArray = $this->initArray;//获得配置信息
 
@@ -488,7 +490,7 @@ Class FormSubmit
 		$this->setParams($requestType,$requestData,$initArray,$table,$validateClass,$existsParams);
 
 		//Request参数验证
-		if($this->formSubmitInputFilter($requestData,$inputFilter) === false) return false;
+		if($this->formSubmitInputFilter($requestData) === false) return false;
 		if($this->formSubmitValidate($validateClass,$requestData) === false) return false;
 		if($this->formSubmitForm() === false) return false;
 
@@ -579,11 +581,29 @@ Class FormSubmit
 				$form = new \FormSubmit\Form\FormSubmitForm($form,$attrs);
 				$form = $form->getForm();
 			}
-			
 			$this->form = $form;
 		}
 		else {
 			throw new \FormSubmit\Exception\FormSubmitException('form function params error');
+		}
+	}
+	
+	/**
+	 * 如果同时为validate和inputfilter赋值，以inputfilter优先
+	 * @param array|Traversable $inputFilter
+	 * @throws \FormSubmit\Exception\FormSubmitException
+	 */
+	public function inputFilter($inputFilter)
+	{
+		if($inputFilter instanceof \Traversable || $inputFilter instanceof \Zend\InputFilter\InputFilter || is_array($inputFilter)) {
+			if($inputFilter instanceof \Traversable || is_array($inputFilter)) {
+				$inputFilter = new \FormSubmit\InputFilter\InputFilter($inputFilter);
+				$inputFilter = $inputFilter->getInputFilter();
+			}
+			$this->inputFilter = $inputFilter;
+		}
+		else {
+			throw new \FormSubmit\Exception\FormSubmitException('inputFilter instanceof Traversable or instanceof Zend\InputFilter\InputFilter or array error');
 		}
 	}
 	

@@ -21,7 +21,6 @@ Class Base
 	protected $isInsertExists = true;//默认进行添加数据重复验证
 	protected $isUpdateExists = true;//默认进行更新数据重复验证
 	protected $validateClass = null;//默认不验证
-	protected $inputFilter = false;//默认不进行inputFilter
 	protected $mediaIsMerge;//媒体上传后的地址是否合并入validatedData
 	
     /**
@@ -108,17 +107,6 @@ Class Base
 	public function validate($validateClass)
 	{
 		$this->validateClass = (!is_object($validateClass) && !is_bool($validateClass) && !is_null($validateClass)) ? false : $validateClass;
-		return $this;
-	}
-	
-	/**
-	 * 如果同时为validate和inputfilter赋值，以inputfilter优先 
-	 * @param array $inputFilter
-	 * @return \FormSubmit\Logic\Base
-	 */
-	public function inputFilter(Array $inputFilter)
-	{
-		$this->inputFilter = $inputFilter;
 		return $this;
 	}
 	
@@ -222,7 +210,7 @@ Class Base
 		//设置媒体上传后的地址是否合并入validatedData
 		$formSubmit->mediaUpload($this->media,$this->mediaIsMerge);
 	
-		$insertReturn = $formSubmit->formSubmit($requestType,$this->requestData,$this->table,$this->where,$this->existsFields,$this->existsWhere,$this->validateClass,$this->inputFilter);
+		$insertReturn = $formSubmit->formSubmit($requestType,$this->requestData,$this->table,$this->where,$this->existsFields,$this->existsWhere,$this->validateClass);
 		return $insertReturn;
 	}
 }

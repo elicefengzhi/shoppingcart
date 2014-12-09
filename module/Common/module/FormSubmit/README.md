@@ -194,7 +194,7 @@ $this->serviceLocator->get('FormSubmit')->Insert()->table('user')->isTransaction
 
 mediaUpload:
 此方法接收两个参数，媒体上传
-第一个参数为对象或者布尔值，如果是对象则使用此对象，如果是'false'使用程序自带对象(默认为'false')
+第一个参数为对象或者布尔值，如果是对象则上传操作使用此对象，如果是'false'使用程序自带对象(默认为'false')
 第二个参数为布尔值，媒体上传后的地址是否合并入验证后requestData(默认为'true')
 
 helper:

@@ -28,7 +28,7 @@ class ProductTypeController extends BaseController
     				       				'data' => $sourceData['name'],
     				       				'notEmpty' => array('message' => '商品カテゴリを入力してください')
     				       			)
-    							))
+    							))->mediaUpload()->helper('UploadAfter','UploadEdit',array('a' => array('isRequired' => true,'path' => '','errorMessage' => 'gegeg')))
     					  ->validateErrorMessageFunction('getQuickErrorMessage')->submit();
     		if($return !== false) return $this->redirect()->toRoute('admin/product-type');
 

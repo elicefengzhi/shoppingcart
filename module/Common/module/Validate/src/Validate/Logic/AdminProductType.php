@@ -16,7 +16,7 @@ class AdminProductType extends BaseValidator
 				$this->errorMessage['nameCheck'][] = '商品カテゴリを入力してください';
 				return false;
 			}
-				
+
 			$this->data['name'] = $ValidData;
 		}
 	}

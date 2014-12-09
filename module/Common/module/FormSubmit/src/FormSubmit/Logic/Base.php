@@ -188,7 +188,7 @@ Class Base
 				//执行相应helper类init方法
 				call_user_func_array(array($formHelper,'init'),$initParams);
 				//执行相应helper类action方法
-				$formHelper->action();
+				return $formHelper->action();
 			}
 		});
 		

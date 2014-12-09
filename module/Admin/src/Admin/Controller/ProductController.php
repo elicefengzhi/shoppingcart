@@ -26,7 +26,7 @@ class ProductController extends BaseController
     		$logic = $this->serviceLocator->get('admin/product/logic');
     		$logic->setTimeData();
     		$logic->insertProductImageAndAd();
-    		$return = $user->requestData()->table('product')->existsFields(array('name'))->existsWhere(array('delete_flg' => 0))->validate($this->serviceLocator->get('Validate')->AdminProduct())
+    		$return = $user->table('product')->existsFields(array('name'))->existsWhere(array('delete_flg' => 0))->validate($this->serviceLocator->get('Validate')->AdminProduct())
     		->helper('ValidateAfter','ChildColumns','input','AdProduct','ad')
     		->helper('ValidateAfter','ChildColumns','input','TypeProduct','ptypeId')
     		->mediaUpload(false,false)->customFilter(array('editorValue' => null))->submit();

@@ -97,7 +97,7 @@ class NewsController extends BaseController
         $news = $this->serviceLocator->get('FormSubmit')->IsRequestReturnFalse(false)->Insert()->table('news')->form($formSpec,array(
     		'id' => 'news-form',
     		'method' => 'post',
-    		'action' => $this->url()->fromRoute('admin/news/add')
+    		'action' => $this->url()->fromRoute('admin/news/add'),
     	));
     	$form = $news->getForm();
     	$request = $this->request;
@@ -109,7 +109,7 @@ class NewsController extends BaseController
     		}
     		if($return !== false) return $this->redirect()->toRoute('admin/news');
     	}
-    	
+
     	return array('form' => $form);
     }
     

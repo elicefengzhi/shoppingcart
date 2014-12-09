@@ -28,6 +28,7 @@ class ChildColumns extends BaseHelper
      */
 	public function init($type,$childColumnKey,$sourceKey)
 	{
+		//如果类型是input，源数据就是验证后requestData，否则视为文件上传来获取内容
 		if($type == 'input') {
 			$sourceData = $this->formSubmit->getValidatedData();
 		}
@@ -52,11 +53,9 @@ class ChildColumns extends BaseHelper
 		} 
 	}
 	
-	/**
-	 * 注册一个可被外部调用的方法
-	 */
 	public function action()
 	{	
+		//注册一个可被外部调用的方法
 		$this->registerFunction('getChildColumnsValues');
 	}
 }

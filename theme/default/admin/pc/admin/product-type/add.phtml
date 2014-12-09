@@ -1,7 +1,7 @@
 <p id="admin-nav"><a lang="loginTitle" href="<?php echo $this->url('admin/index'); ?>"></a>--<a lang="productType" href="<?php echo $this->url('admin/product-type'); ?>"></a>--<span lang="typeSubAdd"></span></p>
 <div id="admin-product-type-div">
 <?php echo $this->partial('admin/common/errorMessage',array('viewHelper' => $this->viewHelper,'loopName' => 'errorMessage')); ?>
-	<form action="<?php echo $this->url; ?>" method="post">
+	<form action="<?php echo $this->url; ?>" method="post" enctype="multipart/form-data">
 		<input name="name" type="text" value="<?php echo $this->viewHelper->string('name'); ?>" />
 		<select name="parent_id">
 			<option lang="false" value="0"></option>
